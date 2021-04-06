@@ -1,5 +1,5 @@
 /gps/particle mu+
-/gps/pos/centre 500 0 -200 mm
+/gps/pos/centre 0 0 -200 mm
 /gps/direction 0 0 1
 /gps/ene/type Mono
 /gps/ene/mono 1 GeV

@@ -40,6 +40,8 @@
 #include "G4VSolid.hh"
 #include "G4Tubs.hh"
 
+#include "G4Color.hh"
+#include "G4VisAttributes.hh"
 #include "G4SolidStore.hh"
 #include "G4SubtractionSolid.hh"
 // #include "LXePMTSD.hh"
@@ -55,6 +57,7 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     void DefineSurfaces();
     void DefineSolids();
     void DefineLogicalVolumes();
+    void DefineVisAttributes();
     void ConstructVolumes();
     virtual G4VPhysicalVolume* Construct();
     virtual ~OpNoviceDetectorConstruction();
@@ -175,6 +178,17 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
   std::vector<G4VPhysicalVolume*> PMMA_Hat_phys_vect;
   std::vector<G4VPhysicalVolume*> Steel_Add_phys_vect;
   std::vector<G4VPhysicalVolume*> Sct_Inside_phys_vect;
+
+//visualisation
+
+  G4Color blue;
+  G4Color green;
+  G4Color red;
+  G4Color white;
+  G4Color cyan;
+  G4Color magenda;
+  G4Color DircColor;
+  G4Color SensColor;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
