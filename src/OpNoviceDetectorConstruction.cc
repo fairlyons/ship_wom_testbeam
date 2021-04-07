@@ -650,36 +650,55 @@ void OpNoviceDetectorConstruction::ConstructVolumes()
 
   for(unsigned int pos = 0; pos<WOM_coord_vec.size(); pos++)
   {
-    sipm_base_phys_vect.push_back(  new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_sipm), sipm_base_log, "sipm_base", expHall_log, false, pos, intersect_check) );
-    Outer_tube_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Outer_tube), Outer_tube_log, "Outer_tube", expHall_log, false, 0, intersect_check) );
-    WOM_tube_phys_vect.push_back(   new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_WOM), WOM_tube_log, "WOM tube", expHall_log, false, 0, intersect_check) );
-    Inner_tube_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Inner_tube), Inner_tube_log, "Inner_tube", expHall_log, false, 0, intersect_check) );
-    PMMA_Ring_phys_vect.push_back(  new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_PMMA_Ring), PMMA_Ring_log, "PMMA_Ring", expHall_log, false, 0, intersect_check) );
-    PMMA_Disk_phys_vect.push_back(  new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_PMMA_Disk), PMMA_disk_log, "PMMA_Disk", expHall_log, false, 0, intersect_check) );
-    Air_gap_1_phys_vect.push_back(  new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Air_gap_1), Air_gap1_log, "Air_gap1", expHall_log, false, 0, intersect_check) );
-    Air_gap_2_phys_vect.push_back(  new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Air_gap_2), Air_gap2_log, "Air_gap2", expHall_log, false, 0, intersect_check) );
-    WLS_tube1_phys_vect.push_back(  new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_WLS_1), WLS_tube1_log, "WLS1", expHall_log, false, 0, intersect_check) );
-    WLS_tube2_phys_vect.push_back(  new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_WLS_2), WLS_tube2_log, "WLS2", expHall_log, false, 0, intersect_check) );
-    PMMA_Hat_phys_vect.push_back(   new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_PMMA_Hat), PMMA_Hat_log, "PMMA_Hat", expHall_log, false, 0, intersect_check) );
-    Steel_Add_phys_vect.push_back(  new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Steel_Add), Steel_Add_log, "Steel_Add", expHall_log, false, 0, intersect_check) );
-    Sct_Inside_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Sct_Inside), Sct_Inside_log, "Sct_Inside", expHall_log, false, 0, intersect_check) );
+    sipm_base_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_sipm), sipm_base_log, "sipm_base", expHall_log, false, pos, intersect_check) );
+    Outer_tube_phys_vect.push_back(new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Outer_tube), Outer_tube_log, "Outer_tube", expHall_log, false, 0, intersect_check) );
+    WOM_tube_phys_vect.push_back(  new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_WOM), WOM_tube_log, "WOM tube", expHall_log, false, 0, intersect_check) );
+    Inner_tube_phys_vect.push_back(new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Inner_tube), Inner_tube_log, "Inner_tube", expHall_log, false, 0, intersect_check) );
+    PMMA_Ring_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_PMMA_Ring), PMMA_Ring_log, "PMMA_Ring", expHall_log, false, 0, intersect_check) );
+    PMMA_Disk_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_PMMA_Disk), PMMA_disk_log, "PMMA_Disk", expHall_log, false, 0, intersect_check) );
+    Air_gap_1_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Air_gap_1), Air_gap1_log, "Air_gap1", expHall_log, false, 0, intersect_check) );
+    Air_gap_2_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Air_gap_2), Air_gap2_log, "Air_gap2", expHall_log, false, 0, intersect_check) );
+    WLS_tube1_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_WLS_1), WLS_tube1_log, "WLS1", expHall_log, false, 0, intersect_check) );
+    WLS_tube2_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_WLS_2), WLS_tube2_log, "WLS2", expHall_log, false, 0, intersect_check) );
+    PMMA_Hat_phys_vect.push_back(  new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_PMMA_Hat), PMMA_Hat_log, "PMMA_Hat", expHall_log, false, 0, intersect_check) );
+    Steel_Add_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Steel_Add), Steel_Add_log, "Steel_Add", expHall_log, false, 0, intersect_check) );
+    Sct_Inside_phys_vect.push_back(new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Sct_Inside), Sct_Inside_log, "Sct_Inside", expHall_log, false, 0, intersect_check) );
   }
 }
 
 void OpNoviceDetectorConstruction::DefineVisAttributes(){
     G4Color blue        = G4Color(0., 0., 1.);
+    G4Color grey        = G4Color(0.3, 0.3, 0.3);
+    G4Color blue_trans  = G4Color(0., 0., 1., 0.3);
     G4Color green       = G4Color(0., 1., 0.);
     G4Color red         = G4Color(1., 0., 0.);
     G4Color white       = G4Color(1., 1., 1.);
-    G4Color white_trans = G4Color(1., 1., 1., 0.0);
+    G4Color white_trans = G4Color(1., 1., 1., 0.2);
     G4Color cyan        = G4Color(0., 1., 1., 0.3);
     G4Color magenda     = G4Color(1.,0.,1.);
 
     G4VisAttributes *worldVisAtt = new G4VisAttributes;
-    worldVisAtt->SetColor(green);
-    worldVisAtt->SetVisibility(true);
-    worldVisAtt->SetForceSolid(false);
+    worldVisAtt->SetVisibility(false);
     expHall_log->SetVisAttributes(worldVisAtt);
+
+    G4VisAttributes *steelBoxVisAtt = new G4VisAttributes;
+    steelBoxVisAtt->SetVisibility(true);
+    steelBoxVisAtt->SetColor(white_trans);
+    SteelBox_log->SetVisAttributes(steelBoxVisAtt);
+
+    G4VisAttributes *sctBoxVisAtt = new G4VisAttributes;
+    sctBoxVisAtt->SetColor(blue_trans);
+    sctBoxVisAtt->SetVisibility(true);
+    ScintilatorBox_log->SetVisAttributes(sctBoxVisAtt);
+    Sct_Inside_log->SetVisAttributes(sctBoxVisAtt);
+    G4VisAttributes *PMMAVisAtt = new G4VisAttributes;
+    PMMAVisAtt->SetVisibility(true);
+    PMMAVisAtt->SetColor(grey);
+    PMMA_Hat_log->SetVisAttributes(PMMAVisAtt);
+    PMMA_Ring_log->SetVisAttributes(PMMAVisAtt);
+    PMMA_Hat_log->SetVisAttributes(PMMAVisAtt);
+    Outer_tube_log->SetVisAttributes(PMMAVisAtt);
+    Inner_tube_log->SetVisAttributes(PMMAVisAtt);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -695,6 +714,6 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
   DefineLogicalVolumes();
   ConstructVolumes();
   DefineSurfaces();
-
+  DefineVisAttributes();
   return expHall_phys;
 }
