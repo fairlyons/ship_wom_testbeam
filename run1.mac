@@ -1,6 +1,7 @@
+/analysis/setFileName asdf.root
 /gps/particle mu+
-/gps/pos/centre 0 0 -200 mm
-/gps/direction 0 0 1
+/gps/position 0 0 30 cm
+/gps/direction 0 0 -1
 /gps/ene/type Mono
-/gps/ene/mono 1 GeV
-/run/beamOn 1
+/gps/energy 1 GeV
+/run/beamOn 10
