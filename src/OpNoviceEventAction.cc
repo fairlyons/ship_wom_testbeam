@@ -56,6 +56,10 @@ OpNoviceEventAction::OpNoviceEventAction()
 
 void OpNoviceEventAction::BeginOfEventAction( const G4Event*)
 { 
+
+  G4cout << "\n---> Begin of Event: " << G4RunManager::GetRunManager()->
+  GetCurrentEvent()->GetEventID() << G4endl;
+
   scintillation_photons = 0;
   cherenkov_photons = 0;
 }
