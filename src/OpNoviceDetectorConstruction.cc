@@ -64,19 +64,25 @@ OpNoviceDetectorConstruction::OpNoviceDetectorConstruction()
   fExpHall_y = 0.6*m;
   fExpHall_z = 0.5*m;
 
+  sipmSize = 6*mm;
+  sipmBaseThickness = 1.42*mm;
+  sipmWindowThickness = sipmBaseThickness + 0.3*mm;
+
   SteelX = 120*cm;
   SteelY = 80*cm;
-  SteelZ = 335*mm;
-//  SteelZ = 135*mm;
+  SteelZ = 135.*mm;
+
   WallThickness_XY = 10*mm;
   WallThickness_Z_Bottom = 20*mm;
   WallThickness_Z_Cover = 5*mm;
   SctX = SteelX - 2*WallThickness_XY;
   SctY = SteelY - 2*WallThickness_XY;
   SctZ = SteelZ - WallThickness_Z_Bottom - WallThickness_Z_Cover;
-    
-  Additional_Length = 0.*mm;
-    
+
+//  G4double delta_Z_0 = SteelZ/2 + Thickness_Steel_Add - Length_2;  // upper surface of PMMA ring
+
+  Additional_Length = -100*mm + 21*mm;
+
   Diam_In_In = 44*mm;
   Diam_In_Out = 50*mm;
   Diam_Out_In = 64*mm;
@@ -95,7 +101,7 @@ OpNoviceDetectorConstruction::OpNoviceDetectorConstruction()
   Length_WOM = 230*mm + Additional_Length;
 //  Length_WOM = 300*mm + Additional_Length;
   Thickness_WLS = 0.05*mm;
-    
+
   delta_X = SteelX/2 - 91.5*mm;
   delta_Y = SteelY/2 - 91.5*mm;
 
@@ -106,8 +112,8 @@ OpNoviceDetectorConstruction::OpNoviceDetectorConstruction()
 //                     {delta_X, -delta_Y}
 //                   };
     WOM_coord_vec = {
-                    {-400.*mm, 0.},
-                    {400.*mm, 0.}
+                    {-300.*mm, 0.},
+                    {300.*mm, 0.}
                   };
 }
 
@@ -208,7 +214,7 @@ void OpNoviceDetectorConstruction::DefineMPTs()
     G4MaterialPropertiesTable *MPT_LAB_PPO = new G4MaterialPropertiesTable();
     MPT_LAB_PPO -> AddConstProperty("SCINTILLATIONYIELD",10800./MeV);
     MPT_LAB_PPO -> AddProperty("RINDEX", photon_en_LAB_PPO, rindex_LAB_PPO, 100)->SetSpline(true);
-          
+
     // emission
     G4double photonWaveLength3[201] = {300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324,
         325, 326, 327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 345, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355, 356,
@@ -230,7 +236,7 @@ void OpNoviceDetectorConstruction::DefineMPTs()
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     MPT_LAB_PPO -> AddProperty("FASTCOMPONENT",photon_en_LAB_PPO_2, scintilFast_LAB_PPO, 201) -> SetSpline(true);
     MPT_LAB_PPO -> AddProperty("SLOWCOMPONENT",photon_en_LAB_PPO_2, scintilFast_LAB_PPO, 201) -> SetSpline(true);
-                                                                  
+
   // transmission
     G4double waveLength2[211] = {320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344,
               345, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 360, 360.75, 361.5, 362.25, 363, 363.75, 364.5, 365.25, 366, 366.75, 367.5,
@@ -256,7 +262,7 @@ void OpNoviceDetectorConstruction::DefineMPTs()
     G4double absLen2[211];
     for(int i=0; i<211; i++)
       absLen2[i] = -1./std::log(transCoef2[i])*m;
-    MPT_LAB_PPO -> AddProperty("ABSLENGTH",photon_en_LAB_PPO_3,absLen2,211) -> SetSpline(true);        
+    MPT_LAB_PPO -> AddProperty("ABSLENGTH",photon_en_LAB_PPO_3,absLen2,211) -> SetSpline(true);
     MPT_LAB_PPO -> AddConstProperty("RESOLUTIONSCALE", 2.0);
     MPT_LAB_PPO -> AddConstProperty("FASTTIMECONSTANT", 5.2*ns);
     MPT_LAB_PPO -> AddConstProperty("SLOWTIMECONSTANT", 18.4*ns);
@@ -317,7 +323,10 @@ void OpNoviceDetectorConstruction::DefineMPTs()
   MPT_Bis_MSB->AddProperty("WLSCOMPONENT", photonEnergy6, reEmit4, 16);
   MPT_Bis_MSB->AddConstProperty("WLSTIMECONSTANT", 3.*ns);
       //MPT_Bis_MSB-> AddConstProperty("WLSMEANNUMBERPHOTONS",1.0);
-  MPT_Bis_MSB->AddProperty("RINDEX", ppckovEmit, rindexWLS, 8)->SetSpline(true);
+
+//  MPT_Bis_MSB->AddProperty("RINDEX", ppckovEmit, rindexWLS, 8)->SetSpline(true);
+  MPT_Bis_MSB->AddProperty("RINDEX", pmma_en, pmma_rind, pmma_mpt_entr)->SetSpline(true);
+
   Bis_MSB->SetMaterialPropertiesTable(MPT_Bis_MSB);
 
 
@@ -345,7 +354,7 @@ void OpNoviceDetectorConstruction::DefineSurfaces()
   AirBoxSurface->SetType(dielectric_dielectric);
   AirBoxSurface->SetFinish(polished);
   AirBoxSurface->SetModel(glisur);
-         
+
   const G4int num1 = 2;
   G4double pp1[num1] = {2.*eV, 5.*eV};
   G4double reflectivity1[num1] = {0.999, 0.999}; // by A. K.
@@ -363,6 +372,8 @@ void OpNoviceDetectorConstruction::DefineSurfaces()
     new G4LogicalBorderSurface( (std::string("TubeSurface_")+std::to_string(pos)).c_str(), PMMA_Ring_phys_vect[pos], Air_gap_2_phys_vect[pos], AirBoxSurface);
     new G4LogicalBorderSurface( (std::string("TubeSurface_")+std::to_string(pos)).c_str(), Inner_tube_phys_vect[pos], Air_gap_2_phys_vect[pos], AirBoxSurface);
     new G4LogicalBorderSurface( (std::string("TubeSurface_")+std::to_string(pos)).c_str(), Air_gap_2_phys_vect[pos], Inner_tube_phys_vect[pos], AirBoxSurface);
+    new G4LogicalBorderSurface( (std::string("WLSSurface_")+std::to_string(pos)).c_str(), WLS_tube1_phys_vect[pos], WOM_tube_phys_vect[pos], AirBoxSurface);
+    new G4LogicalBorderSurface( (std::string("WLSSurface_")+std::to_string(pos)).c_str(), WLS_tube2_phys_vect[pos], WOM_tube_phys_vect[pos], AirBoxSurface);
   }
 
 
@@ -393,7 +404,7 @@ void OpNoviceDetectorConstruction::DefineSurfaces()
 //                               0.97712734, 0.97275713, 0.97658953, 0.97920518, 0.97380716, 0.98033894,
 //                               0.9776999 , 0.978477  , 0.97228729, 0.97114843, 0.97375261, 0.97113254};
 
-  G4MaterialPropertiesTable *MPTsurf_Steel = new G4MaterialPropertiesTable();      
+  G4MaterialPropertiesTable *MPTsurf_Steel = new G4MaterialPropertiesTable();
   MPTsurf_Steel -> AddProperty("REFLECTIVITY", photonEnergy7, reflectSteel, 18);
   SteelBoxSurface -> SetMaterialPropertiesTable(MPTsurf_Steel);
 
@@ -416,7 +427,7 @@ void OpNoviceDetectorConstruction::DefineSurfaces()
   G4MaterialPropertiesTable *MPTsurf_PMMA_WLS = new G4MaterialPropertiesTable();
   MPTsurf_PMMA_WLS->AddProperty("REFLECTIVITY", photon_en_PMMA_sWLS, reflectivityPMMA, nentries_PMMA_WLS_surf);
 
-  FiberSurfaceInside->SetMaterialPropertiesTable(MPTsurf_PMMA_WLS);                                               
+  FiberSurfaceInside->SetMaterialPropertiesTable(MPTsurf_PMMA_WLS);
 
   for(unsigned int pos = 0; pos<WOM_coord_vec.size(); pos++)
   {
@@ -449,7 +460,7 @@ void OpNoviceDetectorConstruction::DefineSurfaces()
     new G4LogicalBorderSurface( (std::string("FiberBoxSurfaceOut_")+std::to_string(pos)).c_str(), ScintilatorBox_phys, Inner_tube_phys_vect[pos], Scintillator_PMMA_Surface);
     new G4LogicalBorderSurface( (std::string("FiberBoxSurfaceOut_")+std::to_string(pos)).c_str(), Sct_Inside_phys_vect[pos], Inner_tube_phys_vect[pos], Scintillator_PMMA_Surface);
     new G4LogicalBorderSurface( (std::string("FiberBoxSurfaceOut_")+std::to_string(pos)).c_str(), Sct_Inside_phys_vect[pos], PMMA_Disk_phys_vect[pos], Scintillator_PMMA_Surface);
-  } 
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -467,10 +478,10 @@ void OpNoviceDetectorConstruction::DefineSolids()
   ScintilatorBox = new G4Box("ScintilatorBox",SctX/2,SctY/2,SctZ/2);
 //Steel box
   SteelBox = new G4Box("Steelbox",SteelX/2,SteelY/2,SteelZ/2);
-                
+
   G4double Rin, Rout;
   G4double delta_Z;
-    
+
 //Outer tube
   Rin = Diam_Out_In/2;
   Rout = Diam_Out_Out/2;
@@ -486,8 +497,8 @@ void OpNoviceDetectorConstruction::DefineSolids()
   Rout = Diam_WOM_Out/2 + Thickness_WLS;
   WLS_tube1  = new G4Tubs("WLS_tube1", Rin, Rout, Length_WOM/2, 0, 360*deg);
 //WOM tube
-  Rin = Diam_WOM_In/2;
-  Rout = Diam_WOM_Out/2;
+  Rin = Diam_WOM_In/2 - Thickness_WLS;
+  Rout = Diam_WOM_Out/2 + Thickness_WLS;
   WOM_tube  = new G4Tubs("WOM_tube", Rin, Rout, Length_WOM/2, 0, 360*deg);
 //Hole in box
   Rin = 0.0*mm;
@@ -541,10 +552,10 @@ double OlengthAdd = Thickness_Steel_Add;
 double OlengthWlsRing = Thickness_WLS;
   WLS_ring = new G4Tubs("WLS_ring ", Rin, Rout, OlengthWlsRing, 0, 360*deg);
 
-    
+
   delta_Z = (WallThickness_Z_Bottom - WallThickness_Z_Cover)/2;
   G4SubtractionSolid *EmptySteelBox= new G4SubtractionSolid("EmptySteelBox",SteelBox, ScintilatorBox,0,G4ThreeVector(0, 0, delta_Z));
-                
+
   G4double delta_Z_EmptySteelBoxWithHole = SteelZ/2 - OlengthHoleBox/2;
   G4double delta_Z_ScintilatorBoxWithHole = SctZ/2 - OlengthHoleSct/2;
 
@@ -574,6 +585,10 @@ double OlengthWlsRing = Thickness_WLS;
   }
   EmptySteelBoxWithHole=EmptySteelBoxWithHole_tempvec[WOM_coord_vec.size()-1];
   ScintilatorBoxWithHole = ScintilatorBoxWithHole_tempvec[WOM_coord_vec.size()-1];
+
+  sipmBox = new G4Box("sipmBox", sipmSize, sipmSize, sipmWindowThickness);
+  sipmBaseBox = new G4Box("sipmBase", sipmSize, sipmSize, sipmBaseThickness);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -598,6 +613,9 @@ void OpNoviceDetectorConstruction::DefineLogicalVolumes()
   PMMA_Hat_log = new G4LogicalVolume(PMMA_Hat, PMMA_side, "PMMA_HatLV");
   Steel_Add_log = new G4LogicalVolume(SteelAdd, steel, "Steel_AddLV");
   Sct_Inside_log = new G4LogicalVolume(SctInside, LAB_PPO, "Sct_InsideLV");
+
+  sipmBox_log = new G4LogicalVolume(sipmBox, air, "sipmBox");
+  sipmBaseBox_log = new G4LogicalVolume(sipmBaseBox, air, "sipmBaseBox");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -614,7 +632,7 @@ void OpNoviceDetectorConstruction::ConstructVolumes()
   G4double delta_Z_0 = SteelZ/2 + Thickness_Steel_Add - Length_2;  // upper surface of PMMA ring
 
   SteelBox_phys = new G4PVPlacement(0,G4ThreeVector(0,0,0),SteelBox_log,"SteelBox",expHall_log,false,0, intersect_check);
-  
+
   delta_Z = (WallThickness_Z_Bottom - WallThickness_Z_Cover)/2;
   ScintilatorBox_phys = new G4PVPlacement(0,G4ThreeVector(0, 0, delta_Z),ScintilatorBox_log,"ScintilatorBoxPV",expHall_log,false,0, intersect_check);
 
@@ -658,8 +676,8 @@ void OpNoviceDetectorConstruction::ConstructVolumes()
     PMMA_Disk_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_PMMA_Disk), PMMA_disk_log, "PMMA_Disk", expHall_log, false, 0, intersect_check) );
     Air_gap_1_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Air_gap_1), Air_gap1_log, "Air_gap1", expHall_log, false, 0, intersect_check) );
     Air_gap_2_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Air_gap_2), Air_gap2_log, "Air_gap2", expHall_log, false, 0, intersect_check) );
-    WLS_tube1_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_WLS_1), WLS_tube1_log, "WLS1", expHall_log, false, 0, intersect_check) );
-    WLS_tube2_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_WLS_2), WLS_tube2_log, "WLS2", expHall_log, false, 0, intersect_check) );
+    WLS_tube1_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(0.,0., 0.), WLS_tube1_log, "WLS1", WOM_tube_log, false, 0, intersect_check) );
+    WLS_tube2_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(0.,0., 0.), WLS_tube2_log, "WLS2", WOM_tube_log, false, 0, intersect_check) );
     PMMA_Hat_phys_vect.push_back(  new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_PMMA_Hat), PMMA_Hat_log, "PMMA_Hat", expHall_log, false, 0, intersect_check) );
     Steel_Add_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Steel_Add), Steel_Add_log, "Steel_Add", expHall_log, false, 0, intersect_check) );
     Sct_Inside_phys_vect.push_back(new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Sct_Inside), Sct_Inside_log, "Sct_Inside", expHall_log, false, 0, intersect_check) );

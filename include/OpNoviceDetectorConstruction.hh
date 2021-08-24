@@ -115,6 +115,9 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4double OlengthAG1;
     G4double OlengthInside;
     G4double sipmbasewidth;
+    G4double sipmSize;
+    G4double sipmWindowThickness;
+    G4double sipmBaseThickness;
 
 
 //solids
@@ -124,6 +127,8 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
   //-------------------------------------------------------------------
   G4Box* ScintilatorBox;
   G4Box* SteelBox;
+  G4Box* sipmBox;
+  G4Box* sipmBaseBox;
   G4VSolid *Outer_tube;
   G4VSolid *Air_gap1;
   G4VSolid *WLS_tube1;
@@ -145,6 +150,8 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
 //logical volumes
     G4LogicalVolume* expHall_log;
     G4LogicalVolume* sipm_base_log;
+    G4LogicalVolume* sipmBox_log;
+    G4LogicalVolume* sipmBaseBox_log;
     G4LogicalVolume* ScintilatorBox_log;
     G4LogicalVolume* SteelBox_log;
     G4LogicalVolume *Outer_tube_log;
@@ -178,6 +185,9 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
   std::vector<G4VPhysicalVolume*> PMMA_Hat_phys_vect;
   std::vector<G4VPhysicalVolume*> Steel_Add_phys_vect;
   std::vector<G4VPhysicalVolume*> Sct_Inside_phys_vect;
+
+  std::vector<G4VPhysicalVolume*> sipm_phys_vect;
+//  std::vector<G4VPhysicalVolume*> Sct_Inside_phys_vect;
 
 //visualisation
 
