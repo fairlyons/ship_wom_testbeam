@@ -37,6 +37,7 @@
 #include "g4root.hh"
 #include "G4Step.hh"
 #include "G4VPhysicalVolume.hh"
+#include "G4VTouchable.hh"
 #include "G4LogicalVolume.hh"
 #include "OpNoviceDetectorConstruction.hh"
 #include "G4VSolid.hh"
@@ -60,7 +61,7 @@ OpNoviceSteppingAction::~OpNoviceSteppingAction()
 
 G4int sipm_detection(G4double wl)
 {
-  G4double filling_factor = 0.875*0.01;
+  G4double filling_factor = 0.875*0.01; //shouldn't this be 0.67?
   std::vector<double> wl_vec = {320., 330., 340., 350., 360., 370., 380., 390., 400., 410., 420., 430., 440., 450., 460., 470., 480., 490., 500., 510., 520., 530., 540., 550.};
   std::vector<double> eff_vec = {3., 9., 19., 27., 31., 34., 39., 43., 45., 46., 48., 49., 49., 50., 50., 50., 50., 49., 48., 47., 46., 44., 42., 41.};
   G4int veclen = wl_vec.size();
@@ -122,6 +123,9 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
 
     G4int post_copynum = postvolumephys->GetCopyNo();
 
+    const G4VTouchable* posttouchable = NULL;
+    posttouchable = aStep->GetPostStepPoint()->GetTouchable();
+    if(!posttouchable) return;
 
     if(stepnum ==1)
     {
@@ -153,8 +157,9 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
 
     //---------------- 4. photons that reached SiPM's
 
-    if(postphysvolname == "sipm_base")
+    if(postphysvolname == "sipmBase")
     {
+      G4cout << "sipm hit !!!!!!!!! " << posttouchable->GetCopyNumber(1) << G4endl;
       analysisManager->FillNtupleDColumn(0,0, aStep -> GetPostStepPoint() -> GetPosition().getX() );
       analysisManager->FillNtupleDColumn(0,1, aStep -> GetPostStepPoint() -> GetPosition().getY() );
       analysisManager->FillNtupleIColumn(0,2, process );
