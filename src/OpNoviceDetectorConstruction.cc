@@ -416,8 +416,11 @@ void OpNoviceDetectorConstruction::DefineSurfaces()
 //            G4double reflectSteel[18] = {0.467, 0.472, 0.477, 0.482, 0.486, 0.491, 0.496, 0.500,
 //                           0.506, 0.510, 0.515, 0.519, 0.521, 0.522, 0.530, 0.538, 0.542, 0.546};    // from journal article
 
-  G4double reflectSteel[18] = {0.35, 0.36, 0.365, 0.37, 0.375, 0.38, 0.39, 0.395,
-                            0.4, 0.405, 0.41, 0.415, 0.42, 0.42, 0.425, 0.43, 0.43, 0.435};         // from borexino
+//  G4double reflectSteel[18] = {0.35, 0.36, 0.365, 0.37, 0.375, 0.38, 0.39, 0.395,
+//                            0.4, 0.405, 0.41, 0.415, 0.42, 0.42, 0.425, 0.43, 0.43, 0.435};         // from borexino
+
+  G4double reflectSteel[18] = {0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+                               0., 0., 0., 0., 0., 0., 0., 0.,};         // turn off the reflectivity
 
 //  G4double reflectSteel[18] = {0.97752157, 0.9722873 , 0.96680556, 0.97042264, 0.97126233, 0.97271017,
 //                               0.97712734, 0.97275713, 0.97658953, 0.97920518, 0.97380716, 0.98033894,
@@ -441,7 +444,7 @@ void OpNoviceDetectorConstruction::DefineSurfaces()
 
   const int nentries_PMMA_WLS_surf = 3;
   G4double photon_en_PMMA_sWLS[nentries_PMMA_WLS_surf] = {2.*eV,3.5*eV,5.*eV};
-  G4double reflectivityPMMA[nentries_PMMA_WLS_surf] = {0.0999,0.0999, 0.0999};
+  G4double reflectivityPMMA[nentries_PMMA_WLS_surf] = {0.999,0.999, 0.999};
 
   G4MaterialPropertiesTable *MPTsurf_PMMA_WLS = new G4MaterialPropertiesTable();
   MPTsurf_PMMA_WLS->AddProperty("REFLECTIVITY", photon_en_PMMA_sWLS, reflectivityPMMA, nentries_PMMA_WLS_surf);
