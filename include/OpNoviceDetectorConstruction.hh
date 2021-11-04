@@ -127,6 +127,7 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
   //-------------------------------------------------------------------
   G4Box* ScintilatorBox;
   G4Box* SteelBox;
+  G4Box* WOM_cellBox;
   G4Box* sipmBox;
   G4Box* sipmBaseBox;
   G4VSolid *Outer_tube;
@@ -149,6 +150,7 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
 
 //logical volumes
     G4LogicalVolume* expHall_log;
+    G4LogicalVolume* WOM_cell_log;
     G4LogicalVolume* sipm_base_log;
     G4LogicalVolume* sipmBox_log;
     G4LogicalVolume* sipmBaseBox_log;
@@ -187,6 +189,7 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
   std::vector<G4VPhysicalVolume*> Sct_Inside_phys_vect;
 
   std::vector<G4VPhysicalVolume*> sipm_phys_vect;
+  std::vector<G4VPhysicalVolume*> WOM_cells_phys_vect;
 //  std::vector<G4VPhysicalVolume*> Sct_Inside_phys_vect;
 
 //visualisation
