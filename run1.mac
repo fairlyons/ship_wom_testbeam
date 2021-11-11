@@ -1,7 +1,7 @@
-/analysis/setFileName test.root
-/gps/particle e-
-/gps/position 50 31 0 cm
-/gps/direction -1 -1 0
+/analysis/setFileName testref4.root
+/gps/particle mu-
+/gps/position 130 51 0 cm
+/gps/direction -1 -0.7 0
 /gps/ene/type Mono
-/gps/energy 100 MeV
-/run/beamOn 3
+/gps/energy 1 GeV
+/run/beamOn 1000
