@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "*.icc": "cpp",
+        "4cell_ana.C": "cpp",
+        "cell_ana.C": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
+}
