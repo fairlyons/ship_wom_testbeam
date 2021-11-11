@@ -5,4 +5,11 @@
         "cell_ana.C": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled"
+        "*.tikz": "latex",
+        "tube_xy.C": "cpp",
+        "angular_dist.C": "cpp",
+        "plume_XY_hits.C": "cpp",
+        "plume_histo.C": "cpp",
+        "OrlovStyle.C": "cpp"
+    }
 }

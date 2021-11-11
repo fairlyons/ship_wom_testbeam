@@ -46,6 +46,7 @@ set(OpNovice_SCRIPTS
     run.png
     vis.mac
     run1.mac
+    photons.mac
   )
 
 foreach(_script ${OpNovice_SCRIPTS})
