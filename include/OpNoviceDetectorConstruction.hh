@@ -187,7 +187,6 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
   std::vector<G4VPhysicalVolume*> Sct_Inside_phys_vect;
 
   std::vector<G4VPhysicalVolume*> sipm_phys_vect;
-//  std::vector<G4VPhysicalVolume*> Sct_Inside_phys_vect;
 
 //visualisation
 

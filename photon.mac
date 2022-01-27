@@ -1,0 +1,7 @@
+/analysis/setFileName photons.root
+/gps/particle opticalphoton
+/gps/position 0 0 30 cm
+/gps/direction 0 0 -1
+/gps/ene/type Mono
+/gps/energy 5 eV
+/run/beamOn 10
