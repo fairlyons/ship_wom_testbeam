@@ -81,7 +81,7 @@ OpNoviceDetectorConstruction::OpNoviceDetectorConstruction()
 
 //  G4double delta_Z_0 = SteelZ/2 + Thickness_Steel_Add - Length_2;  // upper surface of PMMA ring
 
-  Additional_Length = -100*mm + 21*mm;
+  Additional_Length = 0;
 
   Diam_In_In = 44*mm;
   Diam_In_Out = 50*mm;
@@ -650,6 +650,7 @@ void OpNoviceDetectorConstruction::ConstructVolumes()
   G4double delta_Z_Outer_tube = SteelZ/2 + Thickness_Steel_Add + Thickness_Hat - OlengthOuter/2;
   //WOM tube
   G4double delta_Z_WOM = delta_Z_0 + Thickness_WLS + Length_WOM/2;
+  G4cout << "########   " << delta_Z_WOM << "########   " << G4endl;
   //Inner tube
   G4double delta_Z_Inner_tube = delta_Z_0 - Thickness_Ring + Length_1/2;
   //PMMA Ring
@@ -673,7 +674,7 @@ void OpNoviceDetectorConstruction::ConstructVolumes()
 
   for(unsigned int pos = 0; pos<WOM_coord_vec.size(); pos++)
   {
-    // sipm_base_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_sipm), sipm_base_log, "sipm_base", expHall_log, false, pos, intersect_check) );
+    sipm_base_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_sipm), sipm_base_log, "sipm_base", expHall_log, false, pos, intersect_check) );
     // Outer_tube_phys_vect.push_back(new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Outer_tube), Outer_tube_log, "Outer_tube", expHall_log, false, 0, intersect_check) );
     WOM_tube_phys_vect.push_back(  new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_WOM), WOM_tube_log, "WOM tube", expHall_log, false, 0, intersect_check) );
     // Inner_tube_phys_vect.push_back(new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Inner_tube), Inner_tube_log, "Inner_tube", expHall_log, false, 0, intersect_check) );
