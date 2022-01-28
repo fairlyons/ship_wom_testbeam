@@ -106,8 +106,12 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
     G4int trackid = track -> GetTrackID();
 
     G4int process = 0;
-    std::string processname = track->GetCreatorProcess()->GetProcessName();
+    
+    std::string processname = "";
 
+    if (track->GetCreatorProcess()){
+        processname = track->GetCreatorProcess()->GetProcessName();
+    }
     if(processname == "Scintillation")
       process = 1;
     else if( processname == "OpWLS") 
@@ -165,6 +169,11 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
       analysisManager->FillNtupleDColumn(0,5, track -> GetGlobalTime() );
       analysisManager->FillNtupleIColumn(0,6, sipm_detection(1.24e-3 / track -> GetKineticEnergy()));
       analysisManager->FillNtupleIColumn(0,7, eventNumber);
+
+      analysisManager->FillNtupleDColumn(0,8, aStep -> GetPostStepPoint() -> GetMomentumDirection().getX() );
+      analysisManager->FillNtupleDColumn(0,9, aStep -> GetPostStepPoint() -> GetMomentumDirection().getY() );
+      analysisManager->FillNtupleDColumn(0,10, aStep -> GetPostStepPoint() -> GetMomentumDirection().getZ() );
+
       analysisManager->AddNtupleRow(0);
       track->SetTrackStatus(fStopAndKill);
     }

@@ -76,6 +76,11 @@ OpNoviceRunAction::OpNoviceRunAction()
   // analysisManager -> CreateNtupleIColumn("Steel_reflections");
   // analysisManager -> CreateNtupleDColumn("Scint_totalpath");
   analysisManager -> CreateNtupleIColumn("eventNumber");
+
+  analysisManager -> CreateNtupleDColumn("px");
+  analysisManager -> CreateNtupleDColumn("py");
+  analysisManager -> CreateNtupleDColumn("pz");
+
   analysisManager -> FinishNtuple(0);
 //--------------------------------------------------------------------
 
