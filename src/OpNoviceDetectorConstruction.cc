@@ -611,8 +611,8 @@ double OlengthWlsRing = Thickness_WLS;
   EmptySteelBoxWithHole=EmptySteelBoxWithHole_tempvec[WOM_coord_vec.size()-1];
   ScintilatorBoxWithHole = ScintilatorBoxWithHole_tempvec[WOM_coord_vec.size()-1];
 
-  sipmBox = new G4Box("sipmBox", sipmSize, sipmSize, sipmWindowThickness);
-  sipmBaseBox = new G4Box("sipmBase", sipmSize, sipmSize, sipmBaseThickness);
+  sipmBox = new G4Box("sipmBox", sipmSize/2., sipmSize/2., sipmWindowThickness/2.);
+  sipmBaseBox = new G4Box("sipmBase", sipmSize/2., sipmSize/2., sipmBaseThickness/2.);
   WOM_cellBox = new G4Box("wom_cell", SteelX/2,SteelY/2,SteelZ/2 + 15*cm);
 
 }
@@ -702,6 +702,7 @@ void OpNoviceDetectorConstruction::ConstructVolumes()
 
   for(unsigned int pos = 0; pos<WOM_coord_vec.size(); pos++)
   {
+    RM1 = new G4RotationMatrix();
     // sipm_base_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_sipm), sipm_base_log, "sipm_base", WOM_cell_log, false, pos, intersect_check) );
     Outer_tube_phys_vect.push_back(new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Outer_tube), Outer_tube_log, "Outer_tube", WOM_cell_log, false, 0, intersect_check) );
     WOM_tube_phys_vect.push_back(  new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_WOM), WOM_tube_log, "WOM tube", WOM_cell_log, false, 0, intersect_check) );
@@ -722,10 +723,11 @@ void OpNoviceDetectorConstruction::ConstructVolumes()
       sipm_phys_vect.push_back(new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first +  radius_sipm*std::cos(i*2*pi/n_sipm),
                                                                     WOM_coord_vec[pos].second + radius_sipm*std::sin(i*2*pi/n_sipm),
                                                                     delta_Z_sipm),
-                                                                    sipmBox_log, "sipm", expHall_log, false, sipm_id++, intersect_check) );
+                                                                    sipmBox_log, "sipm", WOM_cell_log, false, sipm_id++, intersect_check) );
     }
   }
 
+  RM1 = new G4RotationMatrix();
   WOM_cells_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(-SteelX/2.,-SteelY/2.,0.), WOM_cell_log, "wom_cell", expHall_log, false, 0, intersect_check) );
   WOM_cells_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(+SteelX/2.,+SteelY/2.,0.), WOM_cell_log, "wom_cell", expHall_log, false, 0, intersect_check) );    
   WOM_cells_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(-SteelX/2.,+SteelY/2.,0.), WOM_cell_log, "wom_cell", expHall_log, false, 0, intersect_check) );

@@ -1,4 +1,4 @@
-/analysis/setFileName testref4.root
+/analysis/setFileName test4cellsipm.root
 /gps/particle mu-
 /gps/position 130 51 0 cm
 /gps/direction -1 -0.7 0

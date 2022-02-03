@@ -4,10 +4,10 @@
 
 int cell_ana(){
 
-    TFile* f = new TFile("../build_ship_wom/testref4.root");
+    TFile* f = new TFile("../build_ship_wom/test4cellsipm.root");
     TTree* t = (TTree*)f->Get("Detected");
 
-    t->Draw("y:x>>h(1200,-1200,1200,800,-800,800)","","colz");
+    t->Draw("y:x>>h(600,-1200,1200,400,-800,800)","","colz");
 
     TLine* vline = new TLine(0,-800,0,800);
     TLine* hline = new TLine(-1200,0,1200,0);
