@@ -37,6 +37,7 @@
 #include "g4root.hh"
 #include "G4Step.hh"
 #include "G4VPhysicalVolume.hh"
+#include "G4VTouchable.hh"
 #include "G4LogicalVolume.hh"
 #include "OpNoviceDetectorConstruction.hh"
 #include "G4VSolid.hh"
@@ -60,7 +61,7 @@ OpNoviceSteppingAction::~OpNoviceSteppingAction()
 
 G4int sipm_detection(G4double wl)
 {
-  G4double filling_factor = 0.875*0.01;
+  G4double filling_factor = 0.875*0.01; //shouldn't this be 0.67?
   std::vector<double> wl_vec = {320., 330., 340., 350., 360., 370., 380., 390., 400., 410., 420., 430., 440., 450., 460., 470., 480., 490., 500., 510., 520., 530., 540., 550.};
   std::vector<double> eff_vec = {3., 9., 19., 27., 31., 34., 39., 43., 45., 46., 48., 49., 49., 50., 50., 50., 50., 49., 48., 47., 46., 44., 42., 41.};
   G4int veclen = wl_vec.size();
@@ -106,8 +107,11 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
     G4int trackid = track -> GetTrackID();
 
     G4int process = 0;
-    
     std::string processname = "";
+
+    if (track->GetCreatorProcess()){
+        std::string processname = track->GetCreatorProcess()->GetProcessName();
+    }
 
     if (track->GetCreatorProcess()){
         processname = track->GetCreatorProcess()->GetProcessName();
@@ -126,6 +130,9 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
 
     G4int post_copynum = postvolumephys->GetCopyNo();
 
+    const G4VTouchable* posttouchable = NULL;
+    posttouchable = aStep->GetPostStepPoint()->GetTouchable();
+    if(!posttouchable) return;
 
     if(stepnum ==1)
     {
@@ -157,22 +164,20 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
 
     //---------------- 4. photons that reached SiPM's
 
-    if(postphysvolname == "sipm_base")
+    if(postphysvolname == "sipmBase")
     {
+      // G4cout << "sipm hit !!!!!!!!! " << posttouchable->GetCopyNumber(1) << " " << posttouchable->GetCopyNumber(2) << G4endl;
       analysisManager->FillNtupleDColumn(0,0, aStep -> GetPostStepPoint() -> GetPosition().getX() );
       analysisManager->FillNtupleDColumn(0,1, aStep -> GetPostStepPoint() -> GetPosition().getY() );
       analysisManager->FillNtupleIColumn(0,2, process );
-      analysisManager->FillNtupleIColumn(0,3, post_copynum );
+      analysisManager->FillNtupleIColumn(0,3, posttouchable->GetCopyNumber(2) ); //cell number
       // analysisManager->FillNtupleIColumn(0,2, parentid );
       // analysisManager->FillNtupleIColumn(0,3, trackid);
       analysisManager->FillNtupleDColumn(0,4, 1.24e-3 / track -> GetKineticEnergy());
       analysisManager->FillNtupleDColumn(0,5, track -> GetGlobalTime() );
       analysisManager->FillNtupleIColumn(0,6, sipm_detection(1.24e-3 / track -> GetKineticEnergy()));
       analysisManager->FillNtupleIColumn(0,7, eventNumber);
-
-      analysisManager->FillNtupleDColumn(0,8, aStep -> GetPostStepPoint() -> GetMomentumDirection().getX() );
-      analysisManager->FillNtupleDColumn(0,9, aStep -> GetPostStepPoint() -> GetMomentumDirection().getY() );
-      analysisManager->FillNtupleDColumn(0,10, aStep -> GetPostStepPoint() -> GetMomentumDirection().getZ() );
+      analysisManager->FillNtupleIColumn(0,8, posttouchable->GetCopyNumber(1)); //sipm number
 
       analysisManager->AddNtupleRow(0);
       track->SetTrackStatus(fStopAndKill);

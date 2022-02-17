@@ -1,0 +1,6 @@
+/gps/particle opticalphoton
+/gps/position 250 0 0 mm
+/gps/direction 1 0 0 cm
+/gps/ene/type Mono
+/gps/energy 5 eV
+/run/beamOn 100

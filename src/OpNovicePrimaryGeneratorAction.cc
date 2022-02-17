@@ -55,7 +55,7 @@ OpNovicePrimaryGeneratorAction::OpNovicePrimaryGeneratorAction()
   fgInstance = this;
   // fGunMessenger = new OpNovicePrimaryGeneratorMessenger(this);
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-   G4ParticleDefinition* particle = particleTable->FindParticle("e-");
+  G4ParticleDefinition* particle = particleTable->FindParticle("e-");
 
    pgun->SetParticleDefinition(particle);
    pgun->SetParticleTime(0.0*ns);
