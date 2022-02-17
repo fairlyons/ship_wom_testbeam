@@ -76,6 +76,8 @@ OpNoviceRunAction::OpNoviceRunAction()
   // analysisManager -> CreateNtupleIColumn("Steel_reflections");
   // analysisManager -> CreateNtupleDColumn("Scint_totalpath");
   analysisManager -> CreateNtupleIColumn("eventNumber");
+  analysisManager -> CreateNtupleIColumn("sipmNumber");
+
   analysisManager -> FinishNtuple(0);
 //--------------------------------------------------------------------
 
@@ -87,6 +89,7 @@ OpNoviceRunAction::OpNoviceRunAction()
   analysisManager -> CreateNtupleDColumn("Edep_scintillator");
   analysisManager -> CreateNtupleDColumn("Edep_walls");
   analysisManager -> CreateNtupleIColumn("eventNumber");
+
   analysisManager -> FinishNtuple(1);
 //--------------------------------------------------------------------
 

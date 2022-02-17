@@ -163,17 +163,19 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
 
     if(postphysvolname == "sipmBase")
     {
-      G4cout << "sipm hit !!!!!!!!! " << posttouchable->GetCopyNumber(1) << G4endl;
+      // G4cout << "sipm hit !!!!!!!!! " << posttouchable->GetCopyNumber(1) << " " << posttouchable->GetCopyNumber(2) << G4endl;
       analysisManager->FillNtupleDColumn(0,0, aStep -> GetPostStepPoint() -> GetPosition().getX() );
       analysisManager->FillNtupleDColumn(0,1, aStep -> GetPostStepPoint() -> GetPosition().getY() );
       analysisManager->FillNtupleIColumn(0,2, process );
-      analysisManager->FillNtupleIColumn(0,3, post_copynum );
+      analysisManager->FillNtupleIColumn(0,3, posttouchable->GetCopyNumber(2) ); //cell number
       // analysisManager->FillNtupleIColumn(0,2, parentid );
       // analysisManager->FillNtupleIColumn(0,3, trackid);
       analysisManager->FillNtupleDColumn(0,4, 1.24e-3 / track -> GetKineticEnergy());
       analysisManager->FillNtupleDColumn(0,5, track -> GetGlobalTime() );
       analysisManager->FillNtupleIColumn(0,6, sipm_detection(1.24e-3 / track -> GetKineticEnergy()));
       analysisManager->FillNtupleIColumn(0,7, eventNumber);
+      analysisManager->FillNtupleIColumn(0,8, posttouchable->GetCopyNumber(1)); //sipm number
+
       analysisManager->AddNtupleRow(0);
       track->SetTrackStatus(fStopAndKill);
     }

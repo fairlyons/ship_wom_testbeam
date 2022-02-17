@@ -1,7 +1,7 @@
 /analysis/setFileName test4cellsipm.root
 /gps/particle mu-
-/gps/position 130 51 0 cm
-/gps/direction -1 -0.7 0
+/gps/position -60 90 0 cm
+/gps/direction 0 -1 0
 /gps/ene/type Mono
-/gps/energy 1 GeV
-/run/beamOn 1000
+/gps/energy 50 GeV
+/run/beamOn 10000
