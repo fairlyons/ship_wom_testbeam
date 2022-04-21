@@ -1,7 +1,10 @@
 /analysis/setFileName test4cellsipm.root
 /gps/particle mu-
-/gps/position -60 90 0 cm
+/gps/position 60 90 0 cm
 /gps/direction 0 -1 0
 /gps/ene/type Mono
 /gps/energy 50 GeV
-/run/beamOn 10000
+/run/beamOn 2
+
+
+# /control/execute run1.mac
