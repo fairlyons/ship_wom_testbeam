@@ -786,33 +786,46 @@ void OpNoviceDetectorConstruction::DefineVisAttributes(){
     steelBoxVisAtt->SetVisibility(true);
     steelBoxVisAtt->SetColor(white_trans);
     SteelBox_log->SetVisAttributes(steelBoxVisAtt);
+    Steel_Add_log->SetVisAttributes(steelBoxVisAtt);
 
     G4VisAttributes *sctBoxVisAtt = new G4VisAttributes;
     sctBoxVisAtt->SetColor(blue_trans);
     sctBoxVisAtt->SetVisibility(true);
     ScintilatorBox_log->SetVisAttributes(sctBoxVisAtt);
     Sct_Inside_log->SetVisAttributes(sctBoxVisAtt);
+
     G4VisAttributes *PMMAVisAtt = new G4VisAttributes;
     PMMAVisAtt->SetVisibility(true);
     PMMAVisAtt->SetColor(grey);
-    PMMA_Hat_log->SetVisAttributes(PMMAVisAtt);
+    PMMA_disk_log->SetVisAttributes(PMMAVisAtt);
     PMMA_Ring_log->SetVisAttributes(PMMAVisAtt);
     PMMA_Hat_log->SetVisAttributes(PMMAVisAtt);
     Outer_tube_log->SetVisAttributes(PMMAVisAtt);
     Inner_tube_log->SetVisAttributes(PMMAVisAtt);
 
+    G4VisAttributes *airVisAtt = new G4VisAttributes;
+    airVisAtt->SetColor(green);
+    airVisAtt->SetVisibility(true);
+    Air_gap1_log->SetVisAttributes(airVisAtt);
+    Air_gap2_log->SetVisAttributes(airVisAtt);
+
+    G4VisAttributes *WLSVisAtt = new G4VisAttributes;
+    WLSVisAtt->SetColor(red);
+    WLSVisAtt->SetVisibility(true);
+    WLS_tube1_log->SetVisAttributes(WLSVisAtt);
+    WLS_tube2_log->SetVisAttributes(WLSVisAtt);
+
     G4VisAttributes *WOMVisAtt = new G4VisAttributes;
     WOMVisAtt->SetColor(magenta);
     WOMVisAtt->SetVisibility(true);
-
     WOM_tube_log->SetVisAttributes(WOMVisAtt);
 
     G4VisAttributes *sipmVisAtt = new G4VisAttributes;
     sipmVisAtt->SetColor(grey);
     sipmVisAtt->SetVisibility(true);
-
     sipmBox_log->SetVisAttributes(sipmVisAtt);
     sipmBaseBox_log->SetVisAttributes(sipmVisAtt);
+    sipm_base_log->SetVisAttributes(sipmVisAtt);
 
 }
 
