@@ -422,12 +422,12 @@ void OpNoviceDetectorConstruction::DefineSurfaces()
 //  G4double reflectSteel[18] = {0.35, 0.36, 0.365, 0.37, 0.375, 0.38, 0.39, 0.395,
 //                            0.4, 0.405, 0.41, 0.415, 0.42, 0.42, 0.425, 0.43, 0.43, 0.435};         // from borexino
 
-  // G4double reflectSteel[18] = {0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
-  //                              0., 0., 0., 0., 0., 0., 0., 0.,};         // turn off the reflectivity
+  G4double reflectSteel[18] = {0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+                               0., 0., 0., 0., 0., 0., 0., 0.,};         // turn off the reflectivity
 
- G4double reflectSteel[18] = {0.97752157, 0.9722873 , 0.96680556, 0.97042264, 0.97126233, 0.97271017,
-                              0.97712734, 0.97275713, 0.97658953, 0.97920518, 0.97380716, 0.98033894,
-                              0.9776999 , 0.978477  , 0.97228729, 0.97114843, 0.97375261, 0.97113254};
+//  G4double reflectSteel[18] = {0.97752157, 0.9722873 , 0.96680556, 0.97042264, 0.97126233, 0.97271017,
+//                               0.97712734, 0.97275713, 0.97658953, 0.97920518, 0.97380716, 0.98033894,
+//                               0.9776999 , 0.978477  , 0.97228729, 0.97114843, 0.97375261, 0.97113254};
 
   G4MaterialPropertiesTable *MPTsurf_Steel = new G4MaterialPropertiesTable();
   MPTsurf_Steel -> AddProperty("REFLECTIVITY", photonEnergy7, reflectSteel, 18);
@@ -658,10 +658,10 @@ void OpNoviceDetectorConstruction::ConstructVolumes()
   G4RotationMatrix*RM1=new G4RotationMatrix(0*deg,0*deg,0*deg);
   G4double delta_Z_0 = SteelZ/2 + Thickness_Steel_Add - Length_2;  // upper surface of PMMA ring
 
+  ScintilatorBox_phys = new G4PVPlacement(0,G4ThreeVector(0, 0, delta_Z),ScintilatorBox_log,"ScintilatorBoxPV",WOM_cell_log,false,0, intersect_check);
   SteelBox_phys = new G4PVPlacement(0,G4ThreeVector(0,0,0),SteelBox_log,"SteelBox",WOM_cell_log,false,0, intersect_check);
 
   delta_Z = (WallThickness_Z_Bottom - WallThickness_Z_Cover)/2;
-  ScintilatorBox_phys = new G4PVPlacement(0,G4ThreeVector(0, 0, delta_Z),ScintilatorBox_log,"ScintilatorBoxPV",SteelBox_log,false,0, intersect_check);
 
   sipmBase_phys = new G4PVPlacement(0,G4ThreeVector(0, 0, sipmWindowThickness/2. - sipmBaseThickness/2. ),sipmBaseBox_log,"sipmBase",sipmBox_log,false,0, intersect_check);
 
