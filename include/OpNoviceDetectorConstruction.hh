@@ -39,6 +39,7 @@
 #include "G4Box.hh"
 #include "G4VSolid.hh"
 #include "G4Tubs.hh"
+#include "G4ExtrudedSolid.hh"
 
 #include "G4Color.hh"
 #include "G4VisAttributes.hh"
@@ -106,6 +107,7 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4double Thickness_Disk;
     G4double Thickness_Hat;
     G4double Thickness_Steel_Add;
+    G4double Thickness_Gap;
     G4double Length_WOM;
     G4double Thickness_WLS;
     
@@ -113,7 +115,7 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4double delta_Y;
 
     G4double OlengthOuter;
-    G4double OlengthAG1;
+    G4double OlengthAG;
     G4double OlengthInside;
     G4double sipmbasewidth;
     G4double sipmSize;
@@ -126,8 +128,8 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
   //-------------------------------------------------------------------
     G4VSolid *sipm_base;
   //-------------------------------------------------------------------
-  G4Box* ScintilatorBox;
-  G4Box* SteelBox;
+  G4ExtrudedSolid* ScintilatorBox;
+  G4ExtrudedSolid* SteelBox;
   G4Box* WOM_cellBox;
   G4Box* sipmBox;
   G4Box* sipmBaseBox;
@@ -146,6 +148,9 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
   G4VSolid *SteelAdd;
   G4VSolid *SctInside;
   G4VSolid *WLS_ring;
+  G4VSolid *Air_ring1;
+  G4VSolid *Air_ring2;
+  G4VSolid *PMMA_ring_lower;
   G4SubtractionSolid *EmptySteelBoxWithHole;
   G4SubtractionSolid *ScintilatorBoxWithHole;
 
@@ -167,6 +172,9 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4LogicalVolume *WLS_tube1_log;
     G4LogicalVolume *WLS_tube2_log;
     G4LogicalVolume *PMMA_Hat_log;
+    G4LogicalVolume *Air_ring1_log;
+    G4LogicalVolume *Air_ring2_log;
+    G4LogicalVolume *PMMA_ring_lower_log;
     G4LogicalVolume *Steel_Add_log;
     G4LogicalVolume *Sct_Inside_log;
 
@@ -187,12 +195,13 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
   std::vector<G4VPhysicalVolume*> WLS_tube1_phys_vect;
   std::vector<G4VPhysicalVolume*> WLS_tube2_phys_vect;
   std::vector<G4VPhysicalVolume*> PMMA_Hat_phys_vect;
+  std::vector<G4VPhysicalVolume*> Air_ring_1_phys_vect;
+  std::vector<G4VPhysicalVolume*> Air_ring_2_phys_vect;
+  std::vector<G4VPhysicalVolume*> PMMA_ring_lower_phys_vect;
   std::vector<G4VPhysicalVolume*> Steel_Add_phys_vect;
   std::vector<G4VPhysicalVolume*> Sct_Inside_phys_vect;
-
   std::vector<G4VPhysicalVolume*> sipm_phys_vect;
   std::vector<G4VPhysicalVolume*> WOM_cells_phys_vect;
-//  std::vector<G4VPhysicalVolume*> Sct_Inside_phys_vect;
 
 //visualisation
 
