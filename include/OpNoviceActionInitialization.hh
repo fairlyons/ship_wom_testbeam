@@ -34,7 +34,6 @@
 #include "G4VUserActionInitialization.hh"
 
 /// Action initialization class.
-///
 
 class OpNoviceActionInitialization : public G4VUserActionInitialization
 {

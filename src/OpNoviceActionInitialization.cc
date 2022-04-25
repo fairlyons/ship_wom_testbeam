@@ -29,7 +29,6 @@
 /// \brief Implementation of the OpNoviceActionInitialization class
 
 #include "OpNoviceActionInitialization.hh"
-
 #include "OpNoviceEventAction.hh"
 #include "OpNovicePrimaryGeneratorAction.hh"
 #include "OpNoviceRunAction.hh"
@@ -59,8 +58,7 @@ void OpNoviceActionInitialization::Build() const
 {
   SetUserAction(new OpNovicePrimaryGeneratorAction());
   SetUserAction(new OpNoviceRunAction());
-      	OpNoviceEventAction* eventAction = new OpNoviceEventAction;
-      	SetUserAction(eventAction);
-        SetUserAction(new OpNoviceSteppingAction(eventAction));
-
+  OpNoviceEventAction* eventAction = new OpNoviceEventAction;
+  SetUserAction(eventAction);
+  SetUserAction(new OpNoviceSteppingAction(eventAction));
 }

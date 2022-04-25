@@ -2,7 +2,6 @@
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
 // * the Geant4 Collaboration.  It is provided  under  the terms  and *
 // * conditions of the Geant4 Software License,  included in the file *
 // * LICENSE and available at  http://cern.ch/geant4/license .  These *
@@ -57,7 +56,7 @@ OpNoviceSteppingAction::OpNoviceSteppingAction(OpNoviceEventAction* EvAct):G4Use
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 OpNoviceSteppingAction::~OpNoviceSteppingAction()
-{ ; }
+{}
 
 
 G4int sipm_detection(G4double wl)
@@ -66,62 +65,42 @@ G4int sipm_detection(G4double wl)
   std::vector<double> eff_vec = {0.03, 0.09, 0.19, 0.27, 0.31, 0.34, 0.39, 0.43, 0.45, 0.46, 0.48, 0.49, 0.49, 0.50, 0.50, 0.50, 0.50, 0.49, 0.48, 0.47, 0.46, 0.44, 0.42, 0.41};
   G4int veclen = wl_vec.size();
   G4int ind = 0;
-  while(wl>wl_vec[ind])
-    ind++;
-  if( (ind==veclen)||(ind==0) )
-    return 0;
+  while(wl>wl_vec[ind]) ind++;
+  if( (ind==veclen)||(ind==0) ) return 0;
   G4double rnd = double(rand())/RAND_MAX;
 
-  if( rnd < eff_vec[ind] )
-  {
-    return 1;
-  }
+  if( rnd < eff_vec[ind] ) return 1;
   else return 0;
 }
 
 void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
 {
-  G4int eventNumber = G4RunManager::GetRunManager()->
-                                              GetCurrentEvent()->GetEventID();
+  G4int eventNumber = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
 
-  if (eventNumber != fEventNumber)
-  {
-     fEventNumber = eventNumber;
-  }
-  
+  if (eventNumber != fEventNumber) fEventNumber = eventNumber;
 
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
 
-  G4String ParticleName = aStep->GetTrack()->GetDynamicParticle()->
-                                  GetParticleDefinition()->GetParticleName();
+  G4String ParticleName = aStep->GetTrack()->GetDynamicParticle()->GetParticleDefinition()->GetParticleName();
       
 
-  if(aStep->GetTrack()->GetDynamicParticle()->GetParticleDefinition() == G4OpticalPhoton::OpticalPhotonDefinition())
-  {
+  if(aStep->GetTrack()->GetDynamicParticle()->GetParticleDefinition() == G4OpticalPhoton::OpticalPhotonDefinition()) {
     G4Track* track = aStep->GetTrack();
 
     G4int stepnum=track->GetCurrentStepNumber();
     G4int parentid=track -> GetParentID();
-
 
     G4int trackid = track -> GetTrackID();
 
     G4int process = 0;
     std::string processname = "";
 
-    if (track->GetCreatorProcess()){
-        std::string processname = track->GetCreatorProcess()->GetProcessName();
-    }
+    if (track->GetCreatorProcess()) std::string processname = track->GetCreatorProcess()->GetProcessName();
 
-    if (track->GetCreatorProcess()){
-        processname = track->GetCreatorProcess()->GetProcessName();
-    }
-    if(processname == "Scintillation")
-      process = 1;
-    else if( processname == "OpWLS") 
-      process = 3;
-    else if( processname == "Cerenkov")
-      process = 2;
+    if (track->GetCreatorProcess()) processname = track->GetCreatorProcess()->GetProcessName();
+    if(processname == "Scintillation") process = 1;
+    else if( processname == "OpWLS") process = 3;
+    else if( processname == "Cerenkov") process = 2;
     
     G4VPhysicalVolume* postvolumephys = NULL;
     postvolumephys = aStep->GetPostStepPoint()->GetPhysicalVolume();
@@ -134,80 +113,49 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
     posttouchable = aStep->GetPostStepPoint()->GetTouchable();
     if(!posttouchable) return;
 
-    if(stepnum ==1)
-    {
+    if(stepnum ==1) {
       if(process==1) fEventAction->scintillation_photons++;
       if(process==2) fEventAction->cherenkov_photons++;
-
 
       //---------------- 2. Born in WLS
       G4VPhysicalVolume* prevolumephys = NULL;
       prevolumephys = aStep->GetPreStepPoint()->GetPhysicalVolume();
       G4String prephysvolname = prevolumephys->GetName();
       
-      
-      
-      if( (prephysvolname == "WLS1") || (prephysvolname == "WLS2") || (prephysvolname == "WLSring") )
-      {
+      if( (prephysvolname == "WLS1") || (prephysvolname == "WLS2") || (prephysvolname == "WLSring") ) {
         PhotonInfo info = {parentid, process, post_copynum, 1.24e-3 / track -> GetKineticEnergy()};
         fEventAction->map_bornWLS[trackid] = info;
-        // if(process == 0)
-        // {
-        //   std::cout<<"process: "<<processname<<"\n";
-        // }
+        //if(process == 0) std::cout<<"process: "<<processname<<"\n";
       }
       //---------------- 2. Born in WLS END
     }
 
-
-
-
     //---------------- 4. photons that reached SiPM's
-
-    if(postphysvolname == "sipmBase")
-    {
-      G4cout << "sipm hit !!!!!!!!! " << posttouchable->GetCopyNumber(1) << " " << posttouchable->GetCopyNumber(2) << G4endl;
+    if(postphysvolname == "sipmBase") {
+      G4cout << "sipm hit !!!!!!!!! " << posttouchable->GetCopyNumber(1) << G4endl;
       analysisManager->FillNtupleDColumn(0,0, aStep -> GetPostStepPoint() -> GetPosition().getX() );
       analysisManager->FillNtupleDColumn(0,1, aStep -> GetPostStepPoint() -> GetPosition().getY() );
       analysisManager->FillNtupleIColumn(0,2, process );
-      analysisManager->FillNtupleIColumn(0,3, posttouchable->GetCopyNumber(2) ); //cell number
-      // analysisManager->FillNtupleIColumn(0,2, parentid );
-      // analysisManager->FillNtupleIColumn(0,3, trackid);
+      if (posttouchable->GetCopyNumber(1) < 41) analysisManager->FillNtupleIColumn(0,3,1); // WOM number
+      if (posttouchable->GetCopyNumber(1) > 40) analysisManager->FillNtupleIColumn(0,3,2); // WOM number
       analysisManager->FillNtupleDColumn(0,4, 1.24e-3 / track -> GetKineticEnergy());
       analysisManager->FillNtupleDColumn(0,5, track -> GetGlobalTime() );
       analysisManager->FillNtupleIColumn(0,6, sipm_detection(1.24e-3 / track -> GetKineticEnergy()));
       analysisManager->FillNtupleIColumn(0,7, eventNumber);
       analysisManager->FillNtupleIColumn(0,8, posttouchable->GetCopyNumber(1)); //sipm number
-
-    
-
       analysisManager->AddNtupleRow(0);
       track->SetTrackStatus(fStopAndKill);
     }
     //---------------- 4. photons that reached SiPM's END
 
     //---------------- 3. Fallen on WOM + absorbed in WLS
-
-
-    if( (postphysvolname == "WLS1") || (postphysvolname == "WLS2") || (postphysvolname == "WLSring") )
-    {
+    if( (postphysvolname == "WLS1") || (postphysvolname == "WLS2") || (postphysvolname == "WLSring") ) {
       PhotonInfo info = {parentid, process, post_copynum, 1.24e-3 / track -> GetKineticEnergy()};
-      if( fEventAction->map_entersWOM.find(trackid) == fEventAction->map_entersWOM.end() )
-      {
-        fEventAction->map_entersWOM[trackid] = info;
-      }
+      if( fEventAction->map_entersWOM.find(trackid) == fEventAction->map_entersWOM.end() ) fEventAction->map_entersWOM[trackid] = info;
       fEventAction->map_absorbedWLS[trackid] = true;
       fEventAction->map_absorbedWLS_info[trackid] = info;
     }
-    else
-    {
-      if( fEventAction->map_absorbedWLS.find(trackid) != fEventAction->map_absorbedWLS.end() )
-      {
-        fEventAction->map_absorbedWLS[trackid] = false;
-      }
-    }
-
-
+    else if( fEventAction->map_absorbedWLS.find(trackid) != fEventAction->map_absorbedWLS.end() ) fEventAction->map_absorbedWLS[trackid] = false;
     //---------------- 3. Fallen on WOM + absorbed in WLS END 
 
     //---------------- 5. Fallen on PMMA vessel from scintillator
@@ -224,29 +172,18 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
     }
     //---------------- 5. Fallen on PMMA vessel from scintillator END
   }
-  else
-  {
-    // non-optical particles
-      G4int volume_index;
-      G4VPhysicalVolume* prevolumephys = NULL;
-      prevolumephys = aStep->GetPreStepPoint()->GetPhysicalVolume();
-      G4String prephysvolname = prevolumephys->GetName();
-      if(prephysvolname == "ScintilatorBoxPV")
-      {
-        volume_index =1;
-      }
-      else if(prephysvolname == "SteelBox")
-      {
-        volume_index =2;
-      }
-      else
-      {
-        volume_index =0;
-      }
 
+  else {
+    // non-optical particles
+    G4int volume_index;
+    G4VPhysicalVolume* prevolumephys = NULL;
+    prevolumephys = aStep->GetPreStepPoint()->GetPhysicalVolume();
+    G4String prephysvolname = prevolumephys->GetName();
+    if(prephysvolname == "ScintilatorBoxPV") volume_index =1;
+    else if(prephysvolname == "SteelBox") volume_index =2;
+    else volume_index =0;
     fEventAction->addEdep(volume_index, aStep -> GetTotalEnergyDeposit());
   }
-
 }
 
 

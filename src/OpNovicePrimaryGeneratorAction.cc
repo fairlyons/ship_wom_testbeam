@@ -29,49 +29,53 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "OpNovicePrimaryGeneratorAction.hh"
-// #include "OpNovicePrimaryGeneratorMessenger.hh"
+//#include "OpNovicePrimaryGeneratorMessenger.hh"
 
 #include "Randomize.hh"
 
 #include "G4Event.hh"
-//#include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4GeneralParticleSource.hh"
 #include "G4GeneralParticleSourceMessenger.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 OpNovicePrimaryGeneratorAction* OpNovicePrimaryGeneratorAction::fgInstance = 0;
+
 const OpNovicePrimaryGeneratorAction* OpNovicePrimaryGeneratorAction::Instance()
 {
-// Static acces function via G4RunManager
-
+  // Static acces function via G4RunManager
   return fgInstance;
 }
+
 OpNovicePrimaryGeneratorAction::OpNovicePrimaryGeneratorAction()
 : G4VUserPrimaryGeneratorAction()
 {
   pgun = new G4GeneralParticleSource();
   fgInstance = this;
-  // fGunMessenger = new OpNovicePrimaryGeneratorMessenger(this);
+  //fGunMessenger = new OpNovicePrimaryGeneratorMessenger(this);
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* particle = particleTable->FindParticle("e-");
 
-   pgun->SetParticleDefinition(particle);
-   pgun->SetParticleTime(0.0*ns);
-
+  pgun->SetParticleDefinition(particle);
+  pgun->SetParticleTime(0.0*ns);
 }
+
 OpNovicePrimaryGeneratorAction::~OpNovicePrimaryGeneratorAction()
 {
   delete pgun;
-  // delete fGunMessenger;
+  //delete fGunMessenger;
   fgInstance = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-/*oid OpNovicePrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
+
+/*
+OpNovicePrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-	pgun->GeneratePrimaryVertex(anEvent);
+  pgun->GeneratePrimaryVertex(anEvent);
 }
 
 
@@ -82,10 +86,10 @@ OpNovicePrimaryGeneratorAction::OpNovicePrimaryGeneratorAction()
   G4int n_particle = 1;
   fParticleGun = new G4ParticleGun(n_particle);
 
-  //create a messenger for this class
+  // create a messenger for this class
   fGunMessenger = new OpNovicePrimaryGeneratorMessenger(this);
 
-  //default kinematic
+  // default kinematic
   //
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* particle = particleTable->FindParticle("e-");
@@ -107,9 +111,10 @@ OpNovicePrimaryGeneratorAction::~OpNovicePrimaryGeneratorAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 */
+
 void OpNovicePrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-	pgun->GeneratePrimaryVertex(anEvent);
+  pgun->GeneratePrimaryVertex(anEvent);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
