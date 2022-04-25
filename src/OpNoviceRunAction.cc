@@ -69,7 +69,7 @@ OpNoviceRunAction::OpNoviceRunAction()
   analysisManager -> CreateNtupleDColumn("x");
   analysisManager -> CreateNtupleDColumn("y");
   analysisManager -> CreateNtupleIColumn("process");
-  analysisManager -> CreateNtupleIColumn("WOWnumber");
+  analysisManager -> CreateNtupleIColumn("WOMnumber");
   analysisManager -> CreateNtupleDColumn("waveLen");
   analysisManager -> CreateNtupleDColumn("time");
   analysisManager -> CreateNtupleIColumn("detection");

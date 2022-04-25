@@ -31,6 +31,7 @@
 #include "OpNoviceSteppingAction.hh"
 #include "G4Track.hh"
 #include "G4OpticalPhoton.hh"
+#include "G4Geantino.hh"
 #include "G4Event.hh"
 #include "G4RunManager.hh"
 #include <cmath>
@@ -61,9 +62,8 @@ OpNoviceSteppingAction::~OpNoviceSteppingAction()
 
 G4int sipm_detection(G4double wl)
 {
-  G4double filling_factor = 0.875*0.01; //shouldn't this be 0.67?
   std::vector<double> wl_vec = {320., 330., 340., 350., 360., 370., 380., 390., 400., 410., 420., 430., 440., 450., 460., 470., 480., 490., 500., 510., 520., 530., 540., 550.};
-  std::vector<double> eff_vec = {3., 9., 19., 27., 31., 34., 39., 43., 45., 46., 48., 49., 49., 50., 50., 50., 50., 49., 48., 47., 46., 44., 42., 41.};
+  std::vector<double> eff_vec = {0.03, 0.09, 0.19, 0.27, 0.31, 0.34, 0.39, 0.43, 0.45, 0.46, 0.48, 0.49, 0.49, 0.50, 0.50, 0.50, 0.50, 0.49, 0.48, 0.47, 0.46, 0.44, 0.42, 0.41};
   G4int veclen = wl_vec.size();
   G4int ind = 0;
   while(wl>wl_vec[ind])
@@ -72,7 +72,7 @@ G4int sipm_detection(G4double wl)
     return 0;
   G4double rnd = double(rand())/RAND_MAX;
 
-  if( rnd < eff_vec[ind]*filling_factor )
+  if( rnd < eff_vec[ind] )
   {
     return 1;
   }
@@ -166,7 +166,7 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
 
     if(postphysvolname == "sipmBase")
     {
-      // G4cout << "sipm hit !!!!!!!!! " << posttouchable->GetCopyNumber(1) << " " << posttouchable->GetCopyNumber(2) << G4endl;
+      G4cout << "sipm hit !!!!!!!!! " << posttouchable->GetCopyNumber(1) << " " << posttouchable->GetCopyNumber(2) << G4endl;
       analysisManager->FillNtupleDColumn(0,0, aStep -> GetPostStepPoint() -> GetPosition().getX() );
       analysisManager->FillNtupleDColumn(0,1, aStep -> GetPostStepPoint() -> GetPosition().getY() );
       analysisManager->FillNtupleIColumn(0,2, process );
@@ -178,6 +178,8 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
       analysisManager->FillNtupleIColumn(0,6, sipm_detection(1.24e-3 / track -> GetKineticEnergy()));
       analysisManager->FillNtupleIColumn(0,7, eventNumber);
       analysisManager->FillNtupleIColumn(0,8, posttouchable->GetCopyNumber(1)); //sipm number
+
+    
 
       analysisManager->AddNtupleRow(0);
       track->SetTrackStatus(fStopAndKill);
