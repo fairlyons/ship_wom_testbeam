@@ -1,6 +1,6 @@
 /analysis/setFileName cerenkov.root
 /gps/particle mu-
-/gps/position 110 90 0 cm
+/gps/position 1100 900 0 mm
 /gps/direction -1 -1 0
 /gps/ene/type Mono
 /gps/energy 10 GeV

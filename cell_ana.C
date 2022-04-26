@@ -1,52 +1,79 @@
-#include "TFile.h"
-#include "TLine.h"
-#include "TTree.h"
-#include "TCanvas.h"
-#include "TH1.h"
+void cell_ana() {
+    gStyle->SetOptStat("eimrou");
 
-int cell_ana(){
+    TString f = "b/cerenkov.root";
+    TChain *chain = new TChain("Detected");
+    chain->Add(f);
 
-    TCanvas* c1 = new TCanvas();
-    TFile* f = new TFile("../build_ship_wom/test.root");
-    TTree* t = (TTree*)f->Get("Detected");
+    TTreeReader *data = new TTreeReader(chain);
+    TTreeReaderValue<Double_t>   x(*data,"row_wise_branch.x");
+    TTreeReaderValue<Double_t>   y(*data,"row_wise_branch.y");
+    TTreeReaderValue<Int_t>   WOM(*data,"row_wise_branch.WOMnumber");
+    TTreeReaderValue<Double_t>   time(*data,"row_wise_branch.time");
 
-    t->Draw("y:x>>h(600,-1200,1200,400,-800,800)","","colz");
+    TH2D *h1 = new TH2D("", "", 1000, -400, 400, 1000, -600, 600);
+    h1->GetXaxis()->SetTitle("X (mm)");
+    h1->GetYaxis()->SetTitle("Y (mm)");
 
-    TLine* vline = new TLine(0,-800,0,800);
-    TLine* hline = new TLine(-1200,0,1200,0);
-    TLine* track = new TLine(300, 900, 300 - 1600*0.65, -800);
+    TH1I *h2 = new TH1I("", "", 2, 1, 3);
+    h2->GetXaxis()->SetTitle("WOM Number");
+    h2->GetYaxis()->SetTitle("Events");
+
+    TH1D *h3 = new TH1D("", "", 100, 0, 1000);
+    h3->GetXaxis()->SetTitle("Time (?)");
+    h3->GetYaxis()->SetTitle("Events");
+
+    while (data->Next()) {
+	h1->Fill(*x,*y);
+        h2->Fill(*WOM);
+        h3->Fill(*time);
+    }
+
+    ifstream fin("b/run1.mac");
+    string s;
+    s.reserve(50);
+    string pos[2], dir[2];
+    for(int i = 0; i < 2; ++i) std::getline(fin, s);
+    std::getline(fin,s);
+    int j = 14;
+    for(int i = j; i < s.size(); ++i) {
+      j++;
+      if(s[i] == ' ') break;
+      pos[0].push_back(s[i]);
+    }
+    for(int i = j; i < s.size(); ++i) {
+      j++;
+      if(s[i] == ' ') break;
+      pos[1].push_back(s[i]);
+    }
+    std::getline(fin,s);
+    j = 15;
+    for(int i = j; i < s.size(); ++i) {
+      j++;
+      if(s[i] == ' ') break;
+      dir[0].push_back(s[i]);
+    }
+    for(int i = j; i < s.size(); ++i) {
+      j++;
+      if(s[i] == ' ') break;
+      dir[1].push_back(s[i]);
+    }
+
+    TCanvas *c1 = new TCanvas("c1","c1",10,10,800,1000);
+    TLine* track = new TLine(stoi(pos[0]), stoi(pos[1]), stoi(pos[0]) + stoi(dir[0]) * 5000, stoi(pos[1]) + stoi(dir[1]) * 5000);
     track->SetLineColor(kRed);
-    hline->Draw(); vline->Draw(); track->Draw();
+    h1->Draw("COLZ");
+    track->Draw("SAME");
 
-    TCanvas* c2 = new TCanvas();
-    c2->Divide(2,2);
-    c2->cd(1);
-    t->Draw("time>>h0(100,0,60)","WOWnumber==1");
-    c2->cd(2);
-    t->Draw("time>>h1(100,0,60)","WOWnumber==0");
-    c2->cd(3);
-    t->Draw("time>>h2(100,0,60)","WOWnumber==2");
-    c2->cd(4);
-    t->Draw("time>>h3(100,0,60)","WOWnumber==3");
+    TCanvas *c2 = new TCanvas("c2","c2",10,10,1200,800);
+    //gPad->SetLogy();
+    h2->SetLineColor(kBlack);
+    h2->Draw("HIST");
 
-    // TH1F *h1 = (TH1F*)c2->GetPrimitive("h1");
-    // std::cout << h1->GetEntries();
-    TCanvas* c3 = new TCanvas();
-    c3->cd();
-    TH1I* hist = new TH1I("hist", "Number of photons in each cell", 4, 0, 4);
-    for(int i = 0; i < 120; i++)
-        hist->Fill(0);
+    TCanvas *c3 = new TCanvas("c3","c3",10,10,1200,800);
+    gPad->SetLogy();
+    h3->SetLineColor(kBlack);
+    h3->Draw("HIST");
 
-    for(int i = 0; i < 608; i++)
-        hist->Fill(1);
-
-    for(int i = 0; i < 1684; i++)
-        hist->Fill(2);
-
-    for(int i = 0; i < 0; i++)
-        hist->Fill(3);
-
-
-    hist->Draw();
-    return 0;
+    return;
 }
