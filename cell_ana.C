@@ -1,5 +1,5 @@
 void cell_ana() {
-    gStyle->SetOptStat("eimrou");
+    gStyle->SetOptStat("eou");
 
     TString f = "b/cerenkov.root";
     TChain *chain = new TChain("Detected");
@@ -62,17 +62,19 @@ void cell_ana() {
     TCanvas *c1 = new TCanvas("c1","c1",10,10,800,1000);
     TLine* track = new TLine(stoi(pos[0]), stoi(pos[1]), stoi(pos[0]) + stoi(dir[0]) * 5000, stoi(pos[1]) + stoi(dir[1]) * 5000);
     track->SetLineColor(kRed);
+    c1->SetLeftMargin(0.15);
+    h1->SetStats(0);
     h1->Draw("COLZ");
     track->Draw("SAME");
 
     TCanvas *c2 = new TCanvas("c2","c2",10,10,1200,800);
     //gPad->SetLogy();
-    h2->SetLineColor(kBlack);
+    h2->SetLineColor(kBlue);
     h2->Draw("HIST");
 
     TCanvas *c3 = new TCanvas("c3","c3",10,10,1200,800);
     gPad->SetLogy();
-    h3->SetLineColor(kBlack);
+    h3->SetLineColor(kBlue);
     h3->Draw("HIST");
 
     return;

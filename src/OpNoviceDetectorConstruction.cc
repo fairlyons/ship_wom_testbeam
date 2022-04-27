@@ -580,7 +580,7 @@ void OpNoviceDetectorConstruction::DefineSolids()
   Air_ring2 = new G4Tubs("Air_ring2", Rin, Rout, Thickness_Gap/2, 0, 360*deg);
 
   delta_Z = (WallThickness_Z_Bottom - WallThickness_Z_Cover)/2;
-  G4SubtractionSolid *EmptySteelBox= new G4SubtractionSolid("EmptySteelBox",SteelBox, ScintilatorBox,0,G4ThreeVector(0, 0, delta_Z));
+  G4SubtractionSolid *EmptySteelBox= new G4SubtractionSolid("EmptySteelBox",SteelBox,ScintilatorBox,0,G4ThreeVector(0,0,delta_Z));
 
   G4double delta_Z_EmptySteelBoxWithHole = SteelZ/2 - OlengthHoleBox/2;
   G4double delta_Z_ScintilatorBoxWithHole = SctZ/2 - OlengthHoleSct/2;
@@ -659,10 +659,9 @@ void OpNoviceDetectorConstruction::ConstructVolumes()
   G4RotationMatrix*RM1=new G4RotationMatrix(0*deg,0*deg,0*deg);
   G4double delta_Z_0 = SteelZ/2 + Thickness_Steel_Add - Length_2;  // upper surface of PMMA ring
 
-  ScintilatorBox_phys = new G4PVPlacement(0,G4ThreeVector(0, 0, delta_Z),ScintilatorBox_log,"ScintilatorBoxPV",WOM_cell_log,false,0, intersect_check);
   SteelBox_phys = new G4PVPlacement(0,G4ThreeVector(0,0,0),SteelBox_log,"SteelBox",WOM_cell_log,false,0, intersect_check);
-
   delta_Z = (WallThickness_Z_Bottom - WallThickness_Z_Cover)/2;
+  ScintilatorBox_phys = new G4PVPlacement(0,G4ThreeVector(0,0,delta_Z),ScintilatorBox_log,"ScintilatorBoxPV",WOM_cell_log,false,0, intersect_check);
 
   sipmBase_phys = new G4PVPlacement(0,G4ThreeVector(0, 0, sipmWindowThickness/2. - sipmBaseThickness/2. ),sipmBaseBox_log,"sipmBase",sipmBox_log,false,0, intersect_check);
 
