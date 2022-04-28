@@ -42,11 +42,7 @@
 ///
 
 
-#ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
 
 #include "G4UImanager.hh"
 
@@ -59,13 +55,9 @@
 #include "Randomize.hh"
 #include "time.h"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
 
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
