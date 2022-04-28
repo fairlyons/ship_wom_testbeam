@@ -70,7 +70,7 @@ OpNoviceDetectorConstruction::OpNoviceDetectorConstruction()
 
   SteelX = 120*cm;
   SteelY = 80*cm;
-  SteelZ = 135.*mm;
+  SteelZ = 235.*mm;
 
   WallThickness_XY = 10*mm;
   WallThickness_Z_Bottom = 20*mm;
@@ -81,7 +81,7 @@ OpNoviceDetectorConstruction::OpNoviceDetectorConstruction()
 
 //  G4double delta_Z_0 = SteelZ/2 + Thickness_Steel_Add - Length_2;  // upper surface of PMMA ring
 
-  Additional_Length = -100*mm + 21*mm;
+  Additional_Length = 0;//-100*mm + 21*mm;
 
   Diam_In_In = 44*mm;
   Diam_In_Out = 50*mm;
@@ -281,13 +281,27 @@ void OpNoviceDetectorConstruction::DefineMPTs()
   for(int i=0; i<pmma_mpt_entr; i++ )
   {
     pmma_en[i]=1240./pmma_wl[i]*eV;
+    G4cout << pmma_en[i] << G4endl;
   }
   G4double pmma_side_abslen[pmma_mpt_entr] =  { 10.55*mm , 18.23*mm , 24.6*mm, 36.07*mm, 39.7*mm, 42.6*mm, 43.69*mm, 45.77*mm, 52.97*mm, 61.48*mm, 66.44*mm, 70.39*mm, 79.11*mm};
   G4double pmma_bottom_abslen[pmma_mpt_entr] = {  0.01*mm,  0.01*mm,   0.01*mm, 0.01*mm, 1.31*mm, 4.26*mm, 14.98*mm, 24.09*mm, 28.56*mm, 30.35*mm, 32.39*mm, 33.93*mm, 37.32*mm};
 
+  G4double opEn[22] = {
+    2.06640*eV, 2.10143*eV, 2.13766*eV, 2.17516*eV, 2.21400*eV, 2.25426*eV, 2.29600*eV, 2.33932*eV, 2.38431*eV, 2.43106*eV, // 600, 590, 580, 570, 560, 550, 540, 530, 520, 510
+    2.47968*eV, 2.53029*eV, 2.58300*eV, 2.63796*eV, 2.69531*eV, 2.75520*eV, 2.81782*eV, 2.88335*eV, 2.95200*eV, 3.09960*eV, // 500, 490, 480, 470, 460, 450, 440, 430, 420, 400
+    3.54241*eV, 4.13281*eV // 350, 300
+  };
+
+  G4double AbsLen_PMMA[22] = {
+    39.48*m, 48.25*m, 54.29*m, 57.91*m, 54.29*m, 33.40*m, 31.02*m, 43.43*m, 43.43*m, 41.36*m, // 600, 590, 580, 570, 560, 550, 540, 530, 520, 510,
+    39.48*m, 37.76*m, 36.19*m, 36.19*m, 33.40*m, 31.02*m, 28.95*m, 25.55*m, 24.13*m, 21.71*m, // 500, 490, 480, 470, 460, 450, 440, 430, 420, 400,
+    2.171*m, 0.434*m // 350, 300
+  };
+
   G4MaterialPropertiesTable *MPT_PMMA_side = new G4MaterialPropertiesTable();
   MPT_PMMA_side->AddProperty("RINDEX", pmma_en, pmma_rind, pmma_mpt_entr)->SetSpline(true);
-  MPT_PMMA_side->AddProperty("ABSLENGTH", pmma_en, pmma_side_abslen, pmma_mpt_entr)->SetSpline(true);
+  // MPT_PMMA_side->AddProperty("ABSLENGTH", pmma_en, pmma_side_abslen, pmma_mpt_entr)->SetSpline(true);
+  MPT_PMMA_side->AddProperty("ABSLENGTH", opEn, AbsLen_PMMA, pmma_mpt_entr)->SetSpline(true);
   PMMA_side->SetMaterialPropertiesTable(MPT_PMMA_side);
 
   G4MaterialPropertiesTable *MPT_PMMA_bottom = new G4MaterialPropertiesTable();

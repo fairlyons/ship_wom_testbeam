@@ -60,9 +60,9 @@ OpNoviceSteppingAction::~OpNoviceSteppingAction()
 
 G4int sipm_detection(G4double wl)
 {
-  G4double filling_factor = 0.875*0.01;
+  G4double filling_factor = 0.67;
   std::vector<double> wl_vec = {320., 330., 340., 350., 360., 370., 380., 390., 400., 410., 420., 430., 440., 450., 460., 470., 480., 490., 500., 510., 520., 530., 540., 550.};
-  std::vector<double> eff_vec = {3., 9., 19., 27., 31., 34., 39., 43., 45., 46., 48., 49., 49., 50., 50., 50., 50., 49., 48., 47., 46., 44., 42., 41.};
+  std::vector<double> eff_vec = {0.03, 0.09, 0.19, 0.27, 0.31, 0.34, 0.39, 0.43, 0.45, 0.46, 0.48, 0.49, 0.49, 0.50, 0.50, 0.50, 0.50, 0.49, 0.48, 0.47, 0.46, 0.44, 0.42, 0.41};
   G4int veclen = wl_vec.size();
   G4int ind = 0;
   while(wl>wl_vec[ind])
