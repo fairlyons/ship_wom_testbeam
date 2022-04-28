@@ -8,8 +8,12 @@ void cell_ana() {
     TTreeReader *data = new TTreeReader(chain);
     TTreeReaderValue<Double_t>   x(*data,"row_wise_branch.x");
     TTreeReaderValue<Double_t>   y(*data,"row_wise_branch.y");
-    TTreeReaderValue<Int_t>   WOM(*data,"row_wise_branch.WOMnumber");
+    TTreeReaderValue<Int_t>   wom(*data,"row_wise_branch.WOMnumber");
     TTreeReaderValue<Double_t>   time(*data,"row_wise_branch.time");
+    TTreeReaderValue<Int_t>   eventN(*data,"row_wise_branch.eventNumber");
+
+    int entries = chain->GetEntries();
+    int events = 10;
 
     TH2D *h1 = new TH2D("", "", 1000, -400, 400, 1000, -600, 600);
     h1->GetXaxis()->SetTitle("X (mm)");
@@ -20,13 +24,18 @@ void cell_ana() {
     h2->GetYaxis()->SetTitle("Events");
 
     TH1D *h3 = new TH1D("", "", 100, 0, 1000);
-    h3->GetXaxis()->SetTitle("Time (?)");
+    h3->GetXaxis()->SetTitle("Time (ns)");
     h3->GetYaxis()->SetTitle("Events");
 
+    double N[events], w1[events], w2[events];
+    for(int i = 0; i < events; i++) N[i] = i+1;
+
     while (data->Next()) {
-	h1->Fill(*x,*y);
-        h2->Fill(*WOM);
-        h3->Fill(*time);
+      h1->Fill(*x,*y);
+      h2->Fill(*wom);
+      h3->Fill(*time);
+      if(*wom == 1) w1[*eventN]++;
+      if(*wom == 2) w2[*eventN]++;
     }
 
     ifstream fin("b/run1.mac");
@@ -76,6 +85,23 @@ void cell_ana() {
     gPad->SetLogy();
     h3->SetLineColor(kBlue);
     h3->Draw("HIST");
+
+    TCanvas *c4 = new TCanvas("c4","c4",10,10,1200,800);
+    c4->Divide(1,2);
+    c4->cd(1);
+    TGraph *h4 = new TGraph(events, N, w2);
+    h4->GetXaxis()->SetTitle("Event");
+    h4->GetYaxis()->SetTitle("Detected photons in Upper WOM");
+    //gPad->SetLogy();
+    h4->SetFillColor(38);
+    h4->Draw("AB");
+    c4->cd(2);
+    TGraph *h5 = new TGraph(events, N, w1);
+    h5->GetXaxis()->SetTitle("Event");
+    h5->GetYaxis()->SetTitle("Detected photons in Lower WOM");
+    //gPad->SetLogy();
+    h5->SetFillColor(38);
+    h5->Draw("AB");
 
     return;
 }
