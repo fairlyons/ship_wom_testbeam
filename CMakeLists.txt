@@ -42,8 +42,6 @@ target_link_libraries(OpNovice ${Geant4_LIBRARIES} )
 set(OpNovice_SCRIPTS
    # OpNovice.out
     OpNovice.in
-    icons.mac
-    run.png
     vis.mac
     run1.mac
     photons.mac
