@@ -80,6 +80,9 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4Material* air;
     G4Material* LAB_PPO;
     G4Material* Bis_MSB;
+    G4Material* PEMA;
+    G4Material* PTP;
+    G4Material* WLS_Coat;
     G4Material* PMMA_side;
     G4Material* PMMA_bottom;
 
