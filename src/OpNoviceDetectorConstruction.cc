@@ -101,7 +101,8 @@ OpNoviceDetectorConstruction::OpNoviceDetectorConstruction()
   Thickness_Hat = 6*mm;
   Thickness_Steel_Add = 15*mm;
   Length_WOM = 230*mm + Additional_Length;
-  Thickness_WLS = 0.05*mm;
+  Thickness_WLS = 0.02*mm;
+  Thickness_Reflect = 0.02*mm;
 
   delta_X = SteelX/2 - 91.5*mm;
   delta_Y = SteelY/2 - 91.5*mm;
@@ -393,8 +394,8 @@ void OpNoviceDetectorConstruction::DefineSurfaces()
 //           G4double reflectSteel[18] = {0.430, 0.440, 0.449, 0.457, 0.463, 0.469, 0.474, 0.479,
 //                          0.483, 0.487, 0.490, 0.493, 0.496, 0.499, 0.501, 0.504, 0.507, 0.508};    // from refractiveindex.info
 
-          //  G4double reflectSteel[18] = {0.467, 0.472, 0.477, 0.482, 0.486, 0.491, 0.496, 0.500,
-          //                 0.506, 0.510, 0.515, 0.519, 0.521, 0.522, 0.530, 0.538, 0.542, 0.546};    // from journal article
+//  G4double reflectSteel[18] = {0.467, 0.472, 0.477, 0.482, 0.486, 0.491, 0.496, 0.500,
+//                 0.506, 0.510, 0.515, 0.519, 0.521, 0.522, 0.530, 0.538, 0.542, 0.546};    // from journal article
 
 //  G4double reflectSteel[18] = {0.35, 0.36, 0.365, 0.37, 0.375, 0.38, 0.39, 0.395,
 //                            0.4, 0.405, 0.41, 0.415, 0.42, 0.42, 0.425, 0.43, 0.43, 0.435};         // from borexino
@@ -478,15 +479,6 @@ void OpNoviceDetectorConstruction::DefineSolids()
   sipm_base  = new G4Tubs("sipm_base", Diam_WOM_In/2 - Thickness_WLS , Diam_WOM_Out/2 + Thickness_WLS, sipmbasewidth/2, 0, 360*deg);
   //-------------------------------------------------------------------
   
-  // Scintillator box
-  std::vector<G4TwoVector> scint(4);
-  scint[0].set(-402.848*mm + WallThickness_XY, 642.936*mm - WallThickness_XY);
-  scint[1].set(397.515*mm - WallThickness_XY, 589.330*mm - WallThickness_XY);
-  scint[3].set(-402.484*mm + WallThickness_XY, -603.021*mm + WallThickness_XY);
-  scint[2].set(397.515*mm - WallThickness_XY, -635.084*mm + WallThickness_XY);
-  ScintilatorBox = new G4ExtrudedSolid("ScintilatorBox", scint, SctZ/2., G4TwoVector(0., 0.), 1., G4TwoVector(0., 0.), 1.);
-  //ScintilatorBox = new G4Box("ScintilatorBox",SctX/2,SctY/2,SctZ/2);
-  
   // Steel box
   std::vector<G4TwoVector> det(4);
   det[0].set(-402.848*mm, 642.936*mm);
@@ -495,6 +487,23 @@ void OpNoviceDetectorConstruction::DefineSolids()
   det[2].set(397.515*mm, -635.084*mm);
   SteelBox = new G4ExtrudedSolid("Steelbox", det, SteelZ/2.,G4TwoVector(0., 0.), 1., G4TwoVector(0., 0.), 1.);
   //SteelBox = new G4Box("Steelbox",SteelX/2,SteelY/2,SteelZ/2);
+
+  // Reflectivity box
+  std::vector<G4TwoVector> reflect(4);
+  reflect[0].set(-402.848*mm + WallThickness_XY, 642.936*mm - WallThickness_XY);
+  reflect[1].set(397.515*mm - WallThickness_XY, 589.330*mm - WallThickness_XY);
+  reflect[3].set(-402.484*mm + WallThickness_XY, -603.021*mm + WallThickness_XY);
+  reflect[2].set(397.515*mm - WallThickness_XY, -635.084*mm + WallThickness_XY);
+  ReflectBox = new G4ExtrudedSolid("ReflectBox", reflect, SctZ/2., G4TwoVector(0., 0.), 1., G4TwoVector(0., 0.), 1.);
+
+  // Scintillator box
+  std::vector<G4TwoVector> scint(4);
+  scint[0].set(-402.848*mm + WallThickness_XY + Thickness_Reflect, 642.936*mm - WallThickness_XY - Thickness_Reflect);
+  scint[1].set(397.515*mm - WallThickness_XY - Thickness_Reflect, 589.330*mm - WallThickness_XY - Thickness_Reflect);
+  scint[3].set(-402.484*mm + WallThickness_XY + Thickness_Reflect, -603.021*mm + WallThickness_XY + Thickness_Reflect);
+  scint[2].set(397.515*mm - WallThickness_XY - Thickness_Reflect, -635.084*mm + WallThickness_XY + Thickness_Reflect);
+  ScintilatorBox = new G4ExtrudedSolid("ScintilatorBox", scint, (SctZ-Thickness_Reflect)/2., G4TwoVector(0., 0.), 1., G4TwoVector(0., 0.), 1.);
+  //ScintilatorBox = new G4Box("ScintilatorBox",SctX/2,SctY/2,SctZ/2);
 
   G4double Rin, Rout;
   G4double delta_Z;
@@ -580,7 +589,8 @@ void OpNoviceDetectorConstruction::DefineSolids()
   Air_ring2 = new G4Tubs("Air_ring2", Rin, Rout, Thickness_Gap/2, 0, 360*deg);
 
   delta_Z = (WallThickness_Z_Bottom - WallThickness_Z_Cover)/2;
-  G4SubtractionSolid *EmptySteelBox= new G4SubtractionSolid("EmptySteelBox",SteelBox,ScintilatorBox,0,G4ThreeVector(0,0,delta_Z));
+  G4SubtractionSolid *EmptySteelBox = new G4SubtractionSolid("EmptySteelBox",SteelBox,ReflectBox,0,G4ThreeVector(0,0,delta_Z));
+  G4SubtractionSolid *EmptyReflectBox = new G4SubtractionSolid("EmptyReflectBox",ReflectBox,ScintillatorBox,0,G4ThreeVector(0,0,delta_Z));
 
   G4double delta_Z_EmptySteelBoxWithHole = SteelZ/2 - OlengthHoleBox/2;
   G4double delta_Z_ScintilatorBoxWithHole = SctZ/2 - OlengthHoleSct/2;
@@ -628,8 +638,9 @@ void OpNoviceDetectorConstruction::DefineLogicalVolumes()
   sipm_base_log = new G4LogicalVolume(sipm_base, steel,"sipm_base",0,0,0);
   ScintilatorBox_log = new G4LogicalVolume(ScintilatorBoxWithHole, LAB_PPO,"ScintilatorBoxLV",0,0,0);
   SteelBox_log = new G4LogicalVolume(EmptySteelBoxWithHole,steel,"Steelbox",0,0,0);
+  ReflectBox_log = new G4LogicalVolume(EmptyReflectBox, steel,"Reflectbox", 0,0,0);
   Outer_tube_log = new G4LogicalVolume(Outer_tube, PMMA_side, "Outer_tubeLV");
-  WOM_tube_log = new G4LogicalVolume(WOM_tube, PMMA_side, "WOM_tubeLV");
+  WOM_tube_log = new G4LogicalVolume(WOM_tube, PMMA_bottom, "WOM_tubeLV");
   Inner_tube_log = new G4LogicalVolume(Inner_tube, PMMA_side, "Inner_tubeLV");
   PMMA_Ring_log = new G4LogicalVolume(PMMA_Ring, PMMA_bottom, "PMMA_RingLV");
   PMMA_disk_log = new G4LogicalVolume(PMMA_disk, PMMA_side, "PMMA_diskLV");
