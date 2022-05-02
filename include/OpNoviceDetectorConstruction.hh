@@ -93,9 +93,11 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4double WallThickness_XY;
     G4double WallThickness_Z_Bottom;
     G4double WallThickness_Z_Cover;
+    G4double ReflectZ;
     G4double SctX;
     G4double SctY;
     G4double SctZ;
+    G4double Thickness_Reflect;
     
     G4double Additional_Length;
     
@@ -135,8 +137,9 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
   //-------------------------------------------------------------------
     G4VSolid *sipm_base;
   //-------------------------------------------------------------------
-    G4ExtrudedSolid* ScintilatorBox;
+    G4ExtrudedSolid* ScintillatorBox;
     G4ExtrudedSolid* SteelBox;
+    G4ExtrudedSolid* ReflectBox;
     G4Box* WOM_cellBox;
     G4Box* sipmBox;
     G4Box* sipmBaseBox;
@@ -159,7 +162,8 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4VSolid *Air_ring2;
     G4VSolid *PMMA_ring_lower;
     G4SubtractionSolid *EmptySteelBoxWithHole;
-    G4SubtractionSolid *ScintilatorBoxWithHole;
+    G4SubtractionSolid *EmptyReflectBoxWithHole;
+    G4SubtractionSolid *ScintillatorBoxWithHole;
 
     // logical volumes
     G4LogicalVolume* expHall_log;
@@ -167,8 +171,9 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4LogicalVolume* sipm_base_log;
     G4LogicalVolume* sipmBox_log;
     G4LogicalVolume* sipmBaseBox_log;
-    G4LogicalVolume* ScintilatorBox_log;
+    G4LogicalVolume* ScintillatorBox_log;
     G4LogicalVolume* SteelBox_log;
+    G4LogicalVolume* ReflectBox_log;
     G4LogicalVolume *Outer_tube_log;
     G4LogicalVolume *WOM_tube_log;
     G4LogicalVolume *Inner_tube_log;
@@ -189,7 +194,8 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4VPhysicalVolume* expHall_phys;
     //std::vector<G4VPhysicalVolume*> sipm_base_phys_vect;
     G4VPhysicalVolume* SteelBox_phys;
-    G4VPhysicalVolume* ScintilatorBox_phys;
+    G4VPhysicalVolume* ScintillatorBox_phys;
+    G4VPhysicalVolume* ReflectBox_phys;
     G4VPhysicalVolume* sipmBase_phys;
 
     std::vector<G4VPhysicalVolume*> Outer_tube_phys_vect;
