@@ -166,7 +166,7 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
 
     if(postphysvolname == "sipmBase")
     {
-      G4cout << "sipm hit !!!!!!!!! " << posttouchable->GetCopyNumber(1) << " " << posttouchable->GetCopyNumber(2) << G4endl;
+      // G4cout << "sipm hit !!!!!!!!! " << posttouchable->GetCopyNumber(1) << " " << posttouchable->GetCopyNumber(2) << G4endl;
       analysisManager->FillNtupleDColumn(0,0, aStep -> GetPostStepPoint() -> GetPosition().getX() );
       analysisManager->FillNtupleDColumn(0,1, aStep -> GetPostStepPoint() -> GetPosition().getY() );
       analysisManager->FillNtupleIColumn(0,2, process );

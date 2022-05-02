@@ -18,10 +18,11 @@ AbsLen_PMMA = np.array([
 
 pmma_en = 1240./pmma_wl
 
-plt.plot(pmma_en, pmma_side_abslen, "-o")
-plt.plot(pmma_en, pmma_bottom_abslen, "-o")
+# plt.plot(pmma_en, pmma_side_abslen, "-o",label="pmma_side")
+# plt.plot(pmma_en, pmma_bottom_abslen, "-o",label="pmma_bottom")
 plt.plot(opEn, AbsLen_PMMA, "-o")
 
 plt.ylabel("Absorption length, m")
 plt.xlabel("Photon energy, eV")
+# plt.legend()
 plt.show()
