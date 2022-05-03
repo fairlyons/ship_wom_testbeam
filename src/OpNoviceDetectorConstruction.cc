@@ -156,8 +156,8 @@ void OpNoviceDetectorConstruction::DefineMaterials()
   PPO->AddElement(O,natoms=1);
   // Scintillator (LAB+PPO) 23233 cm^3 23.233 l
   LAB_PPO = new G4Material("LAB_PPO", density=0.9*g/cm3, ncomponent=2); //??
-  LAB_PPO->AddMaterial(LAB, 87.8*perCent); //?? Should be 2 g/L of PPO (First measurement of the surface tension of a liquid scintillator based on Linear Alkylbenzene (HYBLENE 113))
-  LAB_PPO->AddMaterial(PPO, 12.2*perCent);
+  LAB_PPO->AddMaterial(LAB, 99.88*perCent); //Calculated considering  be 2 g/L of PPO (First measurement of the surface tension of a liquid scintillator based on Linear Alkylbenzene (HYBLENE 113))
+  LAB_PPO->AddMaterial(PPO, 0.11*perCent);
   // Bis-MSB WLS
   Bis_MSB = new G4Material("Bis_MSB",density=1.076*g/cm3,ncomponent=2); // density: http://www.molbase.com/moldata/368101.html
   Bis_MSB->AddElement(H,natoms=22);
