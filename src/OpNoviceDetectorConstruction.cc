@@ -413,17 +413,41 @@ void OpNoviceDetectorConstruction::DefineSurfaces()
   G4double reflectSteel[18] = {0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
                                0., 0., 0., 0., 0., 0., 0., 0.,};         // turn off the reflectivity
 
-//  G4double reflectSteel[18] = {0.97752157, 0.9722873 , 0.96680556, 0.97042264, 0.97126233, 0.97271017,
-//                               0.97712734, 0.97275713, 0.97658953, 0.97920518, 0.97380716, 0.98033894,
-//                               0.9776999 , 0.978477  , 0.97228729, 0.97114843, 0.97375261, 0.97113254};
+  //G4double reflectSteel[18] = {0.97752157, 0.9722873 , 0.96680556, 0.97042264, 0.97126233, 0.97271017,
+   //                          0.97712734, 0.97275713, 0.97658953, 0.97920518, 0.97380716, 0.98033894,
+   //                          0.9776999 , 0.978477  , 0.97228729, 0.97114843, 0.97375261, 0.97113254};
 
   G4MaterialPropertiesTable *MPTsurf_Steel = new G4MaterialPropertiesTable();
   MPTsurf_Steel -> AddProperty("REFLECTIVITY", photonEnergy7, reflectSteel, 18);
   SteelBoxSurface -> SetMaterialPropertiesTable(MPTsurf_Steel);
 
-  G4LogicalSkinSurface* Surface = new G4LogicalSkinSurface("SteelSurface",ReflectBox_log,SteelBoxSurface);
+  G4LogicalSkinSurface* Surface = new G4LogicalSkinSurface("SteelSurface",SteelBox_log,SteelBoxSurface); //I think this should be SteelBox_log instead of ReflectBox_log (ale)
 
+  //------------------------------------------------------------------------------
+  //----------------------------- BaSO4 (reflective coating) -----------------------------
+  //------------------------------------------------------------------------------
+   G4OpticalSurface* BaSO4_surface = new G4OpticalSurface("BaSO4_surface");
+   BaSO4_surface -> SetType(dielectric_metal);
+   BaSO4_surface -> SetFinish(ground);
+   BaSO4_surface -> SetModel(glisur);
+  
+   G4double p_coating[2]    = { 1.65 * eV, 3.88 * eV }; 
+   G4double non_diffuse_coating[2] = { 0.0, 0.}; // non diffusive reflection Patrick data
+   G4double p_coating_refl[19]    = { 0.653775342148272*eV,0.687758866578874*eV,0.729108650377501*eV,0.773110023703728*eV,0.827676607343705*eV,0.887209379832684*eV,0.954680932864894*eV,1.03471853868547*eV,1.12204531460793*eV,1.24533694371132*eV,1.3767339264975*eV,1.55649354301667*eV,1.77189963551006*eV,2.09375317772178*eV,2.51208306681883*eV,3.16797881984726*eV,3.50425046717685*eV,3.63215740198218*eV,3.81157924082758*eV};
+   G4double refl_coating[19] = { 0.861320132013201,0.916105610561056,0.922706270627063,0.920726072607261,0.916765676567657,0.931287128712871,0.95042904290429,0.958349834983498,0.962970297029703,
+   0.968250825082508,0.969570957095709,0.973531353135314,0.977491749174918,0.978151815181518,0.98013201320132,0.980792079207921,0.970891089108911,0.960990099009901,0.953729372937294}; // reflectivity of the coating https://www.optopolymer.de/produktuebersicht/diffuse-reflecting-materials/bariumsulfate-baso4-coating-oprc/
+       
+   G4MaterialPropertiesTable* MTP_BaSO = new G4MaterialPropertiesTable();
+  // MTP_BaSO->AddProperty("SPECULARLOBECONSTANT", p_coating, non_diffuse_coating,2); // In order to have diffuse reclectivity (Lambertian), it is necessary define all the other three. The diffuse is 
+  // MTP_BaSO->AddProperty("SPECULARSPIKECONSTANT", p_coating, non_diffuse_coating,2); // 1-other three (in this case 1). 
+  // MTP_BaSO->AddProperty("BACKSCATTERCONSTANT", p_coating, non_diffuse_coating,2);
+   MTP_BaSO->AddProperty("REFLECTIVITY", p_coating_refl, refl_coating,19);
+   //MTP_BaSO->AddProperty("EFFICIENCY", <>, <>);
 
+   BaSO4_surface->SetMaterialPropertiesTable(MTP_BaSO);
+   
+
+   G4LogicalSkinSurface* Surface1 = new G4LogicalSkinSurface("BaSO4_surface", ReflectBox_log, BaSO4_surface);
 
   //------------------------------------------------------------------------------
   //----------------------------- PMMA WLS surface -----------------------------
