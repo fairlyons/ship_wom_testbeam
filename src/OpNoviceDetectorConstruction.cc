@@ -142,11 +142,11 @@ void OpNoviceDetectorConstruction::DefineMaterials()
   // Linear alkyl benzene (LAB)
   G4Element* H = new G4Element("Hydrogen", "H", 1 , 1.01*g/mole);
   G4Element* C = new G4Element("Carbon", "C", 6 , 12.01*g/mole);
-  G4Material* LAB = new G4Material("LAB",density=0.86*g/cm3,ncomponent=2);  //density: http://cpmaindia.com/lab_about.php
+  G4Material* LAB = new G4Material("LAB",density=0.856*g/cm3,ncomponent=2);  //density: https://www.knowde.com/stores/sasol/documents/101895
   LAB->AddElement(H,natoms=28);
   LAB->AddElement(C,natoms=17);
   // Diphenyloxazole (PPO)
-  G4Material* PPO = new G4Material("PPO",density=1.184*g/cm3,ncomponent=4); //??
+  G4Material* PPO = new G4Material("PPO",density=1.128*g/cm3,ncomponent=4); // density: https://www.echemi.com/sds/24-diphenyloxazole-pid_Rock24446.html
   PPO->AddElement(H,natoms=11);
   PPO->AddElement(C,natoms=15);
   PPO->AddElement(N,natoms=1);
@@ -154,7 +154,7 @@ void OpNoviceDetectorConstruction::DefineMaterials()
   // Scintillator (LAB+PPO) 23233 cm^3 23.233 l
   LAB_PPO = new G4Material("LAB_PPO", density=0.9*g/cm3, ncomponent=2); //??
   LAB_PPO->AddMaterial(LAB, 99.88*perCent); //Calculated considering  be 2 g/L of PPO (First measurement of the surface tension of a liquid scintillator based on Linear Alkylbenzene (HYBLENE 113))
-  LAB_PPO->AddMaterial(PPO, 0.11*perCent);
+  LAB_PPO->AddMaterial(PPO, 0.12*perCent);
   // Bis-MSB WLS
   Bis_MSB = new G4Material("Bis_MSB",density=1.076*g/cm3,ncomponent=2); // density: http://www.molbase.com/moldata/368101.html
   Bis_MSB->AddElement(H,natoms=22);
