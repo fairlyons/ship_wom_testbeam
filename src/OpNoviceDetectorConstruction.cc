@@ -71,7 +71,7 @@ OpNoviceDetectorConstruction::OpNoviceDetectorConstruction()
 
   SteelX = 80*cm;
   SteelY = 120*cm;
-  SteelZ = 35*cm;
+  SteelZ = 32*cm;
 
   WallThickness_XY = 10*mm;
   WallThickness_Z_Cover = 5*mm;
@@ -131,19 +131,16 @@ void OpNoviceDetectorConstruction::DefineMaterials()
   G4double a, z, density;
   G4int nelements, ncomponent, natoms;
 
-// Air
-//
-    G4Element* N = new G4Element("Nitrogen", "N", z=7 , a=14.01*g/mole);
-    G4Element* O = new G4Element("Oxygen"  , "O", z=8 , a=16.00*g/mole);
+  // Air
+  G4Element* N = new G4Element("Nitrogen", "N", z=7 , a=14.01*g/mole);
+  G4Element* O = new G4Element("Oxygen"  , "O", z=8 , a=16.00*g/mole);
 
-    air = new G4Material("Air", density=1.29*mg/cm3, nelements=2);
-    air->AddElement(N, 70.*perCent);
-    air->AddElement(O, 30.*perCent);
-
-
-  G4Element* H = new G4Element("Hydrogen", "H", 1 , 1.01*g/mole);
+  air = new G4Material("Air", density=1.29*mg/cm3, nelements=2);
+  air->AddElement(N, 70.*perCent);
+  air->AddElement(O, 30.*perCent);
 
   // Linear alkyl benzene (LAB)
+  G4Element* H = new G4Element("Hydrogen", "H", 1 , 1.01*g/mole);
   G4Element* C = new G4Element("Carbon", "C", 6 , 12.01*g/mole);
   G4Material* LAB = new G4Material("LAB",density=0.86*g/cm3,ncomponent=2);  //density: http://cpmaindia.com/lab_about.php
   LAB->AddElement(H,natoms=28);
@@ -184,7 +181,13 @@ void OpNoviceDetectorConstruction::DefineMaterials()
   PMMA_bottom = new G4Material("PMMA",density=1.200*g/cm3,ncomponent=2);
   PMMA_bottom->AddElement(H,natoms=2);
   PMMA_bottom->AddElement(C,natoms=4);
-  
+  // Barium sulphate (BaSO4) Reflectivity coating
+  G4Element* Ba = new G4Element("Barium", "Ba", 56 , 137.327*g/mole);
+  G4Element* S = new G4Element("Sulphur", "S", 16 , 32.065*g/mole);
+  BaSO4 = new G4Material("BaSO4",density=4.5*g/cm3,ncomponent=3); // https://www.chemeurope.com/en/encyclopedia/Barium_sulfate.html
+  BaSO4->AddElement(Ba,natoms=1);
+  BaSO4->AddElement(S,natoms=1);
+  BaSO4->AddElement(O,natoms=4);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -257,7 +260,7 @@ void OpNoviceDetectorConstruction::DefineMPTs()
   //------------------------------------------------------------------------------
   //----------------------------- PMMA -----------------------------
   //------------------------------------------------------------------------------
-   const G4int pmma_mpt_entr = 13;
+  const G4int pmma_mpt_entr = 13;
   G4double pmma_side_wl[pmma_mpt_entr] = {700.,  600.,  550.,  500.,  450.,  400.,  390.,  380.,  370.,  350.,  320., 310.,  300. };
   G4double pmma_bottom_wl[75]= {500.238045437794,497.023934024561,491.973187518052,486.922441011543,481.871694505034,476.820947998526,471.770201492017,466.719454985508,461.668708478999,456.61796197249,451.567215465981,446.516468959472,
   441.465722452963,436.414975946454,431.364229439945,426.313482933437,421.262736426928,416.211989920419,411.16124341391,406.110496907401,401.518909174211,397.845638987659,396.238583281043,393.805041782452,
@@ -382,11 +385,8 @@ void OpNoviceDetectorConstruction::DefineSurfaces()
   MPTsurf_SipmWindowSurface->AddProperty("REFLECTIVITY", pp1, reflectivity2, num1);
   SipmWindowSurface -> SetMaterialPropertiesTable(MPTsurf_SipmWindowSurface);
 
-  for(unsigned int sipm_id = 0; sipm_id<80; sipm_id++)
-  {
-      new G4LogicalBorderSurface( (std::string("SipmWindowSurface_")+std::to_string(sipm_id)).c_str(),
+  for(unsigned int sipm_id = 0; sipm_id<80; sipm_id++) new G4LogicalBorderSurface( (std::string("SipmWindowSurface_")+std::to_string(sipm_id)).c_str(),
                                   WOM_tube_phys_vect[sipm_id/40], sipm_phys_vect[sipm_id], SipmWindowSurface);
-  }
 
   //------------------------------------------------------------------------------
   //----------------------------- Steel -----------------------------
@@ -442,8 +442,7 @@ void OpNoviceDetectorConstruction::DefineSurfaces()
 
   FiberSurfaceInside->SetMaterialPropertiesTable(MPTsurf_PMMA_WLS);
 
-  for(unsigned int pos = 0; pos<WOM_coord_vec.size(); pos++)
-  {
+  for(unsigned int pos = 0; pos<WOM_coord_vec.size(); pos++) {
     new G4LogicalBorderSurface( (std::string("FiberInnerSurface_")+std::to_string(pos)).c_str(), WOM_tube_phys_vect[pos], WLS_tube1_phys_vect[pos], FiberSurfaceInside);
     new G4LogicalBorderSurface( (std::string("FiberInnerSurface_")+std::to_string(pos)).c_str(), WOM_tube_phys_vect[pos], WLS_tube2_phys_vect[pos], FiberSurfaceInside);
   }
@@ -647,12 +646,12 @@ void OpNoviceDetectorConstruction::DefineSolids()
 
 void OpNoviceDetectorConstruction::DefineLogicalVolumes()
 {
-  expHall_log = new G4LogicalVolume(expHall_box,air,"World",0,0,0);
-  WOM_cell_log = new G4LogicalVolume(WOM_cellBox,air,"wom_cell",0,0,0);
+  expHall_log = new G4LogicalVolume(expHall_box, air,"World",0,0,0);
+  WOM_cell_log = new G4LogicalVolume(WOM_cellBox, air,"wom_cell",0,0,0);
   sipm_base_log = new G4LogicalVolume(sipm_base, steel,"sipm_base",0,0,0);
   ScintillatorBox_log = new G4LogicalVolume(ScintillatorBoxWithHole, LAB_PPO,"ScintillatorBoxLV",0,0,0);
-  SteelBox_log = new G4LogicalVolume(EmptySteelBoxWithHole,steel,"Steelbox",0,0,0);
-  ReflectBox_log = new G4LogicalVolume(EmptyReflectBoxWithHole, steel,"Reflectbox", 0,0,0);
+  SteelBox_log = new G4LogicalVolume(EmptySteelBoxWithHole, steel,"Steelbox",0,0,0);
+  ReflectBox_log = new G4LogicalVolume(EmptyReflectBoxWithHole, BaSO4,"Reflectbox", 0,0,0);
   Outer_tube_log = new G4LogicalVolume(Outer_tube, PMMA_side, "Outer_tubeLV");
   WOM_tube_log = new G4LogicalVolume(WOM_tube, PMMA_bottom, "WOM_tubeLV");
   Inner_tube_log = new G4LogicalVolume(Inner_tube, PMMA_side, "Inner_tubeLV");

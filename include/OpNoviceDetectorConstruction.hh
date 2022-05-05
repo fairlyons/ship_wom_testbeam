@@ -85,6 +85,7 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4Material* WLS_Coat;
     G4Material* PMMA_side;
     G4Material* PMMA_bottom;
+    G4Material* BaSO4;
 
     // geometrical parameters
     G4double SteelX;

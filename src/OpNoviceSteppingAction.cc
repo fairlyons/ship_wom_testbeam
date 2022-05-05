@@ -190,7 +190,7 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
     G4VPhysicalVolume* prevolumephys = NULL;
     prevolumephys = aStep->GetPreStepPoint()->GetPhysicalVolume();
     G4String prephysvolname = prevolumephys->GetName();
-    if(prephysvolname == "ScintilatorBoxPV") volume_index =1;
+    if(prephysvolname == "ScintillatorBoxPV") volume_index =1;
     else if(prephysvolname == "SteelBox") volume_index =2;
     else volume_index =0;
     fEventAction->addEdep(volume_index, aStep -> GetTotalEnergyDeposit());
