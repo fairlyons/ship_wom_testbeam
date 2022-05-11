@@ -71,7 +71,7 @@ OpNoviceDetectorConstruction::OpNoviceDetectorConstruction()
 
   SteelX = 80*cm;
   SteelY = 120*cm;
-  SteelZ = 32*cm;
+  SteelZ = 27*cm;
 
   WallThickness_XY = 10*mm;
   WallThickness_Z_Cover = 5*mm;
