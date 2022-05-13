@@ -100,8 +100,6 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4double SctZ;
     G4double Thickness_Reflect;
     
-    G4double Additional_Length;
-    
     G4double Diam_In_In;
     G4double Diam_In_Out;
     G4double Diam_Out_In;
@@ -111,8 +109,8 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4double Diam_Hole;
     G4double Diam_Steel_Add;
     G4double Diam_Hat;
-    G4double Length_1;
-    G4double Length_2;
+    G4double Length_Out;
+    G4double Length_In;
     G4double Thickness_Ring;
     G4double Thickness_Disk;
     G4double Thickness_Hat;
@@ -120,13 +118,11 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4double Thickness_Gap;
     G4double Length_WOM;
     G4double Thickness_WLS;
+    G4double Length_Scint_Hole;
     
     G4double delta_X;
     G4double delta_Y;
 
-    G4double OlengthOuter;
-    G4double OlengthAG;
-    G4double OlengthInside;
     G4double sipmbasewidth;
     G4double sipmSize;
     G4double sipmWindowThickness;
@@ -218,7 +214,6 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     std::vector<G4VPhysicalVolume*> WOM_cells_phys_vect;
 
     // visualisation
-
     G4Color blue;
     G4Color blue_trans;
     G4Color green;

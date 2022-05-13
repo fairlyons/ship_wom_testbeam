@@ -1,7 +1,6 @@
-void cell_ana() {
+void cell_ana(TString f) {
     gStyle->SetOptStat("eou");
 
-    TString f = "b/cerenkov.root";
     TChain *chain = new TChain("Detected");
     chain->Add(f);
 
