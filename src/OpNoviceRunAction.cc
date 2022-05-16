@@ -88,6 +88,42 @@ OpNoviceRunAction::OpNoviceRunAction()
   analysisManager -> FinishNtuple(1);
 //--------------------------------------------------------------------
 
+  analysisManager -> CreateNtuple("entersWOM","Results");
+  analysisManager -> CreateNtupleIColumn("first");
+  analysisManager -> CreateNtupleIColumn("parentID");
+  analysisManager -> CreateNtupleIColumn("process");
+  analysisManager -> CreateNtupleIColumn("WOM Number");
+  analysisManager -> CreateNtupleDColumn("waveLen");
+  analysisManager -> CreateNtupleIColumn("evenNumber");
+  analysisManager -> FinishNtuple(2);
+
+  analysisManager -> CreateNtuple("entersPMMA","Results");
+  analysisManager -> CreateNtupleIColumn("first");
+  analysisManager -> CreateNtupleIColumn("parentID");
+  analysisManager -> CreateNtupleIColumn("process");
+  analysisManager -> CreateNtupleIColumn("WOM Number");
+  analysisManager -> CreateNtupleDColumn("waveLen");
+  analysisManager -> CreateNtupleIColumn("evenNumber");
+  analysisManager -> FinishNtuple(3);
+
+  analysisManager -> CreateNtuple("bornWLS","Results");
+  analysisManager -> CreateNtupleIColumn("first");
+  analysisManager -> CreateNtupleIColumn("parentID");
+  analysisManager -> CreateNtupleIColumn("process");
+  analysisManager -> CreateNtupleIColumn("WOM Number");
+  analysisManager -> CreateNtupleDColumn("waveLen");
+  analysisManager -> CreateNtupleIColumn("evenNumber");
+  analysisManager -> FinishNtuple(4);
+
+  analysisManager -> CreateNtuple("absorbedWLS","Results");
+  analysisManager -> CreateNtupleIColumn("first");
+  analysisManager -> CreateNtupleIColumn("parentID");
+  analysisManager -> CreateNtupleIColumn("process");
+  analysisManager -> CreateNtupleIColumn("WOM Number");
+  analysisManager -> CreateNtupleDColumn("waveLen");
+  analysisManager -> CreateNtupleIColumn("evenNumber");
+  analysisManager -> FinishNtuple(5);
+
 /*
 //--------------------------------------------------------------------
   analysisManager -> CreateNtuple("PotentiallyDetected","Results");

@@ -124,19 +124,18 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
     posttouchable = aStep->GetPostStepPoint()->GetTouchable();
     if(!posttouchable) return;
 
-    if(stepnum ==1) {
-      if(process==1) fEventAction->scintillation_photons++;
-      if(process==2) fEventAction->cherenkov_photons++;
+    if(stepnum == 1) {
+      if(process == 1) fEventAction->scintillation_photons++;
+      if(process == 2) fEventAction->cherenkov_photons++;
 
       //---------------- 2. Born in WLS
       G4VPhysicalVolume* prevolumephys = NULL;
       prevolumephys = aStep->GetPreStepPoint()->GetPhysicalVolume();
       G4String prephysvolname = prevolumephys->GetName();
       
-      if( (prephysvolname == "WLS1") || (prephysvolname == "WLS2") || (prephysvolname == "WLSring") ) {
+      if(process == 3) {
         PhotonInfo info = {parentid, process, post_copynum, 1.24e-3 / track -> GetKineticEnergy()};
         fEventAction->map_bornWLS[trackid] = info;
-        //if(process == 0) std::cout<<"process: "<<processname<<"\n";
       }
       //---------------- 2. Born in WLS END
     }
@@ -162,9 +161,14 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
     //---------------- 3. Fallen on WOM + absorbed in WLS
     if( (postphysvolname == "WLS1") || (postphysvolname == "WLS2") || (postphysvolname == "WLSring") ) {
       PhotonInfo info = {parentid, process, post_copynum, 1.24e-3 / track -> GetKineticEnergy()};
-      if( fEventAction->map_entersWOM.find(trackid) == fEventAction->map_entersWOM.end() ) fEventAction->map_entersWOM[trackid] = info;
-      fEventAction->map_absorbedWLS[trackid] = true;
-      fEventAction->map_absorbedWLS_info[trackid] = info;
+      G4VPhysicalVolume* prevolumephys = NULL;
+      prevolumephys = aStep->GetPreStepPoint()->GetPhysicalVolume();
+      G4String prephysvolname = prevolumephys->GetName();
+      if( (prephysvolname == "ScintilatorBoxPV") || (prephysvolname == "SteelBox") || (prephysvolname == "Sct_Outside") || (prephysvolname == "ReflectBox") || (prephysvolname == "Air_gap1") || (prephysvolname == "Air_gap2") || (prephysvolname == "Outer_tube") || (prephysvolname == "Inner_tube") || (prephysvolname == "PMMA_Ring")  || (prephysvolname == "PMMA_Disk")) {
+        if( fEventAction->map_entersWOM.find(trackid) == fEventAction->map_entersWOM.end() ) fEventAction->map_entersWOM[trackid] = info;
+        fEventAction->map_absorbedWLS[trackid] = true;
+        fEventAction->map_absorbedWLS_info[trackid] = info;
+      }
     }
     else if( fEventAction->map_absorbedWLS.find(trackid) != fEventAction->map_absorbedWLS.end() ) fEventAction->map_absorbedWLS[trackid] = false;
     //---------------- 3. Fallen on WOM + absorbed in WLS END 
@@ -175,7 +179,7 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
       G4VPhysicalVolume* prevolumephys = NULL;
       prevolumephys = aStep->GetPreStepPoint()->GetPhysicalVolume();
       G4String prephysvolname = prevolumephys->GetName();
-      if( (prephysvolname == "ScintilatorBoxPV") || (prephysvolname == "SteelBox") || (prephysvolname == "Sct_Outside") )
+      if( (prephysvolname == "ScintilatorBoxPV") || (prephysvolname == "SteelBox") || (prephysvolname == "Sct_Outside") || (prephysvolname == "ReflectBox") )
       {
         PhotonInfo info = {parentid, process, post_copynum, 1.24e-3 / track -> GetKineticEnergy()};
         fEventAction->map_entersPMMAvessel[trackid] = info;
