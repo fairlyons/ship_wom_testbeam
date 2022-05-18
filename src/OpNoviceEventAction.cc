@@ -81,7 +81,8 @@ void OpNoviceEventAction::EndOfEventAction(const G4Event*)
     analysisManager->FillNtupleIColumn(2,3, it->second.precopyno);
     analysisManager->FillNtupleIColumn(2,4, it->second.postcopyno);
     analysisManager->FillNtupleDColumn(2,5, it->second.waveLen);
-    analysisManager->FillNtupleIColumn(2,6, eventNumber);
+    analysisManager->FillNtupleIColumn(2,6, it->second.stepnum);
+    analysisManager->FillNtupleIColumn(2,7, eventNumber);
     analysisManager->AddNtupleRow(2);
   }
   for(it=map_entersPMMAvessel.begin(); it!=map_entersPMMAvessel.end(); it++) {
@@ -91,7 +92,8 @@ void OpNoviceEventAction::EndOfEventAction(const G4Event*)
     analysisManager->FillNtupleIColumn(3,3, it->second.precopyno);
     analysisManager->FillNtupleIColumn(3,4, it->second.postcopyno);
     analysisManager->FillNtupleDColumn(3,5, it->second.waveLen);
-    analysisManager->FillNtupleIColumn(3,6, eventNumber);
+    analysisManager->FillNtupleIColumn(3,6, it->second.stepnum);
+    analysisManager->FillNtupleIColumn(3,7, eventNumber);
     analysisManager->AddNtupleRow(3);
   }
   for(it=map_bornWLS.begin(); it!=map_bornWLS.end(); it++) {
@@ -101,7 +103,8 @@ void OpNoviceEventAction::EndOfEventAction(const G4Event*)
     analysisManager->FillNtupleIColumn(4,3, it->second.precopyno);
     analysisManager->FillNtupleIColumn(4,4, it->second.postcopyno);
     analysisManager->FillNtupleDColumn(4,5, it->second.waveLen);
-    analysisManager->FillNtupleIColumn(4,6, eventNumber);
+    analysisManager->FillNtupleIColumn(4,6, it->second.stepnum);
+    analysisManager->FillNtupleIColumn(4,7, eventNumber);
     analysisManager->AddNtupleRow(4);
   }
   map<G4int, G4bool>::iterator it2;
@@ -114,8 +117,9 @@ void OpNoviceEventAction::EndOfEventAction(const G4Event*)
       analysisManager->FillNtupleIColumn(5,2, info.process);
       analysisManager->FillNtupleIColumn(5,3, it->second.precopyno);
       analysisManager->FillNtupleIColumn(5,4, it->second.postcopyno);
-      analysisManager->FillNtupleDColumn(5,5, info.waveLen);
-      analysisManager->FillNtupleIColumn(5,6, eventNumber);
+      analysisManager->FillNtupleDColumn(5,5, it->second.waveLen);
+      analysisManager->FillNtupleIColumn(5,6, it->second.stepnum);
+      analysisManager->FillNtupleIColumn(5,7, eventNumber);
       analysisManager->AddNtupleRow(5);
     }
   }

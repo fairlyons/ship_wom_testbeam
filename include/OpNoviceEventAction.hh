@@ -56,6 +56,7 @@ typedef struct
     G4int precopyno;
     G4int postcopyno;
     G4double waveLen;
+    G4int stepnum;
 } PhotonInfo;
 
 class OpNoviceEventAction : public G4UserEventAction

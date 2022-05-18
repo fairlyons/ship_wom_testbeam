@@ -95,6 +95,7 @@ OpNoviceRunAction::OpNoviceRunAction()
   analysisManager -> CreateNtupleIColumn("PreCopyNo");
   analysisManager -> CreateNtupleIColumn("PostCopyNo");
   analysisManager -> CreateNtupleDColumn("waveLen");
+  analysisManager -> CreateNtupleIColumn("stepNumber");
   analysisManager -> CreateNtupleIColumn("eventNumber");
   analysisManager -> FinishNtuple(2);
 
@@ -105,6 +106,7 @@ OpNoviceRunAction::OpNoviceRunAction()
   analysisManager -> CreateNtupleIColumn("PreCopyNo");
   analysisManager -> CreateNtupleIColumn("PostCopyNo");
   analysisManager -> CreateNtupleDColumn("waveLen");
+  analysisManager -> CreateNtupleIColumn("stepNumber");
   analysisManager -> CreateNtupleIColumn("eventNumber");
   analysisManager -> FinishNtuple(3);
 
@@ -115,6 +117,7 @@ OpNoviceRunAction::OpNoviceRunAction()
   analysisManager -> CreateNtupleIColumn("PreCopyNo");
   analysisManager -> CreateNtupleIColumn("PostCopyNo");
   analysisManager -> CreateNtupleDColumn("waveLen");
+  analysisManager -> CreateNtupleIColumn("stepNumber");
   analysisManager -> CreateNtupleIColumn("eventNumber");
   analysisManager -> FinishNtuple(4);
 
@@ -126,17 +129,12 @@ OpNoviceRunAction::OpNoviceRunAction()
   analysisManager -> CreateNtupleIColumn("PostCopyNo");
   analysisManager -> CreateNtupleDColumn("waveLen");
   analysisManager -> CreateNtupleIColumn("eventNumber");
+  analysisManager -> CreateNtupleIColumn("stepNumber");
   analysisManager -> FinishNtuple(5);
-
-  analysisManager -> CreateNtuple("Steps","Results");
-  analysisManager -> CreateNtupleIColumn("pre1");
-  analysisManager -> CreateNtupleIColumn("pre5");
-  analysisManager -> CreateNtupleIColumn("pre10");
-  analysisManager -> FinishNtuple(6); 
 
   analysisManager -> CreateNtuple("Dies","Results");
   analysisManager -> CreateNtupleIColumn("CopyNo");
-  analysisManager -> FinishNtuple(7); 
+  analysisManager -> FinishNtuple(6); 
 
 /*
 //--------------------------------------------------------------------

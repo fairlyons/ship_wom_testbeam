@@ -118,21 +118,9 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
     G4int pre_copynum = prevolumephys->GetCopyNo();
     G4VPhysicalVolume* postvolumephys = NULL;
     postvolumephys = aStep->GetPostStepPoint()->GetPhysicalVolume();
-    if(stepnum == 1) {
+    if(track->GetTrackStatus() == fStopAndKill) {
       analysisManager->FillNtupleIColumn(6,0, pre_copynum);
       analysisManager->AddNtupleRow(6);
-    }
-    if(stepnum == 5) {
-      analysisManager->FillNtupleIColumn(6,1, pre_copynum);
-      analysisManager->AddNtupleRow(6);
-    }
-    if(stepnum == 10) {
-      analysisManager->FillNtupleIColumn(6,2, pre_copynum);
-      analysisManager->AddNtupleRow(6);
-    }
-    if(!postvolumephys) {
-      analysisManager->FillNtupleIColumn(7,0, pre_copynum);
-      analysisManager->AddNtupleRow(7);
     }
     if(!postvolumephys) return;
     G4String postphysvolname = postvolumephys->GetName();
@@ -144,28 +132,28 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
     if(stepnum == 1) {
       if(process == 1) fEventAction->scintillation_photons++;
       if(process == 2) fEventAction->cherenkov_photons++;
-
-      //---------------- 2. Born in WLS
-      if(process == 3) {
-        PhotonInfo info = {parentid, process, pre_copynum , post_copynum, 1.24e-3 / track -> GetKineticEnergy()};
-        fEventAction->map_bornWLS[trackid] = info;
-      }
-      //---------------- 2. Born in WLS END
     }
+
+    //---------------- 2. Born in WLS
+    if(process == 3) {
+      PhotonInfo info = {parentid, process, pre_copynum, post_copynum, 1.24e-3 / track -> GetKineticEnergy(), stepnum};
+      fEventAction->map_bornWLS[trackid] = info;
+    }
+    //---------------- 2. Born in WLS END
 
     //---------------- 4. photons that reached SiPM's
     if(postphysvolname == "sipmBase") {
-      G4cout << "sipm hit !!!!!!!!! " << post_copynum << G4endl;
-      analysisManager->FillNtupleDColumn(0,0, aStep -> GetPostStepPoint() -> GetPosition().getX() );
-      analysisManager->FillNtupleDColumn(0,1, aStep -> GetPostStepPoint() -> GetPosition().getY() );
-      analysisManager->FillNtupleIColumn(0,2, process );
-      if (posttouchable->GetCopyNumber(1) < 41) analysisManager->FillNtupleIColumn(0,3,1); // WOM number
-      if (posttouchable->GetCopyNumber(1) > 40) analysisManager->FillNtupleIColumn(0,3,2); // WOM number
-      analysisManager->FillNtupleDColumn(0,4, 1.24e-3 / track -> GetKineticEnergy());
-      analysisManager->FillNtupleDColumn(0,5, track -> GetGlobalTime() );
-      analysisManager->FillNtupleIColumn(0,6, sipm_detection(1.24e-3 / track -> GetKineticEnergy()));
+      G4cout << "sipm hit !!!!!!!!! " << posttouchable->GetCopyNumber(1) << G4endl;
+      analysisManager->FillNtupleDColumn(0,0, aStep-> GetPostStepPoint()-> GetPosition().getX());
+      analysisManager->FillNtupleDColumn(0,1, aStep-> GetPostStepPoint()-> GetPosition().getY());
+      analysisManager->FillNtupleIColumn(0,2, process);
+      if(posttouchable->GetCopyNumber(1) < 41) analysisManager->FillNtupleIColumn(0,3,1); // WOM number
+      if(posttouchable->GetCopyNumber(1) > 40) analysisManager->FillNtupleIColumn(0,3,2); // WOM number
+      analysisManager->FillNtupleDColumn(0,4, 1.24e-3 / track->GetKineticEnergy());
+      analysisManager->FillNtupleDColumn(0,5, track -> GetGlobalTime());
+      analysisManager->FillNtupleIColumn(0,6, sipm_detection(1.24e-3 / track->GetKineticEnergy()));
       analysisManager->FillNtupleIColumn(0,7, eventNumber);
-      analysisManager->FillNtupleIColumn(0,8, post_copynum); //sipm number
+      analysisManager->FillNtupleIColumn(0,8, posttouchable->GetCopyNumber(1)); //sipm number
       analysisManager->AddNtupleRow(0);
       track->SetTrackStatus(fStopAndKill);
     }
@@ -173,7 +161,7 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
 
     //---------------- 3. Absorbed in WLS
     if((postphysvolname == "WLS1") || (postphysvolname == "WLS2") || (postphysvolname == "WLSring")) {
-      PhotonInfo info = {parentid, process, pre_copynum, post_copynum, 1.24e-3 / track -> GetKineticEnergy()};
+      PhotonInfo info = {parentid, process, pre_copynum, post_copynum, 1.24e-3 / track -> GetKineticEnergy(), stepnum};
       fEventAction->map_absorbedWLS[trackid] = true;
       fEventAction->map_absorbedWLS_info[trackid] = info;
     }
@@ -182,7 +170,7 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
 
     //---------------- 1. Fallen on WOM
     if((postphysvolname == "WOM_tube")) {
-      PhotonInfo info = {parentid, process, pre_copynum, post_copynum, 1.24e-3 / track -> GetKineticEnergy()};
+      PhotonInfo info = {parentid, process, pre_copynum, post_copynum, 1.24e-3 / track -> GetKineticEnergy(), stepnum};
       fEventAction->map_entersWOM[trackid] = info;
     }
     //---------------- 1. Fallen on WOM END 
@@ -190,7 +178,7 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
     //---------------- 5. Fallen on PMMA vessel from scintillator
     if((postphysvolname == "Outer_tube") || (postphysvolname == "Inner_tube") || (postphysvolname == "PMMA_Ring")  || (postphysvolname == "PMMA_Disk") || (postphysvolname == "PMMA_ring_lower")) {
       if((prephysvolname == "ScintillatorBoxPV") || (prephysvolname == "SteelBox") || (prephysvolname == "Sct_Inside") || (prephysvolname == "ReflectBox")) {
-        PhotonInfo info = {parentid, process, pre_copynum, post_copynum, 1.24e-3 / track -> GetKineticEnergy()};
+        PhotonInfo info = {parentid, process, pre_copynum, post_copynum, 1.24e-3 / track -> GetKineticEnergy(), stepnum};
         fEventAction->map_entersPMMAvessel[trackid] = info;
       }
     }
