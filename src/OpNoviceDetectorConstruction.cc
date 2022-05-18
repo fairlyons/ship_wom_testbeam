@@ -170,11 +170,11 @@ void OpNoviceDetectorConstruction::DefineMaterials()
   WLS_Coat->AddMaterial(PTP,1.94 * perCent);
   WLS_Coat->AddMaterial(PEMA,  97.09 * perCent);
   // PMMA side
-  PMMA_side = new G4Material("PMMA",density=1.200*g/cm3,ncomponent=2);
+  PMMA_side = new G4Material("PMMA_side",density=1.200*g/cm3,ncomponent=2);
   PMMA_side->AddElement(H,natoms=2);
   PMMA_side->AddElement(C,natoms=4);
   // PMMA bottom
-  PMMA_bottom = new G4Material("PMMA",density=1.200*g/cm3,ncomponent=2);
+  PMMA_bottom = new G4Material("PMMA_bottom",density=1.200*g/cm3,ncomponent=2);
   PMMA_bottom->AddElement(H,natoms=2);
   PMMA_bottom->AddElement(C,natoms=4);
   // Barium sulphate (BaSO4) Reflectivity coating
@@ -200,19 +200,19 @@ void OpNoviceDetectorConstruction::DefineMPTs()
   auto Ridndex_LAB_PPO = [=](G4double wl) {
     G4double rind=1.;
     G4double B[4], C[4];
-    B[0] =0.821384; C[0] =94.7625;
-    B[1] =0.311375; C[1] =160.751;
-    B[2] =0.0170099;C[2] =219.575;
-    B[3] =0.608268; C[3] =9385.54;
-    for(int term = 0; term<4; term++) rind+=B[term]/( 1.-(C[term]/wl)*(C[term]/wl) ); //formula eand coefficients: https://arxiv.org/pdf/1105.2101.pdf
+    B[0] =0.821384; C[0] = 94.7625;
+    B[1] =0.311375; C[1] = 160.751;
+    B[2] =0.0170099;C[2] = 219.575;
+    B[3] =0.608268; C[3] = 9385.54;
+    for(int term = 0; term < 4; term++) rind+=B[term]/( 1.-(C[term]/wl)*(C[term]/wl) ); //formula eand coefficients: https://arxiv.org/pdf/1105.2101.pdf
     return sqrt(rind);
   };
 
   G4double wl;
-  for(int i=0;i<100;i++) {
+  for(int i = 0; i < sizeof(photon_en_LAB_PPO)/sizeof(photon_en_LAB_PPO[0]); i++) {
     wl = 250.+5.*i;
-    photon_en_LAB_PPO[i]=1240./wl*eV;
-    rindex_LAB_PPO[i]=Ridndex_LAB_PPO(wl);
+    photon_en_LAB_PPO[i] = 1240./wl*eV;
+    rindex_LAB_PPO[i] = Ridndex_LAB_PPO(wl);
   }
   G4MaterialPropertiesTable *MPT_LAB_PPO = new G4MaterialPropertiesTable();
   MPT_LAB_PPO -> AddConstProperty("SCINTILLATIONYIELD",10800./MeV); // https://underground.physics.berkeley.edu/WbLS/slides/PennRnD-Grullon.pdf
@@ -224,8 +224,10 @@ void OpNoviceDetectorConstruction::DefineMPTs()
   407,406,405,404,403,402,401,400,399,398,397,396,395,394,393,392,391,390,389,388,387,386,385,384,383,382,381,380,379,378,377,376,375,374,373,372,371,370,369,368,367,366,365,364,363,362,361,
   360,359,358,357,356,355,354,353,352,351,350,349,348,347,346,345,344,343,342,341,340,339,338,337,336,335,334,333,332,331,330,329,328,327,326,325,324,323,322,321,320,319,318,317,316,315,314,
   313,312,311,310,309,308,307,306,305,304,303,302,301,300};
+
   G4double photon_en_LAB_PPO_2[201];
-  for(int i=0; i<201; i++) photon_en_LAB_PPO_2[i] = 1240./photonWaveLength3[i]*eV;
+  for(int i=0; i < sizeof(photonWaveLength3)/sizeof(photonWaveLength3[0]); i++) photon_en_LAB_PPO_2[i] = 1240./photonWaveLength3[i]*eV;
+
   G4double scintilFast_LAB_PPO[201] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0025,0.005,0.0075,0.01,0.0125,0.015,0.0175,0.02,0.0225,0.025,0.025,0.025,0.025,0.025,0.025,0.025,0.025,0.025,0.025,0.025,0.0275,
   0.03,0.0325,0.035,0.0375,0.04,0.0425,0.045,0.0475,0.05,0.0525,0.055,0.0575,0.06,0.0625,0.065,0.0675,0.07,0.0725,0.075,0.08,0.085,0.09,0.095,0.1,0.105,0.11,0.115,0.12,0.125,
   0.1325,0.14,0.1475,0.155,0.1625,0.17,0.1775,0.185,0.1925,0.2,0.2075,0.215,0.2225,0.23,0.2375,0.245,0.2525,0.26,0.2675,0.275,0.29,0.305,0.32,0.335,0.35,0.365,0.38,0.395,0.41,
@@ -241,7 +243,8 @@ void OpNoviceDetectorConstruction::DefineMPTs()
   440,438,436,434,432,430,428,426,424,422,420,418,416,414,412,410,408,406,404,402,400,398,396,394,392,390,388,386,384,382,380,378,376,374,372,370,368,366,364,362,360,358,356,354,352,350,348,
   346,344,342,340,338,336,334,332,330,328,326,324,322,320,318,316,314,312,310,308,306,304,302,300};
   G4double photon_en_LAB_PPO_3[151];
-  for(int i=0; i<211; i++) photon_en_LAB_PPO[i] = 1240./waveLength[i]*eV;
+  for(int i=0; i < sizeof(waveLength)/sizeof(waveLength[0]); i++) photon_en_LAB_PPO[i] = 1240./waveLength[i]*eV;
+
   G4double absLen_unpurified[151] = {7.41928480365393*m,7.68678403498895*m,7.91287034263266*m,7.98944770316961*m,8.08548242289423*m,8.05778791764816*m,8.09059945466605*m,8.11488877012421*m,8.15949366895364*m,8.24046357622784*m,8.36896424710391*m,8.5724798759478*m,8.85772575154252*m,8.85221167762828*m,8.81555436133421*m,9.05389571096987*m,9.48924122323874*m,9.76515374992161*m,9.51335775244241*m,9.45328043541621*m,8.97482880285293*m,8.70096539741452*m,8.48935917676502*m,8.44097817045948*m,8.44405991017534*m,8.43190261832563*m,8.38645678568186*m,8.35648742634518*m,8.33232353493578*m,8.33114526507463*m,8.23755943796866*m,8.13213459072979*m,7.8726545001728*m,7.65415458551032*m,7.5800588175385*m,7.6061295282424*m,7.69320756579235*m,7.7082984257603*m,7.70586123507162*m,7.70325134674453*m,7.66923841145675*m,7.64365261429804*m,7.62664064911952*m,7.55677185990663*m,7.50711974244003*m,7.45713654579468*m,7.43721662692559*m,7.35800834707499*m,7.22642533541789*m,7.11844709300408*m,7.01469716585332*m,6.96176069278602*m,6.90597103165448*m,6.84830374947254*m,6.84525178280356*m,6.83526672561362*m,6.79526318509296*m,6.71587945264393*m,6.63947275377847*m,6.6118444804822*m,6.49136793799083*m,6.42934488959944*m,6.31098091183809*m,6.21946196680514*m,6.15871441142064*m,6.09293247274225*m,6.02864030249323*m,5.94477355531049*m,5.86604224769804*m,5.80521857408766*m,5.73506328468108*m,5.66214631723293*m,5.57289275228197*m,5.49731700891059*m,5.39615082475944*m,5.30550194154553*m,5.19943157180204*m,5.0911745929865*m,4.99959477462503*m,4.90159698959031*m,4.7917682338105*m,4.6681139833648*m,4.55010411037092*m,4.40871123138021*m,4.28519387842501*m,4.16757742933685*m,4.04589813769501*m,3.91998342801409*m,3.79194507519573*m,3.65200866136557*m,3.51899905487626*m,3.36858314280228*m,3.219533855462*m,3.06634990702638*m,2.90804104570209*m,2.74757561840523*m,2.58972782886322*m,2.41918635504621*m,2.23054267956921*m,2.05636621586457*m,1.94127546199575*m,1.85826095244245*m,1.74682662700547*m,1.59879984499012*m,1.40361593174363*m,1.21010948607421*m,1.12298134358669*m,1.12861772574266*m,1.1046585196898*m,1.04234271232283*m,0.9941373021031*m,0.956557242515996*m,0.927425529399054*m,0.875744366988952*m,0.779908411841287*m,0.663313263320605*m,0.541094630094606*m,0.406926671366136*m,0.265001590325018*m,0.153480082825598*m,0.085384830013475*m,0.048210452365814*m,0.028221561196635*m,0.017250128891369*m,0.013236885579806*m,0.013016803788927*m,0.012986890579723*m,0.012971261573831*m,0.012958145564748*m,0.01294674529108*m,0.01293558959276*m,0.012928356570193*m,0.01292213175909*m,0.012913052869886*m,0.012909213986899*m,0.01290710804677*m,0.012901565135242*m,0.012897247581221*m,0.012890383936614*m,0.012881105659852*m,0.01286687734122*m,0.012849574178154*m,0.012838615276908*m,0.012833994111742*m,0.012830840543912*m,0.012822230954434*m,0.01281835788177*m,0.012816426865377*m,0.012807751818825*m,0.0128029524293*m,0.01279493404851*m}; // Patrick measurement Mainz TB_scintillator
   G4double absLen_purified[151] = {8.69251407037729*m,9.02995755323176*m,9.27373907607242*m,9.2987694632999*m,9.37254639295624*m,9.31493016410715*m,9.32945396614867*m,9.36095897891052*m,9.48082544118919*m,9.60814130202656*m,9.82801139775702*m,10.1046947101091*m,10.4907062873286*m,10.5108807867562*m,10.4753853636081*m,10.8002040964469*m,11.4980811433371*m,11.9325107778151*m,11.6636028590624*m,11.7094782859565*m,10.9852633716743*m,10.670267622928*m,10.3800086540752*m,10.3082593229783*m,10.3275701553562*m,10.3319544221576*m,10.2662283365215*m,10.2925732890662*m,10.3153782242223*m,10.3860868021326*m,10.3365901053944*m,10.231517114707*m,9.92788014563769*m,9.61898800830966*m,9.54402290594051*m,9.62746317964499*m,9.79692373936646*m,9.91423094765397*m,9.9643151940587*m,10.0187720504539*m,10.0358961669191*m,10.0802588950859*m,10.1054177127325*m,10.0818415254723*m,10.086029649153*m,10.1133311242014*m,10.1350472968498*m,10.0761167690658*m,9.90904041225772*m,9.77530373579883*m,9.66256670125958*m,9.65338010651176*m,9.63069786946983*m,9.62140630852179*m,9.71997172370098*m,9.79744658014088*m,9.80672901676583*m,9.78343285609755*m,9.72163465573446*m,9.80518793240826*m,9.69593799132894*m,9.67791627886446*m,9.59985620139408*m,9.55705239801755*m,9.57416795211246*m,9.56671620921144*m,9.59797651082656*m,9.56114765877604*m,9.53375540026655*m,9.55647549660189*m,9.54447464256824*m,9.53291003815433*m,9.49239969544417*m,9.49917662439382*m,9.42391963661282*m,9.3663798468712*m,9.32376570267581*m,9.22629281746381*m,9.17977310076775*m,9.12179277182491*m,9.00886669573072*m,8.85479490604375*m,8.71252334840956*m,8.50086621234753*m,8.33199872471845*m,8.18529383430015*m,8.02793280531241*m,7.84805101504057*m,7.67375314752583*m,7.46193191606457*m,7.24933185585757*m,7.00057529008316*m,6.78144433425612*m,6.57082163294415*m,6.3463075559428*m,6.13214412943496*m,5.9379419460511*m,5.73334467669744*m,5.53766879317458*m,5.3394385508064*m,5.15238124063095*m,4.98340338198499*m,4.8012155457967*m,4.60195158864653*m,4.41961657539783*m,4.22693302308812*m,4.0416225005906*m,3.87499604590985*m,3.71820540936771*m,3.5472216422986*m,3.36485969966114*m,3.15134802038665*m,2.90168745463681*m,2.5867387338465*m,2.16375663283064*m,1.66966271660288*m,1.14377099881739*m,0.680589789294733*m,0.360363924864896*m,0.181782601946722*m,0.093267712946957*m,0.0503991725824*m,0.02880952553709*m,0.01737142379557*m,0.013310009583829*m,0.013096262643175*m,0.013063354253155*m,0.013043343934459*m,0.013030737069578*m,0.013019803591978*m,0.013008275438005*m,0.012998844829755*m,0.012996396487048*m,0.012992079547825*m,0.012984198598302*m,0.012978816961298*m,0.012975348745523*m,0.012968698731763*m,0.012962219216222*m,0.012956981482458*m,0.012941499851657*m,0.012919404279236*m,0.012913555972765*m,0.012909301261196*m,0.012901893060039*m,0.012901203446858*m,0.012897730665173*m,0.012889608969039*m,0.012882419482255*m,0.012878996045324*m,0.0128715069987*m}; // Patrick measurement Mainz Column00+ppo
   MPT_LAB_PPO -> AddProperty("ABSLENGTH",photon_en_LAB_PPO,absLen_unpurified,151) -> SetSpline(true);
@@ -268,8 +271,8 @@ void OpNoviceDetectorConstruction::DefineMPTs()
   G4double pmma_rind[pmma_mpt_entr] = {1.489, 1.492, 1.495, 1.498, 1.502, 1.511, 1.512, 1.514, 1.516, 1.522, 1.54, 1.541, 1.542}; // https://refractiveindex.info/?shelf=3d&book=plastics&page=pmma
   G4double pmma_side_en[pmma_mpt_entr];
   G4double pmma_bottom_en[75];
-  for(int i=0; i<pmma_mpt_entr; i++ ) pmma_side_en[i]=1240./pmma_side_wl[i]*eV;
-  for(int i=0; i<75; i++ ) pmma_bottom_en[i]=1240./pmma_bottom_wl[i]*eV;
+  for(int i=0; i < pmma_mpt_entr; i++ ) pmma_side_en[i]=1240./pmma_side_wl[i]*eV;
+  for(int i=0; i < sizeof(pmma_bottom_en)/sizeof(pmma_bottom_en[0]); i++ ) pmma_bottom_en[i]=1240./pmma_bottom_wl[i]*eV;
   G4double pmma_side_abslen[pmma_mpt_entr] =  {79.11*mm,70.39*mm,66.44*mm,61.48*mm,52.97*mm,45.77*mm,43.9*mm,42.6*mm,39.7*mm,36.07*mm,24.6*mm,18.23*mm,10.55*mm}; // picture in the folder 
   G4double pmma_bottom_abslen[75] = {825.532796331375*mm,995.546039820757*mm,906.063978187016*mm,963.25152928162*mm,1028.05540850485*mm,1102.24118950533*mm,1188.17858974627*mm,1289.12312649519*mm,1409.67117813625*mm,1556.52723104106*mm,1739.86542909011*mm,1975.90212068429*mm,3685.07275616407*mm,2739.34967914697*mm,3422.40435226653*mm,2615.11915536775*mm,1132.20893793201*mm,562.025169239236*mm,172.116453593441*mm,99.4344973522557*mm,42.1314492053959*mm,23.1587007862628*mm,14.5614893710837*mm,11.0809619119315*mm,8.65636778196572*mm,6.85307504536698*mm,5.55976428458039*mm,4.57033958442137*mm,3.85080777903292*mm,3.37910236494851*mm,2.91311721698663*mm,2.55268573906641*mm,2.27698546816599*mm,2.01668418096676*mm,1.79297764368291*mm,1.59752491160343*mm,1.4038711788544*mm,1.23546305784829*mm,1.06726603411345*mm,0.908835789380408*mm,0.740420832185596*mm,0.566454871207457*mm,0.42886782895817*mm,0.353271102463193*mm,0.307327896210654*mm,0.301885494993155*mm,0.301900827031845*mm,0.301917181987131*mm,0.301934641361397*mm,0.301953291111774*mm,0.301973221802586*mm,0.301994528780971*mm,0.30201731239245*mm,0.302041678261247*mm,0.302067737671548*mm,0.341435928448701*mm,0.302125413985435*mm,0.347533944235681*mm,0.437466744235865*mm,0.556750517609407*mm,0.647685273255554*mm,0.644020575189511*mm,0.535816480007306*mm,0.367918166877008*mm,0.302452281175179*mm,0.320791760065612*mm,0.3025669127656*mm,0.302631272369388*mm,0.302701282266752*mm,0.30277794773123*mm,0.302862615780021*mm,0.302957110157253*mm,0.303063920927376*mm,0.303186471853871*mm,0.321725431864253*mm}; //measure from CheapCal simulation / Doramas and Andrew measurements 
   G4MaterialPropertiesTable *MPT_PMMA_side = new G4MaterialPropertiesTable();
@@ -292,7 +295,7 @@ void OpNoviceDetectorConstruction::DefineMPTs()
   423,422,421,420,419,418,417,416,415,414,413,412,411,410,409,408,407,406,405,404,403,402,401,400,399,398,397,396,395,394,393,392,391,390,389,388,387,386,385,384,383,382,381,380,379,378,377,376,375,374,373,372,
   371,370,369,368,367,366,365,364,363,362,361,360,359,358,357,356,355,354,353,352,351,350,349,348,347,346,345,344,343,342,341,340};
   G4double photonEnergy5[136];
-  for(int i=0; i<7; i++) photonEnergy5[i] = 1240./waveLength3[i]*eV;
+  for(int i=0; i < sizeof(photonEnergy5)/sizeof(photonEnergy5[0]); i++) photonEnergy5[i] = 1240./waveLength3[i]*eV;
   G4double absLen3[136] = {0.029778641727802*mm,0.025727615980593*mm,0.022665520558419*mm,0.020403678900674*mm,0.018760693300556*mm,0.017577531521066*mm,0.016743287118922*mm,0.016167813685957*mm,0.015763998051761*mm,0.015488194203623*mm,0.015307536362709*mm,0.015191914667119*mm,0.015136095095359*mm,0.015132499525881*mm,0.015160770477501*mm,0.015211299915083*mm,0.01527461409535*mm,0.01533570681267*mm,0.015388969892783*mm,0.015446517621522*mm,0.015514103409318*mm,0.015604008404231*mm,0.015722238215546*mm,0.015842947046885*mm,0.015935673285256*mm,0.015961747565318*mm,0.015876626438453*mm,0.015663034252966*mm,0.0153368750864*mm,0.014921444513454*mm,0.014457211086833*mm,0.014005829236491*mm,0.013596300159085*mm,0.013236174984747*mm,0.012937598346848*mm,0.012704729003243*mm,0.012556254080098*mm,0.012492925033901*mm,0.012503072214779*mm,0.012580455720222*mm,0.012714392487393*mm,0.012884403875863*mm,0.013077390909031*mm,0.013283452954831*mm,0.013498835770703*mm,0.013723246482374*mm,0.01397419169843*mm,0.014241998652728*mm,0.014538624404617*mm,0.014867013478646*mm,0.015207837487861*mm,0.01555093737029*mm,0.015891392059806*mm,0.016191775144739*mm,0.016464263989425*mm,0.016696079973972*mm,0.016868032735573*mm,0.017004398964974*mm,0.017129512051334*mm,0.017253072087858*mm,0.017408464591978*mm,0.017599657075201*mm,0.017827956625514*mm,0.018107546799042*mm,0.018444575338237*mm,0.018811768412869*mm,0.019241846033599*mm,0.019713216602749*mm,0.02016609923033*mm,0.020604550905032*mm,0.021045484562316*mm,0.021456716664703*mm,0.021869584131306*mm,0.022271735128411*mm,0.022584232665911*mm,0.022783558437929*mm,0.022857134705945*mm,0.022745419121801*mm,0.022526778487644*mm,0.022194097391056*mm,0.021754927694089*mm,0.021275832295674*mm,0.020767552670763*mm,0.020200340029712*mm,0.019620327155833*mm,0.019025999593978*mm,0.018418473190498*mm,0.017867045375677*mm,0.017400073171183*mm,0.016956900957442*mm,0.016537832503563*mm,0.01611521038162*mm,0.015685271706403*mm,0.015297671648531*mm,0.014964140123143*mm,0.014666054270214*mm,0.014392594469716*mm,0.014081160494145*mm,0.013793257461952*mm,0.013492336322506*mm,0.013220777232175*mm,0.012963588085775*mm,0.012705359036573*mm,0.012441068320623*mm,0.012181936920422*mm,0.011918775570912*mm,0.011665080611527*mm,0.01142246436451*mm,0.011194560639647*mm,0.010993900870109*mm,0.010807618064254*mm,0.010635604013039*mm,0.010484281619043*mm,0.010359474572177*mm,0.010243379307035*mm,0.010147717929237*mm,0.010063195881395*mm,0.009986378514733*mm,0.009930972141261*mm,0.009887238724068*mm,0.009850512834273*mm,0.009819243355476*mm,0.009791168587455*mm,0.009754555980911*mm,0.009723489799155*mm,0.009690262669493*mm,0.009654553130722*mm,0.009619087536725*mm,0.009589732009137*mm,0.009559515170076*mm,0.009530682070846*mm,0.009502456734169*mm,0.009485526465539*mm,0.009468925475183*mm,0.009469233941075*mm,0.00948309435039*mm}; //Jakobs measure without cloroform  
   MPT_WLSCoat->AddProperty("WLSABSLENGTH", photonEnergy5, absLen3, 136);
 
@@ -303,7 +306,7 @@ void OpNoviceDetectorConstruction::DefineMPTs()
   393.620389802785,392.661003458199,390.948731712797,389.702126722733,388.693734027439,388.169942931827,387.606839417529,386.814987134474,386.022324288337,384.176496975521,382.716212740349,381.014431692937,
   378.83045463701,376.455517150279,373.305908776801};  
   G4double photonEnergy6[51];
-  for(int i=0; i<16; i++) photonEnergy6[i] = 1240./waveLength4[i]*eV;
+  for(int i=0; i < sizeof(photonEnergy6)/sizeof(photonEnergy6[0]); i++) photonEnergy6[i] = 1240./waveLength4[i]*eV;
   G4double reEmit4[51] = {0.095367125872878,0.100714589065125,0.13933792816855,0.176288041362039,0.211928140548633,0.245505005810625,0.273370328546945,0.30221148342213,0.333093045311687,0.364223283871252,0.399221677160171,
   0.448451857613,0.514706458856799,0.566173063784637,0.587186163465084,0.619912730325973,0.657430320109198,0.6974131402047,0.747799923939089,0.82411878610154,0.886968238152526,0.927207898674191,0.972182090856316,
   0.995579234732068,0.973067015983444,0.930457495931142,0.880606822664751,0.837907842014882,0.808317266222523,0.778775703403637,0.739211827896116,0.774816618055286,0.818288494562106,0.86029367303487,
@@ -403,7 +406,7 @@ void OpNoviceDetectorConstruction::DefineSurfaces()
   308.234158430107,298.119759098637,288.617698758033,278.498977033686,269.063193383857,257.757254416045};
   
   G4double photonEnergy7[59];
-  for(int i=0; i<18; i++) photonEnergy7[i] = 1240./waveLength5[i]*eV;
+  for(int i=0; i < sizeof(photonEnergy7)/sizeof(photonEnergy7[0]); i++) photonEnergy7[i] = 1240./waveLength5[i]*eV;
 
 
   G4double specular_steel[59] = {0.30216675359479,0.255752492579892,0.211988869838342,0.189438738725759,0.169538407342305,
@@ -428,8 +431,8 @@ void OpNoviceDetectorConstruction::DefineSurfaces()
   G4double specular_steel2[2] = {0,0}; // this is for not smooth surfaces. In this case probably the specular reflectivity is some of this and some of the other but we cannot know, so I would 						say that we can define just one
   G4MaterialPropertiesTable *MPTsurf_Steel = new G4MaterialPropertiesTable();
   MPTsurf_Steel->AddProperty("SPECULARLOBECONSTANT", photonEnergy7, specular_steel,59); // In order to have diffuse 												reclectivity (Lambertian), it is 													necessary define all the other 												three. The diffuse is 
-   MPTsurf_Steel->AddProperty("SPECULARSPIKECONSTANT", photonEnergy9, specular_steel2,2); // 1-other three (in this case 1). 
-   MPTsurf_Steel->AddProperty("BACKSCATTERCONSTANT", photonEnergy7, other_steel,59);
+  MPTsurf_Steel->AddProperty("SPECULARSPIKECONSTANT", photonEnergy9, specular_steel2,2); // 1-other three (in this case 1). 
+  MPTsurf_Steel->AddProperty("BACKSCATTERCONSTANT", photonEnergy7, other_steel,59);
   //MPTsurf_Steel -> AddProperty("REFLECTIVITY", photonEnergy7, reflectSteel, 18);
   SteelBoxSurface -> SetMaterialPropertiesTable(MPTsurf_Steel);
 
@@ -456,7 +459,7 @@ void OpNoviceDetectorConstruction::DefineSurfaces()
    308.044540615495,296.855782807067,287.740986759707,277.243549538301,267.499727726046,257.806045648673}; 
    
   G4double photonEnergy8[59];
-  for(int i=0; i<18; i++) photonEnergy8[i] = 1240./waveLength6[i]*eV;
+  for(int i=0; i < sizeof(photonEnergy8)/sizeof(photonEnergy8[0]); i++) photonEnergy8[i] = 1240./waveLength6[i]*eV;
   
    G4double specular_coating[59] = { 0.043090222881352,0.031689546391218,0.041461554811332,0.033318214461237,0.02843221025118,0.036575550601275,0.033318214461237,0.038204218671295,
    0.030060878321199,0.038204218671295,0.021917537971104,0.039832886741313,0.033453755370293,0.020371406492993,0.015465525664007,0.033453755370293,0.025277287321981,0.030183168150969,
@@ -504,7 +507,7 @@ void OpNoviceDetectorConstruction::DefineSurfaces()
 
   FiberSurfaceInside->SetMaterialPropertiesTable(MPTsurf_PMMA_WLS);
 
-  for(unsigned int pos = 0; pos<WOM_coord_vec.size(); pos++) {
+  for(unsigned int pos = 0; pos < WOM_coord_vec.size(); pos++) {
     new G4LogicalBorderSurface( (std::string("FiberInnerSurface_")+std::to_string(pos)).c_str(), WOM_tube_phys_vect[pos], WLS_tube1_phys_vect[pos], FiberSurfaceInside);
     new G4LogicalBorderSurface( (std::string("FiberInnerSurface_")+std::to_string(pos)).c_str(), WOM_tube_phys_vect[pos], WLS_tube2_phys_vect[pos], FiberSurfaceInside);
   }
@@ -715,8 +718,8 @@ void OpNoviceDetectorConstruction::DefineLogicalVolumes()
   PMMA_disk_log = new G4LogicalVolume(PMMA_disk, PMMA_side, "PMMA_diskLV");
   Air_gap1_log = new G4LogicalVolume(Air_gap1, air, "Air_gap1LV");
   Air_gap2_log = new G4LogicalVolume(Air_gap2, air, "Air_gap2LV");
-  WLS_tube1_log = new G4LogicalVolume(WLS_tube1, Bis_MSB, "WLS1LV");
-  WLS_tube2_log = new G4LogicalVolume(WLS_tube2, Bis_MSB, "WLS2LV");
+  WLS_tube1_log = new G4LogicalVolume(WLS_tube1, WLS_Coat, "WLS1LV");
+  WLS_tube2_log = new G4LogicalVolume(WLS_tube2, WLS_Coat, "WLS2LV");
   PMMA_Hat_log = new G4LogicalVolume(PMMA_Hat, PMMA_side, "PMMA_HatLV");
   Air_ring1_log = new G4LogicalVolume(Air_ring1, air, "Air_ring1LV");
   Air_ring2_log = new G4LogicalVolume(Air_ring2, air, "Air_ring2LV");
@@ -738,9 +741,9 @@ void OpNoviceDetectorConstruction::ConstructVolumes()
   G4double delta_Z;
   G4RotationMatrix *RM1 = new G4RotationMatrix(0*deg,0*deg,0*deg);
 
-  SteelBox_phys = new G4PVPlacement(0,G4ThreeVector(0,0,0),SteelBox_log,"SteelBox",WOM_cell_log,false,0, intersect_check);
-  ReflectBox_phys = new G4PVPlacement(0,G4ThreeVector(0,0,0),ReflectBox_log,"ReflectBox",WOM_cell_log,false,0, intersect_check);
-  ScintillatorBox_phys = new G4PVPlacement(0,G4ThreeVector(0,0,0),ScintillatorBox_log,"ScintillatorBoxPV",WOM_cell_log,false,0, intersect_check);
+  SteelBox_phys = new G4PVPlacement(0,G4ThreeVector(0,0,0),SteelBox_log,"SteelBox",WOM_cell_log,false,100, intersect_check);
+  ReflectBox_phys = new G4PVPlacement(0,G4ThreeVector(0,0,0),ReflectBox_log,"ReflectBox",WOM_cell_log,false,101, intersect_check);
+  ScintillatorBox_phys = new G4PVPlacement(0,G4ThreeVector(0,0,0),ScintillatorBox_log,"ScintillatorBoxPV",WOM_cell_log,false,102, intersect_check);
 
   sipmBase_phys = new G4PVPlacement(0,G4ThreeVector(0, 0, sipmWindowThickness/2. - sipmBaseThickness/2. ),sipmBaseBox_log,"sipmBase",sipmBox_log,false,0, intersect_check);
 
@@ -775,21 +778,21 @@ void OpNoviceDetectorConstruction::ConstructVolumes()
   for(unsigned int pos = 0; pos<WOM_coord_vec.size(); pos++) {
     RM1 = new G4RotationMatrix();
     //sipm_base_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_sipm), sipm_base_log, "sipm_base", WOM_cell_log, false, pos, intersect_check) );
-    Outer_tube_phys_vect.push_back(new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Outer_tube), Outer_tube_log, "Outer_tube", WOM_cell_log, false, 0, intersect_check) );
-    WOM_tube_phys_vect.push_back(  new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_WOM), WOM_tube_log, "WOM tube", WOM_cell_log, false, 0, intersect_check) );
-    Inner_tube_phys_vect.push_back(new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Inner_tube), Inner_tube_log, "Inner_tube", WOM_cell_log, false, 0, intersect_check) );
-    PMMA_Ring_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_PMMA_Ring), PMMA_Ring_log, "PMMA_Ring", WOM_cell_log, false, 0, intersect_check) );
-    PMMA_Disk_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_PMMA_Disk), PMMA_disk_log, "PMMA_Disk", WOM_cell_log, false, 0, intersect_check) );
-    Air_gap_1_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_WOM), Air_gap1_log, "Air_gap1", WOM_cell_log, false, 0, intersect_check) );
-    Air_gap_2_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_WOM), Air_gap2_log, "Air_gap2", WOM_cell_log, false, 0, intersect_check) );
-    WLS_tube1_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(0.,0., 0.), WLS_tube1_log, "WLS1", WOM_tube_log, false, 0, intersect_check) );
-    WLS_tube2_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(0.,0., 0.), WLS_tube2_log, "WLS2", WOM_tube_log, false, 0, intersect_check) );
-    PMMA_Hat_phys_vect.push_back(  new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_PMMA_Hat), PMMA_Hat_log, "PMMA_Hat", WOM_cell_log, false, 0, intersect_check) );
-    Air_ring_1_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_upper_ring), Air_ring1_log, "Air_ring1", WOM_cell_log, false, 0, intersect_check) );
-    Air_ring_2_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_upper_ring), Air_ring2_log, "Air_ring2", WOM_cell_log, false, 0, intersect_check) );
-    PMMA_ring_lower_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_upper_ring), PMMA_ring_lower_log, "PMMA_ring_lower", WOM_cell_log, false, 0, intersect_check) );
-    Steel_Add_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Steel_Add), Steel_Add_log, "Steel_Add", WOM_cell_log, false, 0, intersect_check) );
-    Sct_Inside_phys_vect.push_back(new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Sct_Inside), Sct_Inside_log, "Sct_Inside", WOM_cell_log, false, 0, intersect_check) );
+    Outer_tube_phys_vect.push_back(new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Outer_tube), Outer_tube_log, "Outer_tube", WOM_cell_log, false, 103, intersect_check) );
+    WOM_tube_phys_vect.push_back(  new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_WOM), WOM_tube_log, "WOM_tube", WOM_cell_log, false, 104, intersect_check) );
+    Inner_tube_phys_vect.push_back(new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Inner_tube), Inner_tube_log, "Inner_tube", WOM_cell_log, false, 105, intersect_check) );
+    PMMA_Ring_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_PMMA_Ring), PMMA_Ring_log, "PMMA_Ring", WOM_cell_log, false, 106, intersect_check) );
+    PMMA_Disk_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_PMMA_Disk), PMMA_disk_log, "PMMA_Disk", WOM_cell_log, false, 107, intersect_check) );
+    Air_gap_1_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_WOM), Air_gap1_log, "Air_gap1", WOM_cell_log, false, 116, intersect_check) );
+    Air_gap_2_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_WOM), Air_gap2_log, "Air_gap2", WOM_cell_log, false, 117, intersect_check) );
+    WLS_tube1_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(0.,0., 0.), WLS_tube1_log, "WLS1", WOM_tube_log, false, 108, intersect_check) );
+    WLS_tube2_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(0.,0., 0.), WLS_tube2_log, "WLS2", WOM_tube_log, false, 109, intersect_check) );
+    PMMA_Hat_phys_vect.push_back(  new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_PMMA_Hat), PMMA_Hat_log, "PMMA_Hat", WOM_cell_log, false, 110, intersect_check) );
+    Air_ring_1_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_upper_ring), Air_ring1_log, "Air_ring1", WOM_cell_log, false, 111, intersect_check) );
+    Air_ring_2_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_upper_ring), Air_ring2_log, "Air_ring2", WOM_cell_log, false, 112, intersect_check) );
+    PMMA_ring_lower_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_upper_ring), PMMA_ring_lower_log, "PMMA_ring_lower", WOM_cell_log, false, 113, intersect_check) );
+    Steel_Add_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Steel_Add), Steel_Add_log, "Steel_Add", WOM_cell_log, false, 114, intersect_check) );
+    Sct_Inside_phys_vect.push_back(new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Sct_Inside), Sct_Inside_log, "Sct_Inside", WOM_cell_log, false, 115, intersect_check) );
 
     for(int i = 0; i<n_sipm; i++){
       RM1 = new G4RotationMatrix();

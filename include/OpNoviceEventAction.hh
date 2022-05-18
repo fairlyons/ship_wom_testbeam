@@ -53,7 +53,8 @@ typedef struct
 {
     G4int parentID;
     G4int process;
-    G4int WOWnumber;
+    G4int precopyno;
+    G4int postcopyno;
     G4double waveLen;
 } PhotonInfo;
 

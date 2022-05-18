@@ -68,7 +68,7 @@ OpNoviceRunAction::OpNoviceRunAction()
   analysisManager -> CreateNtupleDColumn("x");
   analysisManager -> CreateNtupleDColumn("y");
   analysisManager -> CreateNtupleIColumn("process");
-  analysisManager -> CreateNtupleIColumn("WOMnumber");
+  analysisManager -> CreateNtupleIColumn("WomNo");
   analysisManager -> CreateNtupleDColumn("waveLen");
   analysisManager -> CreateNtupleDColumn("time");
   analysisManager -> CreateNtupleIColumn("detection");
@@ -92,37 +92,51 @@ OpNoviceRunAction::OpNoviceRunAction()
   analysisManager -> CreateNtupleIColumn("first");
   analysisManager -> CreateNtupleIColumn("parentID");
   analysisManager -> CreateNtupleIColumn("process");
-  analysisManager -> CreateNtupleIColumn("WOM Number");
+  analysisManager -> CreateNtupleIColumn("PreCopyNo");
+  analysisManager -> CreateNtupleIColumn("PostCopyNo");
   analysisManager -> CreateNtupleDColumn("waveLen");
-  analysisManager -> CreateNtupleIColumn("evenNumber");
+  analysisManager -> CreateNtupleIColumn("eventNumber");
   analysisManager -> FinishNtuple(2);
 
   analysisManager -> CreateNtuple("entersPMMA","Results");
   analysisManager -> CreateNtupleIColumn("first");
   analysisManager -> CreateNtupleIColumn("parentID");
   analysisManager -> CreateNtupleIColumn("process");
-  analysisManager -> CreateNtupleIColumn("WOM Number");
+  analysisManager -> CreateNtupleIColumn("PreCopyNo");
+  analysisManager -> CreateNtupleIColumn("PostCopyNo");
   analysisManager -> CreateNtupleDColumn("waveLen");
-  analysisManager -> CreateNtupleIColumn("evenNumber");
+  analysisManager -> CreateNtupleIColumn("eventNumber");
   analysisManager -> FinishNtuple(3);
 
   analysisManager -> CreateNtuple("bornWLS","Results");
   analysisManager -> CreateNtupleIColumn("first");
   analysisManager -> CreateNtupleIColumn("parentID");
   analysisManager -> CreateNtupleIColumn("process");
-  analysisManager -> CreateNtupleIColumn("WOM Number");
+  analysisManager -> CreateNtupleIColumn("PreCopyNo");
+  analysisManager -> CreateNtupleIColumn("PostCopyNo");
   analysisManager -> CreateNtupleDColumn("waveLen");
-  analysisManager -> CreateNtupleIColumn("evenNumber");
+  analysisManager -> CreateNtupleIColumn("eventNumber");
   analysisManager -> FinishNtuple(4);
 
   analysisManager -> CreateNtuple("absorbedWLS","Results");
   analysisManager -> CreateNtupleIColumn("first");
   analysisManager -> CreateNtupleIColumn("parentID");
   analysisManager -> CreateNtupleIColumn("process");
-  analysisManager -> CreateNtupleIColumn("WOM Number");
+  analysisManager -> CreateNtupleIColumn("PreCopyNo");
+  analysisManager -> CreateNtupleIColumn("PostCopyNo");
   analysisManager -> CreateNtupleDColumn("waveLen");
-  analysisManager -> CreateNtupleIColumn("evenNumber");
+  analysisManager -> CreateNtupleIColumn("eventNumber");
   analysisManager -> FinishNtuple(5);
+
+  analysisManager -> CreateNtuple("Steps","Results");
+  analysisManager -> CreateNtupleIColumn("pre1");
+  analysisManager -> CreateNtupleIColumn("pre5");
+  analysisManager -> CreateNtupleIColumn("pre10");
+  analysisManager -> FinishNtuple(6); 
+
+  analysisManager -> CreateNtuple("Dies","Results");
+  analysisManager -> CreateNtupleIColumn("CopyNo");
+  analysisManager -> FinishNtuple(7); 
 
 /*
 //--------------------------------------------------------------------
@@ -174,10 +188,6 @@ void OpNoviceRunAction::BeginOfRunAction(const G4Run* aRun)
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   fTimer->Start();
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-
-  // Open an output file
-  // The default file name is set in RunAction::RunAction(),
-  // it can be overwritten in a macro
   analysisManager->OpenFile();
 }
 

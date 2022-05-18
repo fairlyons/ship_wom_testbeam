@@ -98,28 +98,45 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
   if(aStep->GetTrack()->GetDynamicParticle()->GetParticleDefinition() == G4OpticalPhoton::OpticalPhotonDefinition()) {
     G4Track* track = aStep->GetTrack();
 
-    G4int stepnum=track->GetCurrentStepNumber();
-    G4int parentid=track -> GetParentID();
+    G4int stepnum = track->GetCurrentStepNumber();
+    G4int parentid = track->GetParentID();
 
-    G4int trackid = track -> GetTrackID();
+    G4int trackid = track->GetTrackID();
 
     G4int process = 0;
     std::string processname = "";
 
-    if (track->GetCreatorProcess()) std::string processname = track->GetCreatorProcess()->GetProcessName();
-
-    if (track->GetCreatorProcess()) processname = track->GetCreatorProcess()->GetProcessName();
+    if(track->GetCreatorProcess()) std::string processname = track->GetCreatorProcess()->GetProcessName();
+    if(track->GetCreatorProcess()) processname = track->GetCreatorProcess()->GetProcessName();
     if(processname == "Scintillation") process = 1;
     else if( processname == "OpWLS") process = 3;
     else if( processname == "Cerenkov") process = 2;
-    
+
+    G4VPhysicalVolume* prevolumephys = NULL;
+    prevolumephys = aStep->GetPreStepPoint()->GetPhysicalVolume();
+    G4String prephysvolname = prevolumephys->GetName();
+    G4int pre_copynum = prevolumephys->GetCopyNo();
     G4VPhysicalVolume* postvolumephys = NULL;
     postvolumephys = aStep->GetPostStepPoint()->GetPhysicalVolume();
+    if(stepnum == 1) {
+      analysisManager->FillNtupleIColumn(6,0, pre_copynum);
+      analysisManager->AddNtupleRow(6);
+    }
+    if(stepnum == 5) {
+      analysisManager->FillNtupleIColumn(6,1, pre_copynum);
+      analysisManager->AddNtupleRow(6);
+    }
+    if(stepnum == 10) {
+      analysisManager->FillNtupleIColumn(6,2, pre_copynum);
+      analysisManager->AddNtupleRow(6);
+    }
+    if(!postvolumephys) {
+      analysisManager->FillNtupleIColumn(7,0, pre_copynum);
+      analysisManager->AddNtupleRow(7);
+    }
     if(!postvolumephys) return;
     G4String postphysvolname = postvolumephys->GetName();
-
     G4int post_copynum = postvolumephys->GetCopyNo();
-
     const G4VTouchable* posttouchable = NULL;
     posttouchable = aStep->GetPostStepPoint()->GetTouchable();
     if(!posttouchable) return;
@@ -129,12 +146,8 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
       if(process == 2) fEventAction->cherenkov_photons++;
 
       //---------------- 2. Born in WLS
-      G4VPhysicalVolume* prevolumephys = NULL;
-      prevolumephys = aStep->GetPreStepPoint()->GetPhysicalVolume();
-      G4String prephysvolname = prevolumephys->GetName();
-      
       if(process == 3) {
-        PhotonInfo info = {parentid, process, post_copynum, 1.24e-3 / track -> GetKineticEnergy()};
+        PhotonInfo info = {parentid, process, pre_copynum , post_copynum, 1.24e-3 / track -> GetKineticEnergy()};
         fEventAction->map_bornWLS[trackid] = info;
       }
       //---------------- 2. Born in WLS END
@@ -142,7 +155,7 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
 
     //---------------- 4. photons that reached SiPM's
     if(postphysvolname == "sipmBase") {
-      G4cout << "sipm hit !!!!!!!!! " << posttouchable->GetCopyNumber(1) << G4endl;
+      G4cout << "sipm hit !!!!!!!!! " << post_copynum << G4endl;
       analysisManager->FillNtupleDColumn(0,0, aStep -> GetPostStepPoint() -> GetPosition().getX() );
       analysisManager->FillNtupleDColumn(0,1, aStep -> GetPostStepPoint() -> GetPosition().getY() );
       analysisManager->FillNtupleIColumn(0,2, process );
@@ -152,36 +165,32 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
       analysisManager->FillNtupleDColumn(0,5, track -> GetGlobalTime() );
       analysisManager->FillNtupleIColumn(0,6, sipm_detection(1.24e-3 / track -> GetKineticEnergy()));
       analysisManager->FillNtupleIColumn(0,7, eventNumber);
-      analysisManager->FillNtupleIColumn(0,8, posttouchable->GetCopyNumber(1)); //sipm number
+      analysisManager->FillNtupleIColumn(0,8, post_copynum); //sipm number
       analysisManager->AddNtupleRow(0);
       track->SetTrackStatus(fStopAndKill);
     }
     //---------------- 4. photons that reached SiPM's END
 
-    //---------------- 3. Fallen on WOM + absorbed in WLS
-    if( (postphysvolname == "WLS1") || (postphysvolname == "WLS2") || (postphysvolname == "WLSring") ) {
-      PhotonInfo info = {parentid, process, post_copynum, 1.24e-3 / track -> GetKineticEnergy()};
-      G4VPhysicalVolume* prevolumephys = NULL;
-      prevolumephys = aStep->GetPreStepPoint()->GetPhysicalVolume();
-      G4String prephysvolname = prevolumephys->GetName();
-      if( (prephysvolname == "ScintilatorBoxPV") || (prephysvolname == "SteelBox") || (prephysvolname == "Sct_Outside") || (prephysvolname == "ReflectBox") || (prephysvolname == "Air_gap1") || (prephysvolname == "Air_gap2") || (prephysvolname == "Outer_tube") || (prephysvolname == "Inner_tube") || (prephysvolname == "PMMA_Ring")  || (prephysvolname == "PMMA_Disk")) {
-        if( fEventAction->map_entersWOM.find(trackid) == fEventAction->map_entersWOM.end() ) fEventAction->map_entersWOM[trackid] = info;
-        fEventAction->map_absorbedWLS[trackid] = true;
-        fEventAction->map_absorbedWLS_info[trackid] = info;
-      }
+    //---------------- 3. Absorbed in WLS
+    if((postphysvolname == "WLS1") || (postphysvolname == "WLS2") || (postphysvolname == "WLSring")) {
+      PhotonInfo info = {parentid, process, pre_copynum, post_copynum, 1.24e-3 / track -> GetKineticEnergy()};
+      fEventAction->map_absorbedWLS[trackid] = true;
+      fEventAction->map_absorbedWLS_info[trackid] = info;
     }
-    else if( fEventAction->map_absorbedWLS.find(trackid) != fEventAction->map_absorbedWLS.end() ) fEventAction->map_absorbedWLS[trackid] = false;
-    //---------------- 3. Fallen on WOM + absorbed in WLS END 
+    else if(fEventAction->map_absorbedWLS.find(trackid) != fEventAction->map_absorbedWLS.end()) fEventAction->map_absorbedWLS[trackid] = false;
+    //---------------- 3. Absorbed in WLS END 
+
+    //---------------- 1. Fallen on WOM
+    if((postphysvolname == "WOM_tube")) {
+      PhotonInfo info = {parentid, process, pre_copynum, post_copynum, 1.24e-3 / track -> GetKineticEnergy()};
+      fEventAction->map_entersWOM[trackid] = info;
+    }
+    //---------------- 1. Fallen on WOM END 
 
     //---------------- 5. Fallen on PMMA vessel from scintillator
-    if( (postphysvolname == "Outer_tube") || (postphysvolname == "Inner_tube") || (postphysvolname == "PMMA_Ring")  || (postphysvolname == "PMMA_Disk") )
-    {
-      G4VPhysicalVolume* prevolumephys = NULL;
-      prevolumephys = aStep->GetPreStepPoint()->GetPhysicalVolume();
-      G4String prephysvolname = prevolumephys->GetName();
-      if( (prephysvolname == "ScintilatorBoxPV") || (prephysvolname == "SteelBox") || (prephysvolname == "Sct_Outside") || (prephysvolname == "ReflectBox") )
-      {
-        PhotonInfo info = {parentid, process, post_copynum, 1.24e-3 / track -> GetKineticEnergy()};
+    if((postphysvolname == "Outer_tube") || (postphysvolname == "Inner_tube") || (postphysvolname == "PMMA_Ring")  || (postphysvolname == "PMMA_Disk") || (postphysvolname == "PMMA_ring_lower")) {
+      if((prephysvolname == "ScintillatorBoxPV") || (prephysvolname == "SteelBox") || (prephysvolname == "Sct_Inside") || (prephysvolname == "ReflectBox")) {
+        PhotonInfo info = {parentid, process, pre_copynum, post_copynum, 1.24e-3 / track -> GetKineticEnergy()};
         fEventAction->map_entersPMMAvessel[trackid] = info;
       }
     }
@@ -194,9 +203,9 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
     G4VPhysicalVolume* prevolumephys = NULL;
     prevolumephys = aStep->GetPreStepPoint()->GetPhysicalVolume();
     G4String prephysvolname = prevolumephys->GetName();
-    if(prephysvolname == "ScintillatorBoxPV") volume_index =1;
-    else if(prephysvolname == "SteelBox") volume_index =2;
-    else volume_index =0;
+    if(prephysvolname == "ScintillatorBoxPV") volume_index = 1;
+    else if(prephysvolname == "SteelBox") volume_index = 2;
+    else volume_index = 0;
     fEventAction->addEdep(volume_index, aStep -> GetTotalEnergyDeposit());
   }
 }

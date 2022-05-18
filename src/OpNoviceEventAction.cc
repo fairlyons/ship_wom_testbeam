@@ -76,29 +76,32 @@ void OpNoviceEventAction::EndOfEventAction(const G4Event*)
   map<G4int, PhotonInfo>::iterator it;
   for(it=map_entersWOM.begin(); it!=map_entersWOM.end(); it++) {
     analysisManager->FillNtupleIColumn(2,0, it->first);
-    analysisManager->FillNtupleIColumn(2,1, it->second.parentID );
+    analysisManager->FillNtupleIColumn(2,1, it->second.parentID);
     analysisManager->FillNtupleIColumn(2,2, it->second.process);
-    analysisManager->FillNtupleIColumn(2,3, it->second.WOWnumber );
-    analysisManager->FillNtupleDColumn(2,4, it->second.waveLen );
-    analysisManager->FillNtupleIColumn(2,5, eventNumber);
+    analysisManager->FillNtupleIColumn(2,3, it->second.precopyno);
+    analysisManager->FillNtupleIColumn(2,4, it->second.postcopyno);
+    analysisManager->FillNtupleDColumn(2,5, it->second.waveLen);
+    analysisManager->FillNtupleIColumn(2,6, eventNumber);
     analysisManager->AddNtupleRow(2);
   }
   for(it=map_entersPMMAvessel.begin(); it!=map_entersPMMAvessel.end(); it++) {
     analysisManager->FillNtupleIColumn(3,0, it->first);
-    analysisManager->FillNtupleIColumn(3,1, it->second.parentID );
+    analysisManager->FillNtupleIColumn(3,1, it->second.parentID);
     analysisManager->FillNtupleIColumn(3,2, it->second.process);
-    analysisManager->FillNtupleIColumn(3,3, it->second.WOWnumber );
-    analysisManager->FillNtupleDColumn(3,4, it->second.waveLen );
-    analysisManager->FillNtupleIColumn(3,5, eventNumber);
+    analysisManager->FillNtupleIColumn(3,3, it->second.precopyno);
+    analysisManager->FillNtupleIColumn(3,4, it->second.postcopyno);
+    analysisManager->FillNtupleDColumn(3,5, it->second.waveLen);
+    analysisManager->FillNtupleIColumn(3,6, eventNumber);
     analysisManager->AddNtupleRow(3);
   }
   for(it=map_bornWLS.begin(); it!=map_bornWLS.end(); it++) {
     analysisManager->FillNtupleIColumn(4,0, it->first);
-    analysisManager->FillNtupleIColumn(4,1, it->second.parentID );
+    analysisManager->FillNtupleIColumn(4,1, it->second.parentID);
     analysisManager->FillNtupleIColumn(4,2, it->second.process);
-    analysisManager->FillNtupleIColumn(4,3, it->second.WOWnumber );
-    analysisManager->FillNtupleDColumn(4,4, it->second.waveLen );
-    analysisManager->FillNtupleIColumn(4,5, eventNumber);
+    analysisManager->FillNtupleIColumn(4,3, it->second.precopyno);
+    analysisManager->FillNtupleIColumn(4,4, it->second.postcopyno);
+    analysisManager->FillNtupleDColumn(4,5, it->second.waveLen);
+    analysisManager->FillNtupleIColumn(4,6, eventNumber);
     analysisManager->AddNtupleRow(4);
   }
   map<G4int, G4bool>::iterator it2;
@@ -107,11 +110,12 @@ void OpNoviceEventAction::EndOfEventAction(const G4Event*)
     if(it2->second) {
       PhotonInfo info = map_absorbedWLS_info[it2->first];
       analysisManager->FillNtupleIColumn(5,0, it2->first);
-      analysisManager->FillNtupleIColumn(5,1, info.parentID );
+      analysisManager->FillNtupleIColumn(5,1, info.parentID);
       analysisManager->FillNtupleIColumn(5,2, info.process);
-      analysisManager->FillNtupleIColumn(5,3, info.WOWnumber );
-      analysisManager->FillNtupleDColumn(5,4, info.waveLen );
-      analysisManager->FillNtupleIColumn(5,5, eventNumber);
+      analysisManager->FillNtupleIColumn(5,3, it->second.precopyno);
+      analysisManager->FillNtupleIColumn(5,4, it->second.postcopyno);
+      analysisManager->FillNtupleDColumn(5,5, info.waveLen);
+      analysisManager->FillNtupleIColumn(5,6, eventNumber);
       analysisManager->AddNtupleRow(5);
     }
   }
@@ -122,11 +126,11 @@ void OpNoviceEventAction::EndOfEventAction(const G4Event*)
   map_entersWOM.clear();
   map_entersPMMAvessel.clear();
 
-  analysisManager->FillNtupleIColumn(1,0, scintillation_photons );
-  analysisManager->FillNtupleIColumn(1,1, cherenkov_photons );
-  analysisManager->FillNtupleDColumn(1,2, fEnergyDeposit[0] );
-  analysisManager->FillNtupleDColumn(1,3, fEnergyDeposit[1] );
-  analysisManager->FillNtupleDColumn(1,4, fEnergyDeposit[2] );
+  analysisManager->FillNtupleIColumn(1,0, scintillation_photons);
+  analysisManager->FillNtupleIColumn(1,1, cherenkov_photons);
+  analysisManager->FillNtupleDColumn(1,2, fEnergyDeposit[0]);
+  analysisManager->FillNtupleDColumn(1,3, fEnergyDeposit[1]);
+  analysisManager->FillNtupleDColumn(1,4, fEnergyDeposit[2]);
   analysisManager->FillNtupleIColumn(1,5, eventNumber);
   analysisManager->AddNtupleRow(1);
 
