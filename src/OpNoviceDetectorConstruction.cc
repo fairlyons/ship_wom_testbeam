@@ -338,36 +338,8 @@ void OpNoviceDetectorConstruction::DefineMPTs()
 
 void OpNoviceDetectorConstruction::DefineSurfaces()
 {
-  //------------------------------------------------------------------------------
-  //----------------------------- AirBoxSurface -----------------------------
-  //------------------------------------------------------------------------------
-  G4OpticalSurface* AirBoxSurface = new G4OpticalSurface("AirBoxSurface"); // air-PMMA border
-  AirBoxSurface->SetType(dielectric_dielectric);
-  AirBoxSurface->SetFinish(polished);
-  AirBoxSurface->SetModel(glisur);
 
-  const G4int num1 = 2;
-  G4double pp1[num1] = {2.*eV, 5.*eV};
-  G4double reflectivity1[num1] = {0.999, 0.999}; // by A. K.
-  G4MaterialPropertiesTable *MPTsurf_AirBoxSurface = new G4MaterialPropertiesTable();
-  MPTsurf_AirBoxSurface->AddProperty("REFLECTIVITY", pp1, reflectivity1, num1);
-  AirBoxSurface -> SetMaterialPropertiesTable(MPTsurf_AirBoxSurface);
-
-  for(unsigned int pos = 0; pos<WOM_coord_vec.size(); pos++)
-  {
-    new G4LogicalBorderSurface( (std::string("TubeSurface_")+std::to_string(pos)).c_str(), Air_gap_1_phys_vect[pos], Outer_tube_phys_vect[pos], AirBoxSurface);
-    new G4LogicalBorderSurface( (std::string("TubeSurface_")+std::to_string(pos)).c_str(), Outer_tube_phys_vect[pos], Air_gap_1_phys_vect[pos], AirBoxSurface);
-    new G4LogicalBorderSurface( (std::string("PMMASurface_")+std::to_string(pos)).c_str(), expHall_phys, PMMA_Disk_phys_vect[pos], AirBoxSurface);
-    new G4LogicalBorderSurface( (std::string("PMMASurface_")+std::to_string(pos)).c_str(), expHall_phys, Inner_tube_phys_vect[pos], AirBoxSurface);
-    new G4LogicalBorderSurface( (std::string("TubeSurface_")+std::to_string(pos)).c_str(), PMMA_Ring_phys_vect[pos], Air_gap_1_phys_vect[pos], AirBoxSurface);
-    new G4LogicalBorderSurface( (std::string("TubeSurface_")+std::to_string(pos)).c_str(), PMMA_Ring_phys_vect[pos], Air_gap_2_phys_vect[pos], AirBoxSurface);
-    new G4LogicalBorderSurface( (std::string("TubeSurface_")+std::to_string(pos)).c_str(), Inner_tube_phys_vect[pos], Air_gap_2_phys_vect[pos], AirBoxSurface);
-    new G4LogicalBorderSurface( (std::string("TubeSurface_")+std::to_string(pos)).c_str(), Air_gap_2_phys_vect[pos], Inner_tube_phys_vect[pos], AirBoxSurface);
-//    new G4LogicalBorderSurface( (std::string("WLSSurface_")+std::to_string(pos)).c_str(), WLS_tube1_phys_vect[pos], WOM_tube_phys_vect[pos], AirBoxSurface);
-//    new G4LogicalBorderSurface( (std::string("WLSSurface_")+std::to_string(pos)).c_str(), WLS_tube2_phys_vect[pos], WOM_tube_phys_vect[pos], AirBoxSurface);
-  }
-
-
+  int num1 = 2;
   G4OpticalSurface* SipmWindowSurface = new G4OpticalSurface("SipmWindowSurface"); // WOM_tube -- sipmWindow border
   SipmWindowSurface->SetType(dielectric_dielectric);
   SipmWindowSurface->SetFinish(polished);
@@ -429,7 +401,7 @@ void OpNoviceDetectorConstruction::DefineSurfaces()
   G4double photonEnergy9[2] = {1.*eV,5.*eV}; 
   G4double specular_steel2[2] = {0,0}; // this is for not smooth surfaces. In this case probably the specular reflectivity is some of this and some of the other but we cannot know, so I would 						say that we can define just one
   G4MaterialPropertiesTable *MPTsurf_Steel = new G4MaterialPropertiesTable();
-  MPTsurf_Steel->AddProperty("SPECULARLOBECONSTANT", photonEnergy7, specular_steel,59); // In order to have diffuse 												reclectivity (Lambertian), it is 													necessary define all the other 												three. The diffuse is 
+  MPTsurf_Steel->AddProperty("SPECULARLOBECONSTANT", photonEnergy7, specular_steel,59); // In order to have diffuse reflectivity (Lambertian), it is necessary define all the other three. The diffuse is 
   MPTsurf_Steel->AddProperty("SPECULARSPIKECONSTANT", photonEnergy9, specular_steel2,2); // 1-other three (in this case 1). 
   MPTsurf_Steel->AddProperty("BACKSCATTERCONSTANT", photonEnergy7, other_steel,59);
   //MPTsurf_Steel -> AddProperty("REFLECTIVITY", photonEnergy7, reflectSteel, 18);
@@ -488,55 +460,6 @@ void OpNoviceDetectorConstruction::DefineSurfaces()
 
    G4LogicalSkinSurface* Surface1 = new G4LogicalSkinSurface("BaSO4_surface", ReflectBox_log, BaSO4_surface);
 
-  //------------------------------------------------------------------------------
-  //----------------------------- PMMA WLS surface -----------------------------
-  //------------------------------------------------------------------------------
-  G4OpticalSurface* FiberSurfaceInside = new G4OpticalSurface("FiberSurfaceInside");
-  FiberSurfaceInside->SetType(dielectric_dielectric);
-  FiberSurfaceInside->SetFinish(polished);
-  FiberSurfaceInside->SetModel(glisur);
-
-  const int nentries_PMMA_WLS_surf = 3;
-  G4double photon_en_PMMA_sWLS[nentries_PMMA_WLS_surf] = {2.*eV,3.5*eV,5.*eV};
-  G4double reflectivityPMMA[nentries_PMMA_WLS_surf] = {0.999,0.999, 0.999};
-
-  G4MaterialPropertiesTable *MPTsurf_PMMA_WLS = new G4MaterialPropertiesTable();
-  MPTsurf_PMMA_WLS->AddProperty("REFLECTIVITY", photon_en_PMMA_sWLS, reflectivityPMMA, nentries_PMMA_WLS_surf);
-
-  FiberSurfaceInside->SetMaterialPropertiesTable(MPTsurf_PMMA_WLS);
-
-  for(unsigned int pos = 0; pos < WOM_coord_vec.size(); pos++) {
-    new G4LogicalBorderSurface( (std::string("FiberInnerSurface_")+std::to_string(pos)).c_str(), WOM_tube_phys_vect[pos], WLS_tube1_phys_vect[pos], FiberSurfaceInside);
-    new G4LogicalBorderSurface( (std::string("FiberInnerSurface_")+std::to_string(pos)).c_str(), WOM_tube_phys_vect[pos], WLS_tube2_phys_vect[pos], FiberSurfaceInside);
-  }
-
-
-
-  //------------------------------------------------------------------------------
-  //----------------------------- Scintillator_PMMA surface -----------------------------
-  //------------------------------------------------------------------------------
-  G4OpticalSurface* Scintillator_PMMA_Surface = new G4OpticalSurface("Scintillator_PMMA_Surface");
-  Scintillator_PMMA_Surface->SetType(dielectric_dielectric);
-  Scintillator_PMMA_Surface->SetFinish(polished);
-  Scintillator_PMMA_Surface->SetModel(glisur);
-
-  const G4int num  = 3;
-  G4double pp[num] = {1.6*eV,3.44*eV, 5.0*eV};
-  G4double reflectivitySct[num] = {0.999,0.999, 0.999};
-
-  G4MaterialPropertiesTable *MPTsurf_Scintillator_PMMA = new G4MaterialPropertiesTable();
-  MPTsurf_Scintillator_PMMA->AddProperty("REFLECTIVITY", pp, reflectivitySct, num);
-  Scintillator_PMMA_Surface->SetMaterialPropertiesTable(MPTsurf_Scintillator_PMMA);
-
-/*   for(unsigned int pos = 0; pos<WOM_coord_vec.size(); pos++)
-   {
-     new G4LogicalBorderSurface( (std::string("FiberBoxSurfaceOut_")+std::to_string(pos)).c_str(), ScintillatorBox_phys, Outer_tube_phys_vect[pos], Scintillator_PMMA_Surface);
-     new G4LogicalBorderSurface( (std::string("FiberBoxSurfaceOut_")+std::to_string(pos)).c_str(), ScintillatorBox_phys, PMMA_Ring_phys_vect[pos], Scintillator_PMMA_Surface);
-     new G4LogicalBorderSurface( (std::string("FiberBoxSurfaceOut_")+std::to_string(pos)).c_str(), ScintillatorBox_phys, Inner_tube_phys_vect[pos], Scintillator_PMMA_Surface);
-     new G4LogicalBorderSurface( (std::string("FiberBoxSurfaceOut_")+std::to_string(pos)).c_str(), Sct_Inside_phys_vect[pos], Inner_tube_phys_vect[pos], Scintillator_PMMA_Surface);
-     new G4LogicalBorderSurface( (std::string("FiberBoxSurfaceOut_")+std::to_string(pos)).c_str(), Sct_Inside_phys_vect[pos], PMMA_Disk_phys_vect[pos], Scintillator_PMMA_Surface);
-   } 
-*/
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
