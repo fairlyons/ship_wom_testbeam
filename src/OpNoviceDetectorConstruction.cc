@@ -371,10 +371,7 @@ void OpNoviceDetectorConstruction::DefineSurfaces()
 
   int num1 = 2;
   G4double pp1[num1] = {2.*eV, 5.*eV};
-<<<<<<< HEAD
-=======
 
->>>>>>> e1c16d23d99e4087973ad49b7a33f851b4620d5f
   G4OpticalSurface* SipmWindowSurface = new G4OpticalSurface("SipmWindowSurface"); // WOM_tube -- sipmWindow border
   SipmWindowSurface->SetType(dielectric_dielectric);
   SipmWindowSurface->SetFinish(polished);
