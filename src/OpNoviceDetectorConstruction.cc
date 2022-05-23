@@ -259,7 +259,7 @@ void OpNoviceDetectorConstruction::DefineMPTs()
   //----------------------------- PMMA -----------------------------
   //------------------------------------------------------------------------------
   const G4int pmma_mpt_entr = 13;
-<<<<<<< HEAD
+
   G4double pmma_side_wl[pmma_mpt_entr] = {700.,600.,550.,500.,450,400.,390.,380.,370.,350.,320.,310.,300.};
   G4double pmma_bottom_wl[75]= {500.238045437794,497.023934024561,491.973187518052,486.922441011543,481.871694505034,476.820947998526,471.770201492017,466.719454985508,461.668708478999,456.61796197249,451.567215465981,446.516468959472,
   441.465722452963,436.414975946454,431.364229439945,426.313482933437,421.262736426928,416.211989920419,411.16124341391,406.110496907401,401.518909174211,397.845638987659,396.238583281043,393.805041782452,
@@ -278,7 +278,7 @@ void OpNoviceDetectorConstruction::DefineMPTs()
   G4MaterialPropertiesTable *MPT_PMMA_side = new G4MaterialPropertiesTable();
   MPT_PMMA_side->AddProperty("RINDEX", pmma_side_en, pmma_rind, pmma_mpt_entr)->SetSpline(true);
   MPT_PMMA_side->AddProperty("ABSLENGTH", pmma_side_en, pmma_side_abslen, pmma_mpt_entr)->SetSpline(true);
-=======
+/*
   G4double pmma_wl[pmma_mpt_entr] = {700.,  600.,  550.,  500.,  450.,  400.,  390.,  380.,  370.,  350.,  320., 310.,  300. };
   G4double pmma_rind[pmma_mpt_entr] = {1.489, 1.492, 1.495, 1.498, 1.502, 1.511, 1.512, 1.514, 1.516, 1.522, 1.54, 1.541, 1.542};
   G4double pmma_en[pmma_mpt_entr];
@@ -305,7 +305,7 @@ void OpNoviceDetectorConstruction::DefineMPTs()
   MPT_PMMA_side->AddProperty("RINDEX", pmma_en, pmma_rind, pmma_mpt_entr)->SetSpline(true);
   MPT_PMMA_side->AddProperty("ABSLENGTH", pmma_en, pmma_side_abslen, pmma_mpt_entr)->SetSpline(true);
   // MPT_PMMA_side->AddProperty("ABSLENGTH", opEn, AbsLen_PMMA, pmma_mpt_entr)->SetSpline(true);
->>>>>>> upstream/4cells
+*/
   PMMA_side->SetMaterialPropertiesTable(MPT_PMMA_side);
 
   G4MaterialPropertiesTable *MPT_PMMA_bottom = new G4MaterialPropertiesTable();
