@@ -120,6 +120,7 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
     postvolumephys = aStep->GetPostStepPoint()->GetPhysicalVolume();
     if(track->GetTrackStatus() == fStopAndKill) {
       analysisManager->FillNtupleIColumn(6,0, pre_copynum);
+      analysisManager->FillNtupleDColumn(6,1, 1.24e-3 / track->GetKineticEnergy());
       analysisManager->AddNtupleRow(6);
     }
     if(!postvolumephys) return;

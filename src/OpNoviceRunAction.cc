@@ -134,6 +134,7 @@ OpNoviceRunAction::OpNoviceRunAction()
 
   analysisManager -> CreateNtuple("Dies","Results");
   analysisManager -> CreateNtupleIColumn("CopyNo");
+  analysisManager -> CreateNtupleDColumn("waveLen");
   analysisManager -> FinishNtuple(6); 
 
 /*
