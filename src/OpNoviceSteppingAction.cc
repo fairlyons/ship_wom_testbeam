@@ -105,8 +105,6 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
 
     G4int process = 0;
     std::string processname = "";
-
-    if(track->GetCreatorProcess()) std::string processname = track->GetCreatorProcess()->GetProcessName();
     if(track->GetCreatorProcess()) processname = track->GetCreatorProcess()->GetProcessName();
     if(processname == "Scintillation") process = 1;
     else if( processname == "OpWLS") process = 3;

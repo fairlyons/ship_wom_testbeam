@@ -102,7 +102,7 @@ OpNoviceDetectorConstruction::OpNoviceDetectorConstruction()
   delta_X = SteelX/2 - 91.5*mm;
   delta_Y = SteelY/2 - 91.5*mm;
 
-  WOM_coord_vec = {{0., -SctY/6.}, {0., SctY/6.}};
+  WOM_coord_vec = {{0., -30*cm/6.}, {0., 30*cm/6.}};
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -276,42 +276,33 @@ void OpNoviceDetectorConstruction::DefineMPTs()
   for(int i=0; i < sizeof(pmma_bottom_en)/sizeof(pmma_bottom_en[0]); i++ ) pmma_bottom_en[i]=1240./pmma_bottom_wl[i]*eV;
   G4double pmma_side_abslen[pmma_mpt_entr] =  {79.11*mm,70.39*mm,66.44*mm,61.48*mm,52.97*mm,45.77*mm,43.9*mm,42.6*mm,39.7*mm,36.07*mm,24.6*mm,18.23*mm,10.55*mm}; // picture in the folder 
   G4double pmma_bottom_abslen[75] = {825.532796331375*mm,995.546039820757*mm,906.063978187016*mm,963.25152928162*mm,1028.05540850485*mm,1102.24118950533*mm,1188.17858974627*mm,1289.12312649519*mm,1409.67117813625*mm,1556.52723104106*mm,1739.86542909011*mm,1975.90212068429*mm,3685.07275616407*mm,2739.34967914697*mm,3422.40435226653*mm,2615.11915536775*mm,1132.20893793201*mm,562.025169239236*mm,172.116453593441*mm,99.4344973522557*mm,42.1314492053959*mm,23.1587007862628*mm,14.5614893710837*mm,11.0809619119315*mm,8.65636778196572*mm,6.85307504536698*mm,5.55976428458039*mm,4.57033958442137*mm,3.85080777903292*mm,3.37910236494851*mm,2.91311721698663*mm,2.55268573906641*mm,2.27698546816599*mm,2.01668418096676*mm,1.79297764368291*mm,1.59752491160343*mm,1.4038711788544*mm,1.23546305784829*mm,1.06726603411345*mm,0.908835789380408*mm,0.740420832185596*mm,0.566454871207457*mm,0.42886782895817*mm,0.353271102463193*mm,0.307327896210654*mm,0.301885494993155*mm,0.301900827031845*mm,0.301917181987131*mm,0.301934641361397*mm,0.301953291111774*mm,0.301973221802586*mm,0.301994528780971*mm,0.30201731239245*mm,0.302041678261247*mm,0.302067737671548*mm,0.341435928448701*mm,0.302125413985435*mm,0.347533944235681*mm,0.437466744235865*mm,0.556750517609407*mm,0.647685273255554*mm,0.644020575189511*mm,0.535816480007306*mm,0.367918166877008*mm,0.302452281175179*mm,0.320791760065612*mm,0.3025669127656*mm,0.302631272369388*mm,0.302701282266752*mm,0.30277794773123*mm,0.302862615780021*mm,0.302957110157253*mm,0.303063920927376*mm,0.303186471853871*mm,0.321725431864253*mm}; //measure from CheapCal simulation / Doramas and Andrew measurements 
-  G4MaterialPropertiesTable *MPT_PMMA_side = new G4MaterialPropertiesTable();
-  MPT_PMMA_side->AddProperty("RINDEX", pmma_side_en, pmma_rind, pmma_mpt_entr)->SetSpline(true);
-  MPT_PMMA_side->AddProperty("ABSLENGTH", pmma_side_en, pmma_side_abslen, pmma_mpt_entr)->SetSpline(true);
-/*
-  G4double pmma_wl[pmma_mpt_entr] = {700.,  600.,  550.,  500.,  450.,  400.,  390.,  380.,  370.,  350.,  320., 310.,  300. };
-  G4double pmma_rind[pmma_mpt_entr] = {1.489, 1.492, 1.495, 1.498, 1.502, 1.511, 1.512, 1.514, 1.516, 1.522, 1.54, 1.541, 1.542};
-  G4double pmma_en[pmma_mpt_entr];
-  for(int i=0; i<pmma_mpt_entr; i++ )
-  {
-    pmma_en[i]=1240./pmma_wl[i]*eV;
-  }
-  G4double pmma_side_abslen[pmma_mpt_entr] =  { 10.55*mm , 18.23*mm , 24.6*mm, 36.07*mm, 39.7*mm, 42.6*mm, 43.69*mm, 45.77*mm, 52.97*mm, 61.48*mm, 66.44*mm, 70.39*mm, 79.11*mm};
-  G4double pmma_bottom_abslen[pmma_mpt_entr] = {  0.01*mm,  0.01*mm,   0.01*mm, 0.01*mm, 1.31*mm, 4.26*mm, 14.98*mm, 24.09*mm, 28.56*mm, 30.35*mm, 32.39*mm, 33.93*mm, 37.32*mm};
 
-  G4double opEn[22] = {
+  G4double pmma_side_abslen_vlad[pmma_mpt_entr] = {10.55*mm,18.23*mm,24.6*mm,36.07*mm,39.7*mm,42.6*mm,43.69*mm,45.77*mm,52.97*mm,61.48*mm,66.44*mm,70.39*mm,79.11*mm};
+  G4double pmma_bottom_abslen_vlad[pmma_mpt_entr] = {0.01*mm,0.01*mm,0.01*mm,0.01*mm,1.31*mm,4.26*mm,14.98*mm,24.09*mm,28.56*mm,30.35*mm,32.39*mm,33.93*mm,37.32*mm};
+
+  G4double opEn_vlad[22] = {
     2.06640*eV, 2.10143*eV, 2.13766*eV, 2.17516*eV, 2.21400*eV, 2.25426*eV, 2.29600*eV, 2.33932*eV, 2.38431*eV, 2.43106*eV, // 600, 590, 580, 570, 560, 550, 540, 530, 520, 510
     2.47968*eV, 2.53029*eV, 2.58300*eV, 2.63796*eV, 2.69531*eV, 2.75520*eV, 2.81782*eV, 2.88335*eV, 2.95200*eV, 3.09960*eV, // 500, 490, 480, 470, 460, 450, 440, 430, 420, 400
     3.54241*eV, 4.13281*eV // 350, 300
   };
 
-  G4double AbsLen_PMMA[22] = {
+  G4double AbsLen_PMMA_vlad[22] = {
     39.48*m, 48.25*m, 54.29*m, 57.91*m, 54.29*m, 33.40*m, 31.02*m, 43.43*m, 43.43*m, 41.36*m, // 600, 590, 580, 570, 560, 550, 540, 530, 520, 510,
     39.48*m, 37.76*m, 36.19*m, 36.19*m, 33.40*m, 31.02*m, 28.95*m, 25.55*m, 24.13*m, 21.71*m, // 500, 490, 480, 470, 460, 450, 440, 430, 420, 400,
     2.171*m, 0.434*m // 350, 300
   };
 
   G4MaterialPropertiesTable *MPT_PMMA_side = new G4MaterialPropertiesTable();
-  MPT_PMMA_side->AddProperty("RINDEX", pmma_en, pmma_rind, pmma_mpt_entr)->SetSpline(true);
-  MPT_PMMA_side->AddProperty("ABSLENGTH", pmma_en, pmma_side_abslen, pmma_mpt_entr)->SetSpline(true);
-  // MPT_PMMA_side->AddProperty("ABSLENGTH", opEn, AbsLen_PMMA, pmma_mpt_entr)->SetSpline(true);
-*/
+  MPT_PMMA_side->AddProperty("ABSLENGTH", pmma_side_en, pmma_side_abslen, pmma_mpt_entr)->SetSpline(true);
+  MPT_PMMA_side->AddProperty("RINDEX", pmma_side_en, pmma_rind, pmma_mpt_entr)->SetSpline(true);
+  //MPT_PMMA_side->AddProperty("ABSLENGTH", pmma_side_en, pmma_side_abslen_vlad, pmma_mpt_entr)->SetSpline(true);
+  //MPT_PMMA_side->AddProperty("ABSLENGTH", opEn, AbsLen_PMMA, pmma_mpt_entr)->SetSpline(true);
   PMMA_side->SetMaterialPropertiesTable(MPT_PMMA_side);
 
   G4MaterialPropertiesTable *MPT_PMMA_bottom = new G4MaterialPropertiesTable();
   MPT_PMMA_bottom->AddProperty("RINDEX", pmma_side_en, pmma_rind, pmma_mpt_entr)->SetSpline(true);
   MPT_PMMA_bottom->AddProperty("ABSLENGTH", pmma_bottom_en, pmma_bottom_abslen,75);
+  //MPT_PMMA_bottom->AddProperty("ABSLENGTH", pmma_bottom_en, pmma_bottom_abslen_vlad,75);
   PMMA_bottom->SetMaterialPropertiesTable(MPT_PMMA_bottom);
 
 
@@ -371,6 +362,10 @@ void OpNoviceDetectorConstruction::DefineSurfaces()
 
   int num1 = 2;
   G4double pp1[num1] = {2.*eV, 5.*eV};
+<<<<<<< HEAD
+=======
+
+>>>>>>> 386966dfe1dc61c71f6e94d5ae4aba84b6e567ea
   G4OpticalSurface* SipmWindowSurface = new G4OpticalSurface("SipmWindowSurface"); // WOM_tube -- sipmWindow border
   SipmWindowSurface->SetType(dielectric_dielectric);
   SipmWindowSurface->SetFinish(polished);
