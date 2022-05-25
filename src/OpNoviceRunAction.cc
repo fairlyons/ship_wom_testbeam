@@ -137,40 +137,6 @@ OpNoviceRunAction::OpNoviceRunAction()
   analysisManager -> CreateNtupleDColumn("waveLen");
   analysisManager -> FinishNtuple(6); 
 
-/*
-//--------------------------------------------------------------------
-  analysisManager -> CreateNtuple("PotentiallyDetected","Results");
-  analysisManager -> CreateNtupleIColumn("photonID");
-  analysisManager -> CreateNtupleIColumn("parentID");
-  analysisManager -> CreateNtupleIColumn("process");
-  analysisManager -> CreateNtupleDColumn("waveLen");
-  analysisManager -> CreateNtupleIColumn("WOM_1");
-  analysisManager -> CreateNtupleIColumn("WOM_2");
-  analysisManager -> CreateNtupleIColumn("WOM_3");
-  analysisManager -> CreateNtupleIColumn("WOM_4");
-  // "WOM_*" variable content:
-  // +10 if a photon fell on corresponding PMMA vessel
-  // +100 if a photon fell on corresponding WOM
-  // +1000 if a photon was absorbed in WLS
-  // +10000 if a photon was born in WLS
-  analysisManager -> CreateNtupleIColumn("eventNumber");
-  analysisManager -> FinishNtuple(1);
-//--------------------------------------------------------------------
-  analysisManager -> CreateNtuple("MassiveParticles","Results");
-  analysisManager -> CreateNtupleIColumn("trackID");
-  analysisManager -> CreateNtupleIColumn("parentID");
-  analysisManager -> CreateNtupleIColumn("charge");
-  analysisManager -> CreateNtupleDColumn("postX");
-  analysisManager -> CreateNtupleDColumn("postY");
-  analysisManager -> CreateNtupleDColumn("postZ");
-  analysisManager -> CreateNtupleDColumn("totEn");
-  analysisManager -> CreateNtupleDColumn("Edep");
-  analysisManager -> CreateNtupleDColumn("time");
-  analysisManager -> CreateNtupleIColumn("stepnum");
-  analysisManager -> CreateNtupleIColumn("volume_index");
-  analysisManager -> CreateNtupleIColumn("eventNumber");
-  analysisManager -> FinishNtuple(4);
-*/
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

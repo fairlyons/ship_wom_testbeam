@@ -69,10 +69,6 @@ void OpNoviceEventAction::EndOfEventAction(const G4Event*)
 
   G4int eventNumber = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
 
-  //std::cout<<"fallen_on_steel= "<<fallen_on_steel<<"\n";
-  //std::cout<<"absorbed_by_steel= "<<absorbed_by_steel<<"\n";
-  //std::cout<<"absorbtion coef= "<<double(absorbed_by_steel)/fallen_on_steel<<"\n";
-
   map<G4int, PhotonInfo>::iterator it;
   for(it=map_entersWOM.begin(); it!=map_entersWOM.end(); it++) {
     analysisManager->FillNtupleIColumn(2,0, it->first);

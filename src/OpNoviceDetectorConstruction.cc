@@ -102,7 +102,7 @@ OpNoviceDetectorConstruction::OpNoviceDetectorConstruction()
   delta_X = SteelX/2 - 91.5*mm;
   delta_Y = SteelY/2 - 91.5*mm;
 
-  WOM_coord_vec = {{0., -SctY/6.}, {0., SctY/6.}};
+  WOM_coord_vec = {{0., -30*cm/6.}, {0., 30*cm/6.}};
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
