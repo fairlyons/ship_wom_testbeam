@@ -45,6 +45,8 @@ set(OpNovice_SCRIPTS
     vis.mac
     run1.mac
     photons.mac
+    photon4.mac
+    shoot.mac
   )
 
 foreach(_script ${OpNovice_SCRIPTS})
@@ -59,4 +61,3 @@ endforeach()
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
 install(TARGETS OpNovice DESTINATION bin)
-
