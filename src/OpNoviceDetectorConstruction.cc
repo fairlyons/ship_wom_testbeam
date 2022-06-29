@@ -766,7 +766,7 @@ void OpNoviceDetectorConstruction::DefineVisAttributes()
 
   G4VisAttributes *sipmVisAtt1 = new G4VisAttributes;
   sipmVisAtt1->SetColor(blue);
-  sipmVisAtt1->SetVisibility(true);
+  sipmVisAtt1->SetVisibility(false);
   sipmWindow_log->SetVisAttributes(sipmVisAtt1);
   G4VisAttributes *sipmVisAtt2 = new G4VisAttributes;
   sipmVisAtt2->SetColor(red);
