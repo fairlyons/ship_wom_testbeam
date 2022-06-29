@@ -320,23 +320,25 @@ void OpNoviceDetectorConstruction::DefineMPTs()
   MPT_WLSCoat->AddProperty("WLSABSLENGTH", photonEnergy5, absLen3, 272);
 
   // BIS reemission
-  G4double waveLength4[51] = {498.50394264782,495.512169509067,489.3462170527,484.343493743363,479.225925762846,472.348366539066,467.849074868481,464.04990973537,461.338683704906,459.793161903923,457.56412302422,454.795680527534,
+  G4double waveLength4[16] = {530,520,510,500,490,480,470,460,450,440,430,420,410,400,390,380}; //new, removed the first peak to simulate the remission 
+  /* {498.50394264782,495.512169509067,489.3462170527,484.343493743363,479.225925762846,472.348366539066,467.849074868481,464.04990973537,461.338683704906,459.793161903923,457.56412302422,454.795680527534,
   451.768205666593,446.867663596341,441.763591710159,435.933166703427,433.243802562634,431.985904788012,429.963943988042,427.926782673168,426.395623114075,425.126769876294,422.410632741153,420.384395226982,
   417.93569195544,415.411789507185,413.448584543676,412.387719607238,411.249479281543,409.9604817049,406.3089221806,404.020506020059,401.848223327902,399.264457914078,397.452088829242,394.82668707538,
   393.620389802785,392.661003458199,390.948731712797,389.702126722733,388.693734027439,388.169942931827,387.606839417529,386.814987134474,386.022324288337,384.176496975521,382.716212740349,381.014431692937,
-  378.83045463701,376.455517150279,373.305908776801};  
-  G4double photonEnergy6[51];
+  378.83045463701,376.455517150279,373.305908776801};  */ // ol. the actualy one  
+  G4double photonEnergy6[16];
   for(int i=0; i < sizeof(photonEnergy6)/sizeof(photonEnergy6[0]); i++) photonEnergy6[i] = 1240./waveLength4[i]*eV;
-  G4double reEmit4[51] = {0.095367125872878,0.100714589065125,0.13933792816855,0.176288041362039,0.211928140548633,0.245505005810625,0.273370328546945,0.30221148342213,0.333093045311687,0.364223283871252,0.399221677160171,
+  G4double reEmit4[16] = {0,0.05,0.05,0.05,0.1,0.15,0.2,0.3,0.45,0.5,0.8,1,0.8,0.1,0,0}; //new, removed the first peak to simulate the remission 
+  /*{0.095367125872878,0.100714589065125,0.13933792816855,0.176288041362039,0.211928140548633,0.245505005810625,0.273370328546945,0.30221148342213,0.333093045311687,0.364223283871252,0.399221677160171,
   0.448451857613,0.514706458856799,0.566173063784637,0.587186163465084,0.619912730325973,0.657430320109198,0.6974131402047,0.747799923939089,0.82411878610154,0.886968238152526,0.927207898674191,0.972182090856316,
   0.995579234732068,0.973067015983444,0.930457495931142,0.880606822664751,0.837907842014882,0.808317266222523,0.778775703403637,0.739211827896116,0.774816618055286,0.818288494562106,0.86029367303487,
   0.836373519169372,0.783204456572165,0.716723640486035,0.653897573842595,0.600839623111776,0.539529302980934,0.482274276482319,0.45143792246339,0.403951196810372,0.355312021195194,0.308055666198011,
   0.257497891356571,0.199434040798557,0.131499952640494,0.074850729151259,0.038245233587249,0.007817590412588}; // (jakob) https://omlc.org/spectra/PhotochemCAD/html/044.html
-  G4double ppckovEmit[8] = {2.95 *eV, 2.95 *eV, 2.95 *eV, 2.95 *eV, 2.6401*eV, 3.0402*eV, 3.5403*eV, 3.8404*eV}; 
+  G4double ppckovEmit[8] = {2.95 *eV, 2.95 *eV, 2.95 *eV, 2.95 *eV, 2.6401*eV, 3.0402*eV, 3.5403*eV, 3.8404*eV}; */
 
   G4double rindexWLS[8] = { 1.5, 1.5, 1.5, 1.5, 1.504 , 1.505 , 1.515 , 1.52 };
 
-  MPT_WLSCoat->AddProperty("WLSCOMPONENT", photonEnergy6, reEmit4, 51);
+  MPT_WLSCoat->AddProperty("WLSCOMPONENT", photonEnergy6, reEmit4, 16);
   MPT_WLSCoat->AddConstProperty("WLSTIMECONSTANT", 2.*ns); // More or less it should be this value
   MPT_WLSCoat->AddProperty("RINDEX", pmma_refl_index_en, pmma_rind, pmma_mpt_entr)->SetSpline(true); //??
 
@@ -715,11 +717,11 @@ void OpNoviceDetectorConstruction::DefineVisAttributes()
   WOM_cell_log->SetVisAttributes(wom_cellAtt);
 */
   G4VisAttributes *steelBoxVisAtt = new G4VisAttributes;
-  steelBoxVisAtt->SetVisibility(true);
+  steelBoxVisAtt->SetVisibility(false);
   steelBoxVisAtt->SetColor(white_trans);
   SteelBox_log->SetVisAttributes(steelBoxVisAtt);
   G4VisAttributes *steelBoxVisAtt1 = new G4VisAttributes;
-  steelBoxVisAtt1->SetVisibility(true);
+  steelBoxVisAtt1->SetVisibility(false);
   steelBoxVisAtt1->SetColor(red);
   Steel_Add_log->SetVisAttributes(steelBoxVisAtt1);
 
@@ -733,7 +735,7 @@ void OpNoviceDetectorConstruction::DefineVisAttributes()
   Sct_Inside_log->SetVisAttributes(sctBoxVisAtt1);
 
   G4VisAttributes *PMMAVisAtt = new G4VisAttributes;
-  PMMAVisAtt->SetVisibility(true);
+  PMMAVisAtt->SetVisibility(false);
   PMMAVisAtt->SetColor(grey);
   PMMA_disk_log->SetVisAttributes(PMMAVisAtt);
   PMMA_Ring_log->SetVisAttributes(PMMAVisAtt);
@@ -759,20 +761,20 @@ void OpNoviceDetectorConstruction::DefineVisAttributes()
 
   G4VisAttributes *WOMVisAtt = new G4VisAttributes;
   WOMVisAtt->SetColor(magenta);
-  WOMVisAtt->SetVisibility(true);
+  WOMVisAtt->SetVisibility(false);
   WOM_tube_log->SetVisAttributes(WOMVisAtt);
 
   G4VisAttributes *sipmVisAtt1 = new G4VisAttributes;
   sipmVisAtt1->SetColor(blue);
-  sipmVisAtt1->SetVisibility(false);
+  sipmVisAtt1->SetVisibility(true);
   sipmWindow_log->SetVisAttributes(sipmVisAtt1);
   G4VisAttributes *sipmVisAtt2 = new G4VisAttributes;
   sipmVisAtt2->SetColor(red);
-  sipmVisAtt2->SetVisibility(false);
+  sipmVisAtt2->SetVisibility(true);
   sipmBaseBox_log->SetVisAttributes(sipmVisAtt2);
   G4VisAttributes *sipmVisAtt3 = new G4VisAttributes;
   sipmVisAtt3->SetColor(green);
-  sipmVisAtt3->SetVisibility(false);
+  sipmVisAtt3->SetVisibility(true);
   sipmSens_log->SetVisAttributes(sipmVisAtt3);
 }
 
