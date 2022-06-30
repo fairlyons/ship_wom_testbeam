@@ -625,7 +625,7 @@ void OpNoviceDetectorConstruction::DefineLogicalVolumes()
 
 void OpNoviceDetectorConstruction::ConstructVolumes()
 {
-  expHall_phys = new G4PVPlacement(0, G4ThreeVector(),expHall_log,"World",0,false,0);
+  expHall_phys = new G4PVPlacement(0, G4ThreeVector(),expHall_log,"World",0,false,200);
 
   G4double delta_Z;
   G4RotationMatrix *RM1 = new G4RotationMatrix(0*deg,0*deg,0*deg);
