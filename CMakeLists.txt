@@ -42,11 +42,6 @@ target_link_libraries(OpNovice ${Geant4_LIBRARIES} )
 set(OpNovice_SCRIPTS
    # OpNovice.out
     OpNovice.in
-    vis.mac
-    run1.mac
-    photons.mac
-    photon4.mac
-    shoot.mac
   )
 
 foreach(_script ${OpNovice_SCRIPTS})
@@ -57,6 +52,10 @@ foreach(_script ${OpNovice_SCRIPTS})
     )
 endforeach()
 
+file(GLOB MACRO_FILES
+  "*.mac"
+)
+file(COPY ${MACRO_FILES} DESTINATION ${PROJECT_BINARY_DIR})
 #----------------------------------------------------------------------------
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
