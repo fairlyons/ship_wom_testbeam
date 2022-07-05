@@ -129,6 +129,7 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4double sipmSizeSens;
     G4double sipmWindowThickness;
     G4double sipmSensThickness;
+    G4double sipmSensThicknessTop;
     G4double sipmBaseThickness;
 
 
@@ -143,6 +144,7 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4Box* WOM_cellBox;
     G4Box* sipmBaseBox;
     G4Box* sipmSens;
+    G4Box* sipmSensTop;
     G4Box* sipmWindowAll;
     G4Box* sipmHole;
     G4VSolid *Outer_tube;
@@ -172,6 +174,7 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4LogicalVolume* expHall_log;
     G4LogicalVolume* WOM_cell_log;
     G4LogicalVolume* sipmSens_log;
+    G4LogicalVolume* sipmSensTop_log;
     G4LogicalVolume* sipmWindow_log;
     G4LogicalVolume* sipmBaseBox_log;
     G4LogicalVolume* ScintillatorBox_log;
@@ -202,6 +205,7 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4VPhysicalVolume* sipmBase_phys;
     G4VPhysicalVolume* sipmWindow_phys;
     G4VPhysicalVolume* sipmSens_phys;
+    G4VPhysicalVolume* sipmSensTop_phys;
 
     std::vector<G4VPhysicalVolume*> Outer_tube_phys_vect;
     std::vector<G4VPhysicalVolume*> WOM_tube_phys_vect;
