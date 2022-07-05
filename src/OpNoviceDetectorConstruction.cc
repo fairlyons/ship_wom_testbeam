@@ -280,32 +280,14 @@ void OpNoviceDetectorConstruction::DefineMPTs()
   G4double pmma_bottom_abslen[37] = {17900*mm,125150*mm,2440*mm,262.5*mm,95*mm,0.353271102*mm,0.307327896*mm,0.301885495*mm,0.301900827*mm,0.301917182*mm,0.301934641*mm,0.301953291*mm,0.301973222*mm,0.301994529*mm,0.302017312*mm,0.302041678*mm,0.302067738*mm,0.341435928*mm,0.302125414*mm,0.347533944*mm,0.437466744*mm,0.556750518*mm,0.647685273*mm,0.644020575*mm,0.53581648*mm,0.367918167*mm,0.302452281*mm,0.32079176*mm,0.302566913*mm,0.302631272*mm,0.302701282*mm,0.302777948*mm,0.302862616*mm,0.30295711*mm,0.303063921*mm,0.303186472*mm,0.321725432*mm}; //RPT 4 / Spartech 3-4	 (From Micheal: https://arxiv.org/pdf/1310.6454.pdf) for >375nm --- andrew and doramas measurement fro <375nm
 
 
- /* G4double pmma_side_abslen_vlad[pmma_mpt_entr] = {10.55*mm,18.23*mm,24.6*mm,36.07*mm,39.7*mm,42.6*mm,43.69*mm,45.77*mm,52.97*mm,61.48*mm,66.44*mm,70.39*mm,79.11*mm};
-  G4double pmma_bottom_abslen_vlad[pmma_mpt_entr] = {0.01*mm,0.01*mm,0.01*mm,0.01*mm,1.31*mm,4.26*mm,14.98*mm,24.09*mm,28.56*mm,30.35*mm,32.39*mm,33.93*mm,37.32*mm};
-
-  G4double opEn_vlad[22] = {
-    2.06640*eV, 2.10143*eV, 2.13766*eV, 2.17516*eV, 2.21400*eV, 2.25426*eV, 2.29600*eV, 2.33932*eV, 2.38431*eV, 2.43106*eV, // 600, 590, 580, 570, 560, 550, 540, 530, 520, 510
-    2.47968*eV, 2.53029*eV, 2.58300*eV, 2.63796*eV, 2.69531*eV, 2.75520*eV, 2.81782*eV, 2.88335*eV, 2.95200*eV, 3.09960*eV, // 500, 490, 480, 470, 460, 450, 440, 430, 420, 400
-    3.54241*eV, 4.13281*eV // 350, 300
-  };
-
-  G4double AbsLen_PMMA_vlad[22] = {
-    39.48*m, 48.25*m, 54.29*m, 57.91*m, 54.29*m, 33.40*m, 31.02*m, 43.43*m, 43.43*m, 41.36*m, // 600, 590, 580, 570, 560, 550, 540, 530, 520, 510,
-    39.48*m, 37.76*m, 36.19*m, 36.19*m, 33.40*m, 31.02*m, 28.95*m, 25.55*m, 24.13*m, 21.71*m, // 500, 490, 480, 470, 460, 450, 440, 430, 420, 400,
-    2.171*m, 0.434*m // 350, 300
-  };*/
-
   G4MaterialPropertiesTable *MPT_PMMA_side = new G4MaterialPropertiesTable();
   MPT_PMMA_side->AddProperty("ABSLENGTH", pmma_side_en, pmma_side_abslen,8 )->SetSpline(true);
   MPT_PMMA_side->AddProperty("RINDEX", pmma_refl_index_en,pmma_rind, pmma_mpt_entr)->SetSpline(true);
-  //MPT_PMMA_side->AddProperty("ABSLENGTH", pmma_side_en, pmma_side_abslen_vlad, pmma_mpt_entr)->SetSpline(true);
-  //MPT_PMMA_side->AddProperty("ABSLENGTH", opEn, AbsLen_PMMA, pmma_mpt_entr)->SetSpline(true);
   PMMA_side->SetMaterialPropertiesTable(MPT_PMMA_side);
 
   G4MaterialPropertiesTable *MPT_PMMA_bottom = new G4MaterialPropertiesTable();
   MPT_PMMA_bottom->AddProperty("RINDEX", pmma_refl_index_en, pmma_rind, pmma_mpt_entr)->SetSpline(true);
   MPT_PMMA_bottom->AddProperty("ABSLENGTH", pmma_bottom_en, pmma_bottom_abslen,37);
-  //MPT_PMMA_bottom->AddProperty("ABSLENGTH", pmma_bottom_en, pmma_bottom_abslen_vlad,75);
   PMMA_bottom->SetMaterialPropertiesTable(MPT_PMMA_bottom);
 
 
@@ -321,25 +303,23 @@ void OpNoviceDetectorConstruction::DefineMPTs()
   MPT_WLSCoat->AddProperty("WLSABSLENGTH", photonEnergy5, absLen3, 272);
 
   // BIS reemission
-  G4double waveLength4[16] = {530,520,510,500,490,480,470,460,450,440,430,420,410,400,390,380}; //new, removed the first peak to simulate the remission 
-  /* {498.50394264782,495.512169509067,489.3462170527,484.343493743363,479.225925762846,472.348366539066,467.849074868481,464.04990973537,461.338683704906,459.793161903923,457.56412302422,454.795680527534,
+  G4double waveLength4[51] =   {498.50394264782,495.512169509067,489.3462170527,484.343493743363,479.225925762846,472.348366539066,467.849074868481,464.04990973537,461.338683704906,459.793161903923,457.56412302422,454.795680527534,
   451.768205666593,446.867663596341,441.763591710159,435.933166703427,433.243802562634,431.985904788012,429.963943988042,427.926782673168,426.395623114075,425.126769876294,422.410632741153,420.384395226982,
   417.93569195544,415.411789507185,413.448584543676,412.387719607238,411.249479281543,409.9604817049,406.3089221806,404.020506020059,401.848223327902,399.264457914078,397.452088829242,394.82668707538,
   393.620389802785,392.661003458199,390.948731712797,389.702126722733,388.693734027439,388.169942931827,387.606839417529,386.814987134474,386.022324288337,384.176496975521,382.716212740349,381.014431692937,
-  378.83045463701,376.455517150279,373.305908776801};  */ // ol. the actualy one  
-  G4double photonEnergy6[16];
+  378.83045463701,376.455517150279,373.305908776801};   // ol. the actualy one  
+  G4double photonEnergy6[51];
   for(int i=0; i < sizeof(photonEnergy6)/sizeof(photonEnergy6[0]); i++) photonEnergy6[i] = 1240./waveLength4[i]*eV;
-  G4double reEmit4[16] = {0,0.05,0.05,0.05,0.1,0.15,0.2,0.3,0.45,0.5,0.8,1,0.8,0.1,0,0}; //new, removed the first peak to simulate the remission 
-  /*{0.095367125872878,0.100714589065125,0.13933792816855,0.176288041362039,0.211928140548633,0.245505005810625,0.273370328546945,0.30221148342213,0.333093045311687,0.364223283871252,0.399221677160171,
+  G4double reEmit4[51] = {0.095367125872878,0.100714589065125,0.13933792816855,0.176288041362039,0.211928140548633,0.245505005810625,0.273370328546945,0.30221148342213,0.333093045311687,0.364223283871252,0.399221677160171,
   0.448451857613,0.514706458856799,0.566173063784637,0.587186163465084,0.619912730325973,0.657430320109198,0.6974131402047,0.747799923939089,0.82411878610154,0.886968238152526,0.927207898674191,0.972182090856316,
   0.995579234732068,0.973067015983444,0.930457495931142,0.880606822664751,0.837907842014882,0.808317266222523,0.778775703403637,0.739211827896116,0.774816618055286,0.818288494562106,0.86029367303487,
   0.836373519169372,0.783204456572165,0.716723640486035,0.653897573842595,0.600839623111776,0.539529302980934,0.482274276482319,0.45143792246339,0.403951196810372,0.355312021195194,0.308055666198011,
   0.257497891356571,0.199434040798557,0.131499952640494,0.074850729151259,0.038245233587249,0.007817590412588}; // (jakob) https://omlc.org/spectra/PhotochemCAD/html/044.html
-  G4double ppckovEmit[8] = {2.95 *eV, 2.95 *eV, 2.95 *eV, 2.95 *eV, 2.6401*eV, 3.0402*eV, 3.5403*eV, 3.8404*eV}; */
+  G4double ppckovEmit[8] = {2.95 *eV, 2.95 *eV, 2.95 *eV, 2.95 *eV, 2.6401*eV, 3.0402*eV, 3.5403*eV, 3.8404*eV}; 
 
   G4double rindexWLS[8] = { 1.5, 1.5, 1.5, 1.5, 1.504 , 1.505 , 1.515 , 1.52 };
 
-  MPT_WLSCoat->AddProperty("WLSCOMPONENT", photonEnergy6, reEmit4, 16);
+  MPT_WLSCoat->AddProperty("WLSCOMPONENT", photonEnergy6, reEmit4, 51);
   MPT_WLSCoat->AddConstProperty("WLSTIMECONSTANT", 2.*ns); // More or less it should be this value
   MPT_WLSCoat->AddProperty("RINDEX", pmma_refl_index_en, pmma_rind, pmma_mpt_entr)->SetSpline(true); //??
 
@@ -583,7 +563,7 @@ void OpNoviceDetectorConstruction::DefineSolids()
   sipmSens = new G4Box("sipmSens", sipmSizeSens/2., sipmSizeSens/2., sipmSensThickness/2.);
   sipmWindowAll = new G4Box("sipmAll", sipmSize/2., sipmSize/2., sipmWindowThickness);
   sipmWindow = new G4SubtractionSolid("sipmWindow", sipmWindowAll, sipmHole, 0,
-                                                G4ThreeVector(0, 0, sipmSensThickness/2 )); 
+                                                G4ThreeVector(0, 0, (sipmSensThickness+sipmSensThicknessTop)/2 )); 
   sipmBaseBox = new G4Box("sipmBase", sipmSize/2., sipmSize/2., sipmBaseThickness/2.);
 
 
@@ -696,7 +676,6 @@ void OpNoviceDetectorConstruction::ConstructVolumes()
     
   }
 
- // new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), WOM_cell_log, "wom_cell", expHall_log, false,20, intersect_check);
 }
 void OpNoviceDetectorConstruction::DefineVisAttributes()
 {
@@ -715,11 +694,6 @@ void OpNoviceDetectorConstruction::DefineVisAttributes()
   worldVisAtt->SetColor(blue);
   expHall_log->SetVisAttributes(worldVisAtt);
   
- /* G4VisAttributes *wom_cellAtt = new G4VisAttributes;
-  wom_cellAtt->SetVisibility(true);
-  wom_cellAtt->SetColor(red);
-  WOM_cell_log->SetVisAttributes(wom_cellAtt);
-*/
   G4VisAttributes *steelBoxVisAtt = new G4VisAttributes;
   steelBoxVisAtt->SetVisibility(false);
   steelBoxVisAtt->SetColor(white_trans);

@@ -198,7 +198,6 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
 
     // physical volumes
     G4VPhysicalVolume* expHall_phys;
-    //std::vector<G4VPhysicalVolume*> sipm_base_phys_vect;
     G4VPhysicalVolume* SteelBox_phys;
     G4VPhysicalVolume* ScintillatorBox_phys;
     G4VPhysicalVolume* ReflectBox_phys;
