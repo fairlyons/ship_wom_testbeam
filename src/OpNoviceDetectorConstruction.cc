@@ -68,7 +68,8 @@ OpNoviceDetectorConstruction::OpNoviceDetectorConstruction()
   sipmSizeSens = 3*mm;
   sipmBaseThickness = 1.*mm;
   sipmWindowThickness =  0.15*mm;
-  sipmSensThickness = 0.15*mm;
+  sipmSensThickness = 0.149*mm;
+  sipmSensThicknessTop = 0.001*mm;
 
   SteelX = 80*cm;
   SteelY = 120*cm;
@@ -440,7 +441,6 @@ void OpNoviceDetectorConstruction::DefineSolids()
 {
   expHall_box = new G4Box("World",fExpHall_x,fExpHall_y,fExpHall_z);
   //-------------------------------------------------------------------
-  sipmbasewidth = 1*cm;
   //-------------------------------------------------------------------
   
   // Steel box
@@ -578,7 +578,8 @@ void OpNoviceDetectorConstruction::DefineSolids()
   ScintillatorBoxWithHole = ScintillatorBoxWithHole_tempvec[WOM_coord_vec.size()-1];
   
   // SIPMs 14161 - 3050HS
-  sipmHole = new G4Box("sipmHole", sipmSizeSens/2., sipmSizeSens/2., sipmSensThickness/2);
+  sipmHole = new G4Box("sipmHole", sipmSizeSens/2., sipmSizeSens/2., (sipmSensThickness+sipmSensThicknessTop)/2);
+  sipmSensTop = new G4Box("sipmSensTop", sipmSizeSens/2., sipmSizeSens/2., sipmSensThicknessTop/2.);
   sipmSens = new G4Box("sipmSens", sipmSizeSens/2., sipmSizeSens/2., sipmSensThickness/2.);
   sipmWindowAll = new G4Box("sipmAll", sipmSize/2., sipmSize/2., sipmWindowThickness);
   sipmWindow = new G4SubtractionSolid("sipmWindow", sipmWindowAll, sipmHole, 0,
@@ -613,7 +614,8 @@ void OpNoviceDetectorConstruction::DefineLogicalVolumes()
   PMMA_ring_lower_log = new G4LogicalVolume(PMMA_ring_lower, PMMA_bottom, "PMMA_ring_lowerLV");
   Steel_Add_log = new G4LogicalVolume(SteelAdd, steel, "Steel_AddLV");
   Sct_Inside_log = new G4LogicalVolume(SctInside, LAB_PPO, "Sct_InsideLV");
-  sipmSens_log = new G4LogicalVolume(sipmSens, Si, "sipmSens");  ////?????
+  sipmSens_log = new G4LogicalVolume(sipmSens, Al, "sipmSens");  ////?????
+  sipmSensTop_log = new G4LogicalVolume(sipmSensTop, Si, "sipmSensTop");  ////?????
   sipmWindow_log = new G4LogicalVolume(sipmWindow, Si, "sipmWindow");
   sipmBaseBox_log = new G4LogicalVolume(sipmBaseBox, Al, "sipmBaseBox");
 }
@@ -684,7 +686,10 @@ void OpNoviceDetectorConstruction::ConstructVolumes()
     for(int i = 0; i<n_sipm; i++){
       RM1 = new G4RotationMatrix();
       RM1->rotateZ(- i * 360./n_sipm * deg);
-      sipm_phys_vect.push_back(new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first +  radius_sipm*std::cos(i*2*pi/n_sipm),WOM_coord_vec[pos].second + radius_sipm*std::sin(i*2*pi/n_sipm),sipmSensThickness/2 + delta_Z_sipm),sipmSens_log, "sipmSens", expHall_log, false, sipm_id++, intersect_check) );
+      sipm_phys_vect.push_back(new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first +  radius_sipm*std::cos(i*2*pi/n_sipm),WOM_coord_vec[pos].second + radius_sipm*std::sin(i*2*pi/n_sipm),sipmSensThicknessTop+sipmSensThickness/2 + delta_Z_sipm),sipmSens_log, "sipmSens", expHall_log, false, 124, intersect_check) );
+      
+      sipmSensTop_phys = new G4PVPlacement(RM1,G4ThreeVector(WOM_coord_vec[pos].first +  radius_sipm*std::cos(i*2*pi/n_sipm),WOM_coord_vec[pos].second + radius_sipm*std::sin(i*2*pi/n_sipm), sipmSensThicknessTop/2+delta_Z_sipm ),sipmSensTop_log,"sipmSensTop",expHall_log,false,sipm_id++, intersect_check);
+      
       sipmWindow_phys = new G4PVPlacement(RM1,G4ThreeVector(WOM_coord_vec[pos].first +  radius_sipm*std::cos(i*2*pi/n_sipm),WOM_coord_vec[pos].second + radius_sipm*std::sin(i*2*pi/n_sipm), delta_Z_sipm ),sipmWindow_log,"sipmWindow",expHall_log,false,122, intersect_check);
       sipmBase_phys = new G4PVPlacement(RM1,G4ThreeVector(WOM_coord_vec[pos].first +  radius_sipm*std::cos(i*2*pi/n_sipm),WOM_coord_vec[pos].second + radius_sipm*std::sin(i*2*pi/n_sipm), sipmWindowThickness+ sipmBaseThickness/2.+delta_Z_sipm ),sipmBaseBox_log,"sipmBase",expHall_log,false,123, intersect_check);
     }
@@ -775,6 +780,10 @@ void OpNoviceDetectorConstruction::DefineVisAttributes()
   sipmVisAtt3->SetColor(green);
   sipmVisAtt3->SetVisibility(true);
   sipmSens_log->SetVisAttributes(sipmVisAtt3);
+  G4VisAttributes *sipmVisAtt4 = new G4VisAttributes;
+  sipmVisAtt4->SetColor(blue);
+  sipmVisAtt4->SetVisibility(true);
+  sipmSensTop_log->SetVisAttributes(sipmVisAtt4);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
