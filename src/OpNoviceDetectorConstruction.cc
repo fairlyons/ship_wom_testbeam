@@ -410,6 +410,35 @@ void OpNoviceDetectorConstruction::DefineSurfaces()
    BaSO4_surface->SetMaterialPropertiesTable(MTP_BaSO); 	
    
    G4LogicalSkinSurface* Surface1 = new G4LogicalSkinSurface("BaSO4_surface", ReflectBox_log, BaSO4_surface);
+   
+   
+   //------------------------------------------------------------------------------
+  //----------------------------- Absorbent surface SiPMs -----------------------------
+  //------------------------------------------------------------------------------
+   G4OpticalSurface* sipms_surface = new G4OpticalSurface("sipms_surface");
+   sipms_surface -> SetType(dielectric_metal);
+   sipms_surface -> SetFinish(ground);
+   sipms_surface -> SetModel(glisur);
+  
+   G4double waveLength7[2] = {1000,100}; 
+   
+  G4double photonEnergy10[2];
+  for(int i=0; i < sizeof(photonEnergy10)/sizeof(photonEnergy10[0]); i++) photonEnergy10[i] = 1240./waveLength7[i]*eV;
+   G4double abs_sipm[2] = {0,0}; // we want that the surface of the sipms sides is completely absorbent
+
+   
+       
+   G4MaterialPropertiesTable* MTP_sipms = new G4MaterialPropertiesTable();
+   MTP_sipms->AddProperty("REFLECTIVITY", photonEnergy10, abs_sipm,2);
+
+   sipms_surface->SetMaterialPropertiesTable(MTP_sipms); 	
+   
+   G4LogicalSkinSurface* Surface_abs_sipms = new G4LogicalSkinSurface("sipms_surface", sipmSens_log, sipms_surface);
+
+
+
+
+
 
 }
 
