@@ -124,9 +124,11 @@ void OpNoviceDetectorConstruction::DefineMaterials()
   G4NistManager* nist = G4NistManager::Instance();
 
   steel = nist->FindOrBuildMaterial("G4_STAINLESS-STEEL");
+  
   Si = nist->FindOrBuildMaterial("G4_Si");
   Al = nist->FindOrBuildMaterial("G4_Al");
-
+  ResinSi = nist->FindOrBuildMaterial("G4_Si");
+  
   G4double a, z, density;
   G4int nelements, ncomponent, natoms;
 
@@ -187,6 +189,8 @@ void OpNoviceDetectorConstruction::DefineMaterials()
   BaSO4->AddElement(Ba,natoms=1);
   BaSO4->AddElement(S,natoms=1);
   BaSO4->AddElement(O,natoms=4);
+  
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -337,10 +341,21 @@ void OpNoviceDetectorConstruction::DefineMPTs()
   
   
   //------------------------------------------------------------------------------
+  //----------------------------- Silicon Resin  -----------------------------
+  //------------------------------------------------------------------------------
+  G4double photonEnergy_ResinSi[2] = { 2.*eV,  5.*eV };
+  G4double refractiveIndex_ResinSi[2] = { 1.57, 1.57 }; //Hamamatsu data sheet
+  G4MaterialPropertiesTable* MPT_ResinSi = new G4MaterialPropertiesTable();
+  MPT_ResinSi->AddProperty("RINDEX", photonEnergy_ResinSi, refractiveIndex_ResinSi, 2);
+  ResinSi->SetMaterialPropertiesTable(MPT_ResinSi);
+  
+  //------------------------------------------------------------------------------
   //----------------------------- Silicon  -----------------------------
   //------------------------------------------------------------------------------
-  G4double photonEnergy_Si[2] = { 2.*eV,  5.*eV };
-  G4double refractiveIndex_Si[2] = { 1.57, 1.57 }; //Hamamatsu data sheet
+  G4double waveLength_Si[3] =   {450,430,400};   // ol. the actualy one  
+  G4double photonEnergy_Si[3];
+  for(int i=0; i < sizeof(photonEnergy_Si)/sizeof(photonEnergy_Si[0]); i++) photonEnergy_Si[i] = 1240./waveLength_Si[i]*eV;
+  G4double refractiveIndex_Si[3] = {2.59,2.75,2.91}; //from article  2002.04218
   G4MaterialPropertiesTable* MPT_Si = new G4MaterialPropertiesTable();
   MPT_Si->AddProperty("RINDEX", photonEnergy_Si, refractiveIndex_Si, 2);
   Si->SetMaterialPropertiesTable(MPT_Si);
@@ -410,7 +425,7 @@ void OpNoviceDetectorConstruction::DefineSurfaces()
    BaSO4_surface->SetMaterialPropertiesTable(MTP_BaSO); 	
    
    G4LogicalSkinSurface* Surface1 = new G4LogicalSkinSurface("BaSO4_surface", ReflectBox_log, BaSO4_surface);
-   
+
    
    //------------------------------------------------------------------------------
   //----------------------------- Absorbent surface SiPMs -----------------------------
@@ -434,10 +449,6 @@ void OpNoviceDetectorConstruction::DefineSurfaces()
    sipms_surface->SetMaterialPropertiesTable(MTP_sipms); 	
    
    G4LogicalSkinSurface* Surface_abs_sipms = new G4LogicalSkinSurface("sipms_surface", sipmSens_log, sipms_surface);
-
-
-
-
 
 
 }
@@ -625,7 +636,7 @@ void OpNoviceDetectorConstruction::DefineLogicalVolumes()
   Sct_Inside_log = new G4LogicalVolume(SctInside, LAB_PPO, "Sct_InsideLV");
   sipmSens_log = new G4LogicalVolume(sipmSens, Al, "sipmSens");  ////?????
   sipmSensTop_log = new G4LogicalVolume(sipmSensTop, Si, "sipmSensTop");  ////?????
-  sipmWindow_log = new G4LogicalVolume(sipmWindow, Si, "sipmWindow");
+  sipmWindow_log = new G4LogicalVolume(sipmWindow, ResinSi, "sipmWindow");
   sipmBaseBox_log = new G4LogicalVolume(sipmBaseBox, Al, "sipmBaseBox");
 }
 
