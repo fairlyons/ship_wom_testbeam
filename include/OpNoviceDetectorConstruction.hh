@@ -78,6 +78,7 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4Material* steel;
     G4Material* Al;
     G4Material* Si;
+    G4Material* ResinSi;
     G4Material* air;
     G4Material* LAB_PPO;
     G4Material* Bis_MSB;
