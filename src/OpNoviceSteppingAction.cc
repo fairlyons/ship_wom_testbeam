@@ -116,13 +116,13 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
     G4int pre_copynum = prevolumephys->GetCopyNo();
     G4VPhysicalVolume* postvolumephys = NULL;
     postvolumephys = aStep->GetPostStepPoint()->GetPhysicalVolume();
-    if(track->GetTrackStatus() == fStopAndKill) {
+/*    if(track->GetTrackStatus() == fStopAndKill) {
       analysisManager->FillNtupleIColumn(6,0, pre_copynum);
       analysisManager->FillNtupleDColumn(6,1, 1.24e-3 / track->GetKineticEnergy());
       analysisManager->FillNtupleDColumn(6,2, aStep->GetPostStepPoint()->GetPosition().getX());
       analysisManager->FillNtupleDColumn(6,3, aStep->GetPostStepPoint()->GetPosition().getY());
       analysisManager->AddNtupleRow(6);
-    }
+    }*/
     if(!postvolumephys) return;
     G4String postphysvolname = postvolumephys->GetName();
     G4int post_copynum = postvolumephys->GetCopyNo();

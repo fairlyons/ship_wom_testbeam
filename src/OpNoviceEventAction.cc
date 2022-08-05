@@ -68,7 +68,7 @@ void OpNoviceEventAction::EndOfEventAction(const G4Event*)
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
 
   G4int eventNumber = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
-
+/*
   map<G4int, PhotonInfo>::iterator it;
   for(it=map_entersWOM.begin(); it!=map_entersWOM.end(); it++) {
     analysisManager->FillNtupleIColumn(2,0, it->first);
@@ -125,7 +125,7 @@ void OpNoviceEventAction::EndOfEventAction(const G4Event*)
   map_absorbedWLS_info.clear();
   map_entersWOM.clear();
   map_entersPMMAvessel.clear();
-
+*/
   analysisManager->FillNtupleIColumn(1,0, scintillation_photons);
   analysisManager->FillNtupleIColumn(1,1, cherenkov_photons);
   analysisManager->FillNtupleDColumn(1,2, fEnergyDeposit[0]);

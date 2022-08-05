@@ -86,7 +86,7 @@ OpNoviceRunAction::OpNoviceRunAction()
   analysisManager -> CreateNtupleIColumn("eventNumber");
   analysisManager -> FinishNtuple(1);
 //--------------------------------------------------------------------
-
+/*
   analysisManager -> CreateNtuple("entersWOM","Results");
   analysisManager -> CreateNtupleIColumn("first");
   analysisManager -> CreateNtupleIColumn("parentID");
@@ -137,7 +137,7 @@ OpNoviceRunAction::OpNoviceRunAction()
   analysisManager -> CreateNtupleDColumn("x");
   analysisManager -> CreateNtupleDColumn("y");
   analysisManager -> FinishNtuple(6); 
-
+*/
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

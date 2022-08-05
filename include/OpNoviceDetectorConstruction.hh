@@ -227,12 +227,14 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
 
     // visualisation
     G4Color blue;
+    G4Color grey;
     G4Color blue_trans;
     G4Color green;
     G4Color red;
     G4Color white;
+    G4Color white_trans;
     G4Color cyan;
-    G4Color magenda;
+    G4Color magenta;
     G4Color DircColor;
     G4Color SensColor;
 };
