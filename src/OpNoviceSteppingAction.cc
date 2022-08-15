@@ -143,7 +143,7 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
     //---------------- 2. Born in WLS END
 
     //---------------- 4. photons that reached SiPM's
-    if(postphysvolname == "sipmSensTop") {
+    if(postphysvolname == "sipmSens") {
       if(sipm_detection(1.24e-3 / track->GetKineticEnergy())) {
         //G4cout << "sipm hit !!!!!!!!! " << posttouchable->GetCopyNumber(0) << G4endl;
         analysisManager->FillNtupleDColumn(0,0, aStep->GetPostStepPoint()->GetPosition().getX());
@@ -203,3 +203,4 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+

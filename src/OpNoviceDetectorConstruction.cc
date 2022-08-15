@@ -664,8 +664,8 @@ void OpNoviceDetectorConstruction::ConstructVolumes()
     RM1->rotateZ(-(i+0.5)*360./n_sipm*deg);
     G4double Xrotation = WOM_coord_vec[pos].first + radius_sipm*std::cos((i + 0.5)*2*pi/n_sipm);
     G4double Yrotation = WOM_coord_vec[pos].second + radius_sipm*std::sin((i + 0.5)*2*pi/n_sipm);
-    sipm_phys_vect.push_back(new G4PVPlacement(RM1, G4ThreeVector(Xrotation, Yrotation, sipmSensThicknessTop + sipmSensThickness/2 + delta_Z_sipm), sipmSens_log, "sipmSens", expHall_log, false, 124, intersect_check));
-    sipmSensTop_phys = new G4PVPlacement(RM1, G4ThreeVector(Xrotation, Yrotation, sipmSensThicknessTop/2 + delta_Z_sipm), sipmSensTop_log, "sipmSensTop", expHall_log, false, sipm_id++, intersect_check);
+    sipm_phys_vect.push_back(new G4PVPlacement(RM1, G4ThreeVector(Xrotation, Yrotation, sipmSensThicknessTop + sipmSensThickness/2 + delta_Z_sipm), sipmSens_log, "sipmSens", expHall_log, false, sipm_id++, intersect_check));
+    sipmSensTop_phys = new G4PVPlacement(RM1, G4ThreeVector(Xrotation, Yrotation, sipmSensThicknessTop/2 + delta_Z_sipm), sipmSensTop_log, "sipmSensTop", expHall_log, false, 124 , intersect_check);
     sipmWindow_phys = new G4PVPlacement(RM1, G4ThreeVector(Xrotation, Yrotation, delta_Z_sipm), sipmWindow_log, "sipmWindow", expHall_log, false, 122, intersect_check);
     sipmBase_phys = new G4PVPlacement(RM1, G4ThreeVector(Xrotation, Yrotation, sipmWindowThickness + sipmBaseThickness/2. + delta_Z_sipm), sipmBaseBox_log, "sipmBase", expHall_log, false, 123, intersect_check);
     } 
