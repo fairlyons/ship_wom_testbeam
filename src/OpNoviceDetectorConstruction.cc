@@ -217,13 +217,13 @@ void OpNoviceDetectorConstruction::DefineMPTs()
 
   G4double wl;
   for(unsigned int i = 0; i < sizeof(photon_en_LAB_PPO)/sizeof(photon_en_LAB_PPO[0]); i++) {
-    wl = 250. + 5.*i;
+    wl = 745. - 5.*i;
     photon_en_LAB_PPO[i] = 1240./wl*eV;
     rindex_LAB_PPO[i] = Ridndex_LAB_PPO(wl);
   }
   G4MaterialPropertiesTable *MPT_LAB_PPO = new G4MaterialPropertiesTable();
   MPT_LAB_PPO->AddConstProperty("SCINTILLATIONYIELD",10800./MeV); // https://underground.physics.berkeley.edu/WbLS/slides/PennRnD-Grullon.pdf
-  MPT_LAB_PPO->AddProperty("RINDEX", photon_en_LAB_PPO, rindex_LAB_PPO, 100)->SetSpline(true);
+  MPT_LAB_PPO->AddProperty("RINDEX", photon_en_LAB_PPO, rindex_LAB_PPO, 100);//->SetSpline(true);
 
   // emission
   G4double photonWaveLength3[201] = {500,499,498,497,496,495,494,493,492,491,490,489,488,487,486,485,484,483,482,481,480,479,478,477,476,475,474,473,472,471,470,469,468,467,466,465,464,463,462,461,460,459,458,457,456,455,454,453,452,451,450,449,448,447,446,445,444,443,442,441,440,439,438,437,436,435,434,433,432,431,430,429,428,427,426,425,424,423,422,421,420,419,418,417,416,415,414,413,412,411,410,409,408,407,406,405,404,403,402,401,400,399,398,397,396,395,394,393,392,391,390,389,388,387,386,385,384,383,382,381,380,379,378,377,376,375,374,373,372,371,370,369,368,367,366,365,364,363,362,361,360,359,358,357,356,355,354,353,352,351,350,349,348,347,346,345,344,343,342,341,340,339,338,337,336,335,334,333,332,331,330,329,328,327,326,325,324,323,322,321,320,319,318,317,316,315,314,313,312,311,310,309,308,307,306,305,304,303,302,301,300};
@@ -579,7 +579,7 @@ void OpNoviceDetectorConstruction::DefineLogicalVolumes()
   SteelBox_log = new G4LogicalVolume(EmptySteelBoxWithHole, steel, "Steelbox", 0, 0, 0);
   ReflectBox_log = new G4LogicalVolume(EmptyReflectBoxWithHole, BaSO4, "Reflectbox", 0, 0, 0);
   Outer_tube_log = new G4LogicalVolume(Outer_tube, PMMA_side, "Outer_tubeLV");
-  WOM_tube_log = new G4LogicalVolume(WOM_tube, LAB_PPO, "WOM_tubeLV");
+  WOM_tube_log = new G4LogicalVolume(WOM_tube, PMMA_bottom, "WOM_tubeLV");
   Inner_tube_log = new G4LogicalVolume(Inner_tube, PMMA_side, "Inner_tubeLV");
   PMMA_Ring_log = new G4LogicalVolume(PMMA_Ring, PMMA_bottom, "PMMA_RingLV");
   PMMA_disk_log = new G4LogicalVolume(PMMA_disk, PMMA_side, "PMMA_diskLV");
