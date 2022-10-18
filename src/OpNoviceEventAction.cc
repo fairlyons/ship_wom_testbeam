@@ -125,7 +125,7 @@ void OpNoviceEventAction::EndOfEventAction(const G4Event*)
   map_absorbedWLS_info.clear();
   map_entersWOM.clear();
   map_entersPMMAvessel.clear();
-*/
+
   analysisManager->FillNtupleIColumn(1,0, scintillation_photons);
   analysisManager->FillNtupleIColumn(1,1, cherenkov_photons);
   analysisManager->FillNtupleDColumn(1,2, fEnergyDeposit[0]);
@@ -134,7 +134,7 @@ void OpNoviceEventAction::EndOfEventAction(const G4Event*)
   analysisManager->FillNtupleIColumn(1,5, eventNumber);
   analysisManager->AddNtupleRow(1);
 
-  fEnergyDeposit.clear();
+  fEnergyDeposit.clear();*/
 }
 
 OpNoviceEventAction::~OpNoviceEventAction()

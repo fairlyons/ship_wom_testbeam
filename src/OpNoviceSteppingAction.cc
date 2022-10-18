@@ -146,15 +146,15 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
     if(postphysvolname == "sipmSens") {
       if(sipm_detection(1.24e-3 / track->GetKineticEnergy())) {
         //G4cout << "sipm hit !!!!!!!!! " << posttouchable->GetCopyNumber(0) << G4endl;
-        analysisManager->FillNtupleDColumn(0,0, aStep->GetPostStepPoint()->GetPosition().getX());
-        analysisManager->FillNtupleDColumn(0,1, aStep->GetPostStepPoint()->GetPosition().getY());
-        analysisManager->FillNtupleIColumn(0,2, process);
-        if(posttouchable->GetCopyNumber(0) < 40) {analysisManager->FillNtupleIColumn(0,3,1);} // WOM number
-        if(posttouchable->GetCopyNumber(0) > 39) {analysisManager->FillNtupleIColumn(0,3,2);} // WOM number
-        analysisManager->FillNtupleDColumn(0,4, 1.24e-3 / track->GetKineticEnergy());
-        analysisManager->FillNtupleDColumn(0,5, track->GetGlobalTime());
-        analysisManager->FillNtupleIColumn(0,6, eventNumber);
-        analysisManager->FillNtupleIColumn(0,7, posttouchable->GetCopyNumber(0)); //sipm number
+        //analysisManager->FillNtupleDColumn(0,0, aStep->GetPostStepPoint()->GetPosition().getX());
+        //analysisManager->FillNtupleDColumn(0,1, aStep->GetPostStepPoint()->GetPosition().getY());
+        //analysisManager->FillNtupleIColumn(0,2, process);
+        //if(posttouchable->GetCopyNumber(0) < 40) {analysisManager->FillNtupleIColumn(0,3,1);} // WOM number
+        //if(posttouchable->GetCopyNumber(0) > 39) {analysisManager->FillNtupleIColumn(0,3,2);} // WOM number
+        //analysisManager->FillNtupleDColumn(0,4, 1.24e-3 / track->GetKineticEnergy());
+        analysisManager->FillNtupleDColumn(0,0, track->GetGlobalTime());
+        analysisManager->FillNtupleIColumn(0,1, eventNumber);
+        analysisManager->FillNtupleIColumn(0,2, posttouchable->GetCopyNumber(0)); //sipm number
         analysisManager->AddNtupleRow(0);
       }
       track->SetTrackStatus(fStopAndKill);

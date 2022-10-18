@@ -60,16 +60,15 @@ OpNoviceRunAction::OpNoviceRunAction()
 
   // Create analysis manager
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  analysisManager->SetNtupleMerging(true);
-  analysisManager->SetFileName("LScin");  
+  //analysisManager->SetFileName("LScin");  
 
 //--------------------------------------------------------------------
   analysisManager -> CreateNtuple("Detected","Results");
-  analysisManager -> CreateNtupleDColumn("x");
-  analysisManager -> CreateNtupleDColumn("y");
-  analysisManager -> CreateNtupleIColumn("process");
-  analysisManager -> CreateNtupleIColumn("WomNo");
-  analysisManager -> CreateNtupleDColumn("waveLen");
+  //analysisManager -> CreateNtupleDColumn("x");
+  //analysisManager -> CreateNtupleDColumn("y");
+  //analysisManager -> CreateNtupleIColumn("process");
+  //analysisManager -> CreateNtupleIColumn("WomNo");
+  //analysisManager -> CreateNtupleDColumn("waveLen");
   analysisManager -> CreateNtupleDColumn("time");
   analysisManager -> CreateNtupleIColumn("eventNumber");
   analysisManager -> CreateNtupleIColumn("sipmNumber");
@@ -77,14 +76,14 @@ OpNoviceRunAction::OpNoviceRunAction()
 //--------------------------------------------------------------------
 
 //--------------------------------------------------------------------
-  analysisManager -> CreateNtuple("EventStat","Results");
+/*  analysisManager -> CreateNtuple("EventStat","Results");
   analysisManager -> CreateNtupleIColumn("scintillation_photons");
   analysisManager -> CreateNtupleIColumn("Cerenkov_photons");
   analysisManager -> CreateNtupleDColumn("Edep_other");
   analysisManager -> CreateNtupleDColumn("Edep_scintillator");
   analysisManager -> CreateNtupleDColumn("Edep_walls");
   analysisManager -> CreateNtupleIColumn("eventNumber");
-  analysisManager -> FinishNtuple(1);
+  analysisManager -> FinishNtuple(1);*/
 //--------------------------------------------------------------------
 /*
   analysisManager -> CreateNtuple("entersWOM","Results");

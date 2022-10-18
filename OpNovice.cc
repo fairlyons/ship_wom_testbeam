@@ -42,7 +42,7 @@
 ///
 
 
-#include "G4MTRunManager.hh"
+#include "G4RunManager.hh"
 
 #include "G4UImanager.hh"
 
@@ -59,14 +59,14 @@
 
 #include "G4UIExecutive.hh"
 
+#include "g4root.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 namespace {
   void PrintUsage() {
     G4cerr << " Usage: " << G4endl;
-    G4cerr << " OpNovice [-m macro ] [-u UIsession] [-t nThreads] [-r seed] "
-           << G4endl;
-    G4cerr << "   note: -t option is available only for multi-threaded mode."
+    G4cerr << " OpNovice [-m macro ] [-r seed] [-f filename]"
            << G4endl;
   }
 }
@@ -83,25 +83,17 @@ int main(int argc,char** argv)
   }
 
   G4String macro;
-  G4String session;
-#ifdef G4MULTITHREADED
-  G4int nThreads = 0;
-#endif
+  G4String file;
 
   G4long myseed = 345354;
   for ( G4int i=1; i<argc; i=i+2 ) {
      if      ( G4String(argv[i]) == "-m" ) macro   = argv[i+1];
-     else if ( G4String(argv[i]) == "-u" ) session = argv[i+1];
      else if ( G4String(argv[i]) == "-r" ) myseed  = atoi(argv[i+1]);
-#ifdef G4MULTITHREADED
-     else if ( G4String(argv[i]) == "-t" ) {
-                    nThreads = G4UIcommand::ConvertToInt(argv[i+1]);
-    }
-#endif
-    else {
+     else if ( G4String(argv[i]) == "-f" ) file    = argv[i+1];
+     else {
       PrintUsage();
       return 1;
-    }
+     }
   }
 
   // Instantiate G4UIExecutive if interactive mode
@@ -116,12 +108,8 @@ int main(int argc,char** argv)
 
   // Construct the default run manager
   //
-#ifdef G4MULTITHREADED
-  G4MTRunManager * runManager = new G4MTRunManager;
-  if ( nThreads > 0 ) runManager->SetNumberOfThreads(nThreads);
-#else
+
   G4RunManager * runManager = new G4RunManager;
-#endif
 
   G4String physName = "QGSP_BERT_HP";
 
@@ -140,6 +128,10 @@ int main(int argc,char** argv)
   // Initialize G4 kernel
   //
   runManager->Initialize();
+
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  if ( file.size() ) analysisManager->SetFileName(file);
+  else analysisManager->SetFileName("test");
 
   // Initialize visualization
   //

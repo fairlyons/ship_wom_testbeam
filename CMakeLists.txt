@@ -39,19 +39,6 @@ target_link_libraries(OpNovice ${Geant4_LIBRARIES} )
 # build OpNovice. This is so that we can run the executable directly because it
 # relies on these scripts being in the current working directory.
 #
-set(OpNovice_SCRIPTS
-   # OpNovice.out
-    OpNovice.in
-  )
-
-foreach(_script ${OpNovice_SCRIPTS})
-  configure_file(
-    ${PROJECT_SOURCE_DIR}/${_script}
-    ${PROJECT_BINARY_DIR}/${_script}
-    COPYONLY
-    )
-endforeach()
-
 file(GLOB MACRO_FILES
   "*.mac"
 )
