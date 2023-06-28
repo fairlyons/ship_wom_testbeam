@@ -6,9 +6,11 @@ A Geant4 simulation of liquid scintillator cells being developed for the Surroun
 ### Branches
 
 <dl>
-  <dt><code>4cells</code></dt>
-  <dd>Main development branch. Contains most up to date parameters of 1 SBT cell.</dd>
   <dt><code>master</code></dt>
+  <dd>Main development branch. Contains most up to date parameters of 1 SBT cell.</dd>
+  <dt><code>4cells</code></dt>
+  <dd>4 cell prototype geometry.</dd>
+  <dt><code>other</code></dt>
   <dd>Old.</dd>
 </dl>
 
@@ -54,7 +56,7 @@ Set up Geant4
     source /usr/local/[...]/geant4make.sh
 ```
 
-To run in interactive mode simply run the executable with no arguments inside the build directory
+To run in interactive mode simply execute inside the build directory with no arguments
 
 ```bash
 ./OpNovice
