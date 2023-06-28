@@ -412,7 +412,10 @@ void OpNoviceDetectorConstruction::DefineSurfaces()
   MTP_BaSO->AddProperty("SPECULARLOBECONSTANT", photonEnergy8, specular_coating, 59); // In order to have diffuse reclectivity (Lambertian), it is necessary define all the other three.
   MTP_BaSO->AddProperty("SPECULARSPIKECONSTANT", photonEnergy9, other_coating, 2); //  The diffuse is 1-other three (in this case 1-sppecular). 
   MTP_BaSO->AddProperty("BACKSCATTERCONSTANT", photonEnergy9, other_coating, 2);
-   
+  
+  G4double refl_test[19];
+  for(int i = 0; i < 19; ++i) refl_test[i] = 0.65*refl_coating[i];
+ 
   MTP_BaSO->AddProperty("REFLECTIVITY", p_coating_refl, refl_coating, 19);
 
   BaSO4_surface->SetMaterialPropertiesTable(MTP_BaSO); 	
@@ -709,11 +712,11 @@ void OpNoviceDetectorConstruction::DefineVisAttributes()
   expHall_log->SetVisAttributes(worldVisAtt);
   
   G4VisAttributes *steelBoxVisAtt = new G4VisAttributes;
-  steelBoxVisAtt->SetVisibility(false);
+  steelBoxVisAtt->SetVisibility(true);
   steelBoxVisAtt->SetColor(white_trans);
   SteelBox_log->SetVisAttributes(steelBoxVisAtt);
   G4VisAttributes *steelBoxVisAtt1 = new G4VisAttributes;
-  steelBoxVisAtt1->SetVisibility(false);
+  steelBoxVisAtt1->SetVisibility(true);
   steelBoxVisAtt1->SetColor(red);
   Steel_Add_log->SetVisAttributes(steelBoxVisAtt1);
 
@@ -723,11 +726,11 @@ void OpNoviceDetectorConstruction::DefineVisAttributes()
   ScintillatorBox_log->SetVisAttributes(sctBoxVisAtt);
   G4VisAttributes *sctBoxVisAtt1 = new G4VisAttributes;
   sctBoxVisAtt1->SetColor(red);
-  sctBoxVisAtt1->SetVisibility(true);
+  sctBoxVisAtt1->SetVisibility(false);
   Sct_Inside_log->SetVisAttributes(sctBoxVisAtt1);
 
   G4VisAttributes *PMMAVisAtt = new G4VisAttributes;
-  PMMAVisAtt->SetVisibility(false);
+  PMMAVisAtt->SetVisibility(true);
   PMMAVisAtt->SetColor(grey);
   PMMA_disk_log->SetVisAttributes(PMMAVisAtt);
   PMMA_Ring_log->SetVisAttributes(PMMAVisAtt);
@@ -753,12 +756,12 @@ void OpNoviceDetectorConstruction::DefineVisAttributes()
 
   G4VisAttributes *WOMVisAtt = new G4VisAttributes;
   WOMVisAtt->SetColor(magenta);
-  WOMVisAtt->SetVisibility(false);
+  WOMVisAtt->SetVisibility(true);
   WOM_tube_log->SetVisAttributes(WOMVisAtt);
 
   G4VisAttributes *sipmVisAtt1 = new G4VisAttributes;
   sipmVisAtt1->SetColor(blue);
-  sipmVisAtt1->SetVisibility(false);
+  sipmVisAtt1->SetVisibility(true);
   sipmWindow_log->SetVisAttributes(sipmVisAtt1);
   G4VisAttributes *sipmVisAtt2 = new G4VisAttributes;
   sipmVisAtt2->SetColor(red);

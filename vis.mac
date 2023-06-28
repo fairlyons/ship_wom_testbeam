@@ -28,10 +28,14 @@
 /vis/viewer/zoom 1.5
 #
 # Specify style (surface or wireframe):
-#/vis/viewer/set/style surface
+/vis/viewer/set/background 1 1 1
 #
 # Draw coordinate axes:
-/vis/scene/add/axes 0 0 0 15 cm
+#/vis/scene/add/axes 0 0 0 15 cm
+
+/vis/filtering/trajectories/create/particleFilter
+/vis/filtering/trajectories/particleFilter-0/add opticalphoton
+/vis/filtering/trajectories/particleFilter-0/invert true
 #
 # Draw smooth trajectories at end of event, showing trajectory points
 # as markers 2 pixels wide:
