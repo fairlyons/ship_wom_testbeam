@@ -283,6 +283,17 @@ void OpNoviceDetectorConstruction::DefineMPTs()
   for(unsigned int i = 0; i < sizeof(pmma_side_en_new)/sizeof(pmma_side_en_new[0]); i++) pmma_side_en_new[i] = 1240./pmma_side_wl_new[i]*eV;
   for(unsigned int i = 0; i < sizeof(pmma_bottom_en_new)/sizeof(pmma_bottom_en_new[0]); i++) pmma_bottom_en_new[i] = 1240./pmma_bottom_wl_new[i]*eV;
 
+  G4double opEn[22] = {
+    2.06640*eV, 2.10143*eV, 2.13766*eV, 2.17516*eV, 2.21400*eV, 2.25426*eV, 2.29600*eV, 2.33932*eV, 2.38431*eV, 2.43106*eV, // 600, 590, 580, 570, 560, 550, 540, 530, 520, 510
+    2.47968*eV, 2.53029*eV, 2.58300*eV, 2.63796*eV, 2.69531*eV, 2.75520*eV, 2.81782*eV, 2.88335*eV, 2.95200*eV, 3.09960*eV, // 500, 490, 480, 470, 460, 450, 440, 430, 420, 400
+    3.54241*eV, 4.13281*eV // 350, 300
+  };
+
+  G4double AbsLen_PMMA[22] = {
+    39.48*m, 48.25*m, 54.29*m, 57.91*m, 54.29*m, 33.40*m, 31.02*m, 43.43*m, 43.43*m, 41.36*m, // 600, 590, 580, 570, 560, 550, 540, 530, 520, 510,
+    39.48*m, 37.76*m, 36.19*m, 36.19*m, 33.40*m, 31.02*m, 28.95*m, 25.55*m, 24.13*m, 21.71*m, // 500, 490, 480, 470, 460, 450, 440, 430, 420, 400,
+    2.171*m, 0.434*m // 350, 300
+  };
 
   G4MaterialPropertiesTable *MPT_PMMA_side = new G4MaterialPropertiesTable();
   MPT_PMMA_side->AddProperty("ABSLENGTH", pmma_side_en, pmma_side_abslen,8)->SetSpline(true);
