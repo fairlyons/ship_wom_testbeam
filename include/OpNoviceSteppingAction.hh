@@ -37,6 +37,7 @@
 /// Stepping action class
 class OpNoviceDetectorConstruction;
 class OpNoviceEventAction;
+
 class OpNoviceSteppingAction : public G4UserSteppingAction
 {
   public:
@@ -47,34 +48,32 @@ class OpNoviceSteppingAction : public G4UserSteppingAction
     virtual void UserSteppingAction(const G4Step*);
 
   private:
-
     G4int fEventNumber;
 
-  // G4double Z_WOMend;
-  // G4double X_WOMend;
-  // G4double Y_WOMend;
-  // G4double eps;
-  // G4double WOM_rin;
-  // G4double WOM_rout;
+  //G4double Z_WOMend;
+  //G4double X_WOMend;
+  //G4double Y_WOMend;
+  //G4double eps;
+  //G4double WOM_rin;
+  //G4double WOM_rout;
 
-  // G4double WLS1_Rin;
-  // G4double WLS1_Rout;
-  // G4double WLS2_Rin;
-  // G4double WLS2_Rout;
-  // G4double WLSring_Rin;
-  // G4double WLSring_Rout;
-  // G4double WLS1_Zup;
-  // G4double WLS1_Zdown;
-  // G4double WLS2_Zup;
-  // G4double WLS2_Zdown;
-  // G4double WLSring_Zup;
-  // G4double WLSring_Zdown;
+  //G4double WLS1_Rin;
+  //G4double WLS1_Rout;
+  //G4double WLS2_Rin;
+  //G4double WLS2_Rout;
+  //G4double WLSring_Rin;
+  //G4double WLSring_Rout;
+  //G4double WLS1_Zup;
+  //G4double WLS1_Zdown;
+  //G4double WLS2_Zup;
+  //G4double WLS2_Zdown;
+  //G4double WLSring_Zup;
+  //G4double WLSring_Zdown;
+
   private:
     OpNoviceEventAction* fEventAction;
-     OpNoviceDetectorConstruction* Detector;
-
-  // G4bool OpNoviceSteppingAction::ifInWLS(G4double , G4double , G4double);
-
+    OpNoviceDetectorConstruction* Detector;
+    //G4bool OpNoviceSteppingAction::ifInWLS(G4double , G4double , G4double);
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -42,17 +42,21 @@
 #include <vector>
 #include <string>
 #include <map>
-using namespace std;
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-class DetectorConstruction;
 
+using namespace std;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class DetectorConstruction;
 
 typedef struct
 {
     G4int parentID;
     G4int process;
-    G4int WOWnumber;
+    G4int precopyno;
+    G4int postcopyno;
     G4double waveLen;
+    G4int stepnum;
 } PhotonInfo;
 
 class OpNoviceEventAction : public G4UserEventAction
@@ -63,8 +67,8 @@ class OpNoviceEventAction : public G4UserEventAction
   public:
     virtual void BeginOfEventAction(const G4Event*);
     virtual void   EndOfEventAction(const G4Event*);
-    void addEdep(G4int volume_index, G4double Edep)     {fEnergyDeposit[volume_index] += Edep;};
-    // G4double GetEnergyDeposit()     {return fTotalEnergyDeposit;};
+    void addEdep(G4int volume_index, G4double Edep) {fEnergyDeposit[volume_index] += Edep;};
+    //G4double GetEnergyDeposit()     {return fTotalEnergyDeposit;};
 
     map<G4int, PhotonInfo> map_bornWLS;
     map<G4int, G4bool> map_absorbedWLS;
@@ -73,11 +77,10 @@ class OpNoviceEventAction : public G4UserEventAction
 
     map<G4int, PhotonInfo> map_entersPMMAvessel;
 
-    // long long int fallen_on_steel;
+    //long long int fallen_on_steel;
     G4int scintillation_photons;
     G4int cherenkov_photons;
     
-
   private:
     map<G4int, G4double>  fEnergyDeposit;
 };

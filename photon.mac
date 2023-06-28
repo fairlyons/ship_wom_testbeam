@@ -1,0 +1,17 @@
+#This sets the gun up to shoot an optical photon
+/analysis/setFileName photons.root
+
+/gps/particle opticalphoton
+/gps/energy 4.00 eV
+/gps/position 15.5 0 0 cm
+#/gps/direction -1 0 0
+/gps/polarization 0 1 0
+#/tracking/verbose 1
+/gps/ang/type iso
+#/gps/ang/rot1 0 0 1
+/gps/ang/rot2 1 0 0
+/gps/ang/mintheta 0
+/gps/ang/maxtheta 10 deg
+/run/beamOn 50
+
+#/control/execute photon.mac

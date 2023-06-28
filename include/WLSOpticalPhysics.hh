@@ -44,6 +44,7 @@
 #include "G4OpMieHG.hh"
 #include "G4OpRayleigh.hh"
 #include "G4OpAbsorption.hh"
+#include "G4OpticalPhysics.hh"
 #include "G4OpBoundaryProcess.hh"
 
 #include "G4VPhysicsConstructor.hh"
@@ -77,6 +78,7 @@ private:
     G4OpRayleigh*        fRayleighScattering;
     G4OpMieHG*           fMieHGScatteringProcess;
     G4OpBoundaryProcess* fBoundaryProcess;
+    G4OpticalPhysics*    fopticalPhysics;
  
     G4bool fAbsorptionOn;
 

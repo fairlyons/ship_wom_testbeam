@@ -36,14 +36,14 @@
 
 class G4GeneralParticleSource;
 class G4Event;
-// class OpNovicePrimaryGeneratorMessenger;
+//class OpNovicePrimaryGeneratorMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class OpNovicePrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-	OpNovicePrimaryGeneratorAction();
+    OpNovicePrimaryGeneratorAction();
     virtual ~OpNovicePrimaryGeneratorAction();
 
     // static access method
@@ -51,11 +51,11 @@ class OpNovicePrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
     // method from the base class
     virtual void GeneratePrimaries(G4Event*);
-  public:
 
-         void SetOptPhotonPolar();
-         void SetOptPhotonPolar(G4double);
-         // OpNovicePrimaryGeneratorMessenger* fGunMessenger;
+  public:
+    void SetOptPhotonPolar();
+    void SetOptPhotonPolar(G4double);
+    //OpNovicePrimaryGeneratorMessenger* fGunMessenger;
     // method to access particle gun
     const G4GeneralParticleSource* GetParticleGun()
     const { return pgun; }
@@ -63,7 +63,6 @@ class OpNovicePrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   private:
     static OpNovicePrimaryGeneratorAction* fgInstance;
     G4GeneralParticleSource* pgun;
-
 };
 
 /*class OpNovicePrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
@@ -85,4 +84,4 @@ class OpNovicePrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif /*OpNovicePrimaryGeneratorAction_h*/
+#endif

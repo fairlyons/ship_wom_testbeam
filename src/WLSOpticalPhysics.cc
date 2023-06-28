@@ -83,6 +83,7 @@ void WLSOpticalPhysics::ConstructProcess()
   fRayleighScattering     = new G4OpRayleigh();
   fMieHGScatteringProcess = new G4OpMieHG();
   fBoundaryProcess        = new G4OpBoundaryProcess();
+  fopticalPhysics = new G4OpticalPhysics();
 
   G4ProcessManager* pManager =
                 G4OpticalPhoton::OpticalPhoton()->GetProcessManager();

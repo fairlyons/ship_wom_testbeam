@@ -1,4 +1,8 @@
+*.png
+*.zip
 *.root
 *.user
-*.tex
+.vscode/*
 *.pdf
+*.tex
+*.C

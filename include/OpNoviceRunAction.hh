@@ -46,9 +46,9 @@ class OpNoviceRunAction : public G4UserRunAction
     virtual ~OpNoviceRunAction();
 
     G4double shotPos;
-       G4double primarytrackID;
-       inline G4double GetVarEn() {return shotPos;}
-       inline G4double GetVarID() {return primarytrackID;}
+    G4double primarytrackID;
+    inline G4double GetVarEn() {return shotPos;}
+    inline G4double GetVarID() {return primarytrackID;}
 
   public:
     virtual void BeginOfRunAction(const G4Run* aRun);
@@ -60,4 +60,4 @@ class OpNoviceRunAction : public G4UserRunAction
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif /*OpNoviceRunAction_h*/
+#endif

@@ -39,25 +39,11 @@ target_link_libraries(OpNovice ${Geant4_LIBRARIES} )
 # build OpNovice. This is so that we can run the executable directly because it
 # relies on these scripts being in the current working directory.
 #
-set(OpNovice_SCRIPTS
-   # OpNovice.out
-    OpNovice.in
-    icons.mac
-    run.png
-    vis.mac
-    run1.mac
-  )
-
-foreach(_script ${OpNovice_SCRIPTS})
-  configure_file(
-    ${PROJECT_SOURCE_DIR}/${_script}
-    ${PROJECT_BINARY_DIR}/${_script}
-    COPYONLY
-    )
-endforeach()
-
+file(GLOB MACRO_FILES
+  "*.mac"
+)
+file(COPY ${MACRO_FILES} DESTINATION ${PROJECT_BINARY_DIR})
 #----------------------------------------------------------------------------
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
 install(TARGETS OpNovice DESTINATION bin)
-
