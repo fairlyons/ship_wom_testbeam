@@ -225,7 +225,10 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
 		else if(posttouchable->GetCopyNumber(0) >= 4075 && posttouchable->GetCopyNumber(0) < 4080) sipm = 63;
         analysisManager->FillNtupleIColumn(0,2, sipm); //sipm number
         analysisManager->AddNtupleRow(0);
+        analysisManager->FillH3(0,eventNumber,sipm,track->GetGlobalTime()); // quadrant 
       }
+      
+      
       track->SetTrackStatus(fStopAndKill);
     }
     //---------------- 4. photons that reached SiPM's END
