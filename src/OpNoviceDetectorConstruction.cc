@@ -713,7 +713,7 @@ void OpNoviceDetectorConstruction::DefineLogicalVolumes()
   Air_gap1_log = new G4LogicalVolume(Air_gap1, air, "Air_gap1LV");
   Air_gap2_log = new G4LogicalVolume(Air_gap2, air, "Air_gap2LV");
   WLS_tube1_log = new G4LogicalVolume(WLS_tube1, WLS_Coat, "WLS1LV");
-  WLS_tube2_log = new G4LogicalVolume(WLS_tube2, air, "WLS2LV"); //we should keep it without
+  WLS_tube2_log = new G4LogicalVolume(WLS_tube2, WLS_Coat, "WLS2LV"); //we should keep it without
   PMMA_Hat_log = new G4LogicalVolume(PMMA_Hat, PMMA_side, "PMMA_HatLV");
   Air_ring1_log = new G4LogicalVolume(Air_ring1, air, "Air_ring1LV");
   Air_ring2_log = new G4LogicalVolume(Air_ring2, air, "Air_ring2LV");
