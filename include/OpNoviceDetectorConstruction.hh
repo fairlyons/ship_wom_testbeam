@@ -121,10 +121,13 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4double Thickness_Disk;
     G4double Thickness_Hat;
     G4double Thickness_Steel_Add;
+    G4double Thickness_Steel_Add_Top;
+    G4double Thickness_Steel_Add_Bot;
     G4double Thickness_Gap;
     G4double Length_WOM;
     G4double Thickness_WLS;
     G4double Length_Scint_Hole;
+    G4double Length_sipm_box;
     
     G4double delta_X;
     G4double delta_Y;
@@ -153,6 +156,7 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4Box* sipmSensTop;
     G4Box* sipmWindowAll;
     G4Box* sipmHole;
+    G4Box* sipmBox;
     G4VSolid *Outer_tube;
     G4VSolid *Air_gap1;
     G4VSolid *WLS_tube1;
@@ -183,6 +187,7 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4LogicalVolume* sipmSensTop_log;
     G4LogicalVolume* sipmWindow_log;
     G4LogicalVolume* sipmBaseBox_log;
+    G4LogicalVolume* sipmBox_log;
     G4LogicalVolume* ScintillatorBox_log;
     G4LogicalVolume* SteelBox_log;
     G4LogicalVolume* SteelBeam_log;
@@ -209,6 +214,7 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4VPhysicalVolume* SteelBeam_phys;
     G4VPhysicalVolume* ScintillatorBox_phys;
     G4VPhysicalVolume* ReflectBox_phys;
+    G4VPhysicalVolume* sipmBox_phys;
     G4VPhysicalVolume* sipmBase_phys;
     G4VPhysicalVolume* sipmWindow_phys;
     G4VPhysicalVolume* sipmSens_phys;

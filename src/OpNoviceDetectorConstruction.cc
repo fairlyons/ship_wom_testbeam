@@ -89,10 +89,13 @@ OpNoviceDetectorConstruction::OpNoviceDetectorConstruction()
   Thickness_Hat = 10*mm;
   Thickness_WLS = 0.02*mm;
   Thickness_Gap = 1*mm;
-  Thickness_Steel_Add = 15*mm;
+  Thickness_Steel_Add = 12*mm;
+  Thickness_Steel_Add_Top = 16.19*mm;
+  Thickness_Steel_Add_Bot = 12*mm;
   Length_Out = 225*mm;
   Length_WOM = 230*mm;
   Length_In = 225*mm;
+  Length_sipm_box = 15*cm;
 
   WOM_coord_vec = {{-397*mm,321.88*mm}, {-397*mm,953.7975*mm}, {397*mm,285.1*mm}, {397*mm,905.2025*mm}, {-397*mm,-762.54125*mm}, {-397*mm,-240.12*mm}, {397*mm,-778.45875*mm}, {397*mm,-266.88*mm}};
 }
@@ -323,7 +326,7 @@ void OpNoviceDetectorConstruction::DefineMPTs()
   //------------------------------------------------------------------------------
   //----------------------------- Air -----------------------------
   //------------------------------------------------------------------------------
-  G4double photonEnergy_Air[2] = {2.*eV,  5.*eV};
+  G4double photonEnergy_Air[2] = {2.*eV, 5.*eV};
   G4double refractiveIndex_Air[2] = {1.00, 1.00};
   G4MaterialPropertiesTable* MPT_Air = new G4MaterialPropertiesTable();
   MPT_Air->AddProperty("RINDEX", photonEnergy_Air, refractiveIndex_Air, 2);
@@ -333,7 +336,7 @@ void OpNoviceDetectorConstruction::DefineMPTs()
   //------------------------------------------------------------------------------
   //----------------------------- Silicon Resin  -----------------------------
   //------------------------------------------------------------------------------
-  G4double photonEnergy_ResinSi[3] = { 2.*eV,  4.*eV, 5.*eV };
+  G4double photonEnergy_ResinSi[3] = { 2.*eV, 4.*eV, 5.*eV };
   G4double refractiveIndex_ResinSi[3] = { 1.57, 1.57, 1.57}; //Hamamatsu data sheet
   G4MaterialPropertiesTable* MPT_ResinSi = new G4MaterialPropertiesTable();
   MPT_ResinSi->AddProperty("RINDEX", photonEnergy_ResinSi, refractiveIndex_ResinSi, 3);
@@ -637,12 +640,7 @@ void OpNoviceDetectorConstruction::DefineSolids()
   // Hole in box
   Rin = 0.0*mm;
   Rout = Diam_Out_Out/2; 
-  Hole_box  = new G4Tubs("Hole_box", Rin, Rout, Length_WOM/2, 0, 360*deg);
-  // Hole in scintillator
-  Rin = 0.0*mm;
-  Rout = Diam_Out_Out/2;
-  Length_Scint_Hole = Length_WOM - Thickness_Steel_Add - Thickness_Hat - WallThick;
-  Hole_sct = new G4Tubs("Hole_sct", Rin, Rout, Length_Scint_Hole/2, 0, 360*deg);
+  Hole_box  = new G4Tubs("Hole_box", Rin, Rout, (Length_Out+Thickness_Ring)/2, 0, 360*deg);
   // PMMA "hat"
   Rin = Diam_Out_Out/2;
   Rout = Diam_Hat/2;
@@ -650,41 +648,48 @@ void OpNoviceDetectorConstruction::DefineSolids()
   // Additional steel
   Rin = Diam_Hole/2;
   Rout = Diam_Steel_Add/2;
-  SteelAdd = new G4Tubs("Steel_add", Rin, Rout, Thickness_Steel_Add/2, 0, 360*deg);
+  G4double y1 = Diam_Steel_Add;
+  G4double z1 = Thickness_Steel_Add_Top - Thickness_Steel_Add_Bot;
+  G4double y2 = z1/y1*(1/(1+z1/y1));
+  G4double z2 = 1-y2;
+  SteelAdd = new G4CutTubs("Steel_add", Rin, Rout, Thickness_Steel_Add_Bot/2+z1/4, 0, 360*deg, G4ThreeVector(0, 0, -1), G4ThreeVector(0, -y2, z2));
   // LAB&PPO inside tube
   Rin = 0.0*mm;
   Rout = Diam_In_In/2;
-  SctInside = new G4Tubs("Sct_inside", Rin, Rout, (Length_WOM - Thickness_Steel_Add + ReflectThick)/2, 0, 360*deg);
-  G4SubtractionSolid* EmptySteelBox = new G4SubtractionSolid("EmptySteelBox", SteelBox, ReflectBox, 0, G4ThreeVector(0,0,0));
-  //G4SubtractionSolid* EmptySteelBox_temp = new G4SubtractionSolid("EmptySteelBox", SteelBox, ReflectBox, 0, G4ThreeVector(0,0,0));
-  //G4SubtractionSolid* EmptySteelBox = new G4SubtractionSolid("EmptySteelBox", SteelBox, ScintillatorBox, 0, G4ThreeVector(0,0,0));
+  SctInside = new G4Tubs("Sct_inside", Rin, Rout, (Length_WOM - Thickness_Steel_Add_Bot + ReflectThick)/2, 0, 360*deg);
+  
+  G4SubtractionSolid* EmptySteelBox = new G4SubtractionSolid("EmptySteelBox", SteelBox, ReflectBox, 0, G4ThreeVector(0, 0, 0));
   G4SubtractionSolid* EmptyReflectBox_temp = new G4SubtractionSolid("EmptyReflectBox_temp", ReflectBox, SteelBeam, 0, G4ThreeVector(0, 0, 0));
   G4SubtractionSolid* EmptyReflectBox = new G4SubtractionSolid("EmptyReflectBox", EmptyReflectBox_temp, ScintillatorBox, 0, G4ThreeVector(0, 0, 0));
-
-
-  G4double delta_Z_EmptySteelBoxWithHole = SteelZ/2 - Length_WOM/2;
-  G4double delta_Z_EmptyReflectBoxWithHole = ReflectZ/2 - Length_WOM/2;
-  G4double delta_Z_ScintillatorBoxWithHole = SctZ/2 - Length_Scint_Hole/2;
+  
+  G4double delta_Z_ScintillatorBoxWithHole = SctZ/2 - (Length_WOM - Thickness_Steel_Add_Bot - Thickness_Hat - WallThick) + (Length_Out + Thickness_Ring)/2;
+  G4double xrot = atan((Thickness_Steel_Add_Top - Thickness_Steel_Add_Bot)/Diam_Steel_Add)*180/pi;
+  G4RotationMatrix* RM1 = new G4RotationMatrix(0*deg, 0*deg, 0*deg); RM1->rotateX(xrot*deg); 
 
   std::vector<G4SubtractionSolid*> EmptySteelBoxWithHole_tempvec;
   std::vector<G4SubtractionSolid*> EmptyReflectBoxWithHole_tempvec;
   std::vector<G4SubtractionSolid*> ScintillatorBoxWithHole_tempvec;
+
+
   for(unsigned int pos = 0; pos<WOM_coord_vec.size(); pos++) {
+    G4Transform3D t_Steel_hole = G4Translate3D(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second-Diam_Steel_Add/2, SteelZ/2+Thickness_Steel_Add_Bot)*G4Rotate3D(*RM1)*G4Translate3D(0, Diam_Steel_Add/2, delta_Z_ScintillatorBoxWithHole-SteelZ/2-Thickness_Steel_Add_Bot);
     if(pos == 0) {
-      EmptySteelBoxWithHole_tempvec.push_back(new G4SubtractionSolid((std::string("EmptySteelBoxWithHole_")+std::to_string(pos)).c_str(), EmptySteelBox, Hole_box, 0, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_EmptySteelBoxWithHole)));
-      EmptyReflectBoxWithHole_tempvec.push_back(new G4SubtractionSolid((std::string("EmptyReflectBoxWithHole_")+std::to_string(pos)).c_str(), EmptyReflectBox,Hole_box, 0, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_EmptyReflectBoxWithHole)));
-      ScintillatorBoxWithHole_tempvec.push_back(new G4SubtractionSolid((std::string("ScintillatorBoxWithHole_")+std::to_string(pos)).c_str(), ScintillatorBox, Hole_sct, 0, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_ScintillatorBoxWithHole)));
+      EmptySteelBoxWithHole_tempvec.push_back(new G4SubtractionSolid((std::string("EmptySteelBoxWithHole_")+std::to_string(pos)).c_str(), EmptySteelBox, Hole_box, t_Steel_hole));
+      EmptyReflectBoxWithHole_tempvec.push_back(new G4SubtractionSolid((std::string("EmptyReflectBoxWithHole_")+std::to_string(pos)).c_str(), EmptyReflectBox, Hole_box, t_Steel_hole));
+      ScintillatorBoxWithHole_tempvec.push_back(new G4SubtractionSolid((std::string("ScintillatorBoxWithHole_")+std::to_string(pos)).c_str(), ScintillatorBox, Hole_box, t_Steel_hole));
     }
     else {
-      EmptySteelBoxWithHole_tempvec.push_back(new G4SubtractionSolid((std::string("EmptySteelBoxWithHole_")+std::to_string(pos)).c_str(), EmptySteelBoxWithHole_tempvec[pos-1], Hole_box, 0, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_EmptySteelBoxWithHole)));
-      EmptyReflectBoxWithHole_tempvec.push_back(new G4SubtractionSolid((std::string("EmptyReflectBoxWithHole_")+std::to_string(pos)).c_str(), EmptyReflectBoxWithHole_tempvec[pos-1], Hole_box, 0, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_EmptyReflectBoxWithHole)));
-      ScintillatorBoxWithHole_tempvec.push_back(new G4SubtractionSolid((std::string("ScintillatorBoxWithHole_")+std::to_string(pos)).c_str(), ScintillatorBoxWithHole_tempvec[pos-1], Hole_sct, 0, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_ScintillatorBoxWithHole)));
+      EmptySteelBoxWithHole_tempvec.push_back(new G4SubtractionSolid((std::string("EmptySteelBoxWithHole_")+std::to_string(pos)).c_str(), EmptySteelBoxWithHole_tempvec[pos-1], Hole_box, t_Steel_hole));
+      EmptyReflectBoxWithHole_tempvec.push_back(new G4SubtractionSolid((std::string("EmptyReflectBoxWithHole_")+std::to_string(pos)).c_str(), EmptyReflectBoxWithHole_tempvec[pos-1], Hole_box, t_Steel_hole));
+      ScintillatorBoxWithHole_tempvec.push_back(new G4SubtractionSolid((std::string("ScintillatorBoxWithHole_")+std::to_string(pos)).c_str(), ScintillatorBoxWithHole_tempvec[pos-1], Hole_box, t_Steel_hole));
     }
   }
   EmptySteelBoxWithHole = EmptySteelBoxWithHole_tempvec[WOM_coord_vec.size()-1];
   EmptyReflectBoxWithHole = EmptyReflectBoxWithHole_tempvec[WOM_coord_vec.size()-1];
   ScintillatorBoxWithHole = ScintillatorBoxWithHole_tempvec[WOM_coord_vec.size()-1];
-  
+ 
+  sipmBox = new G4Box("sipm", Length_sipm_box/2,Length_sipm_box/2,Length_sipm_box/2);
+ 
   // SIPMs 14161 - 3050HS
   sipmHole = new G4Box("sipmHole", sipmSizeSens/2., sipmSizeSens/2., (sipmSensThickness + sipmSensThicknessTop)/2);
   sipmSensTop = new G4Box("sipmSensTop", sipmSizeSens/2., sipmSizeSens/2., sipmSensThicknessTop/2.);
@@ -724,6 +729,7 @@ void OpNoviceDetectorConstruction::DefineLogicalVolumes()
   sipmSensTop_log = new G4LogicalVolume(sipmSensTop, Silicon, "sipmSensTop");  ////?????
   sipmWindow_log = new G4LogicalVolume(sipmWindow, ResinSi, "sipmWindow");
   sipmBaseBox_log = new G4LogicalVolume(sipmBaseBox, Al, "sipmBaseBox");
+  sipmBox_log = new G4LogicalVolume(sipmBox, air, "sipmBox");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -734,7 +740,8 @@ void OpNoviceDetectorConstruction::ConstructVolumes()
 {
   expHall_phys = new G4PVPlacement(0, G4ThreeVector(), expHall_log, "World", 0, false, 0);
 
-  G4RotationMatrix *RM1 = new G4RotationMatrix(0*deg, 0*deg, 0*deg);
+  G4double xrot = atan((Thickness_Steel_Add_Top - Thickness_Steel_Add_Bot)/Diam_Steel_Add)*180/pi;
+  G4RotationMatrix* RM1 = new G4RotationMatrix(0*deg, 0*deg, 0*deg); RM1->rotateX(xrot*deg); 
 
   SteelBox_phys = new G4PVPlacement(0, G4ThreeVector(), SteelBox_log, "SteelBox", expHall_log, false, 100, intersect_check);
   SteelBeam_phys = new G4PVPlacement(0, G4ThreeVector(), SteelBeam_log, "SteelBeam", expHall_log, false, 101, intersect_check);
@@ -742,64 +749,73 @@ void OpNoviceDetectorConstruction::ConstructVolumes()
   ScintillatorBox_phys = new G4PVPlacement(0, G4ThreeVector(), ScintillatorBox_log, "ScintillatorBoxPV", expHall_log, false, 300, intersect_check);
 
 //-------------------------------------------------------------------
-  G4double delta_Z_sipm = SctZ/2 + Thickness_Steel_Add + Thickness_Hat + WallThick + Thickness_Ring + Thickness_Gap + sipmWindowThickness; // no small gap of air 
+  G4double delta_Z_sipm = SctZ/2 + Thickness_Steel_Add_Bot + Thickness_Hat + WallThick + Thickness_Ring + Thickness_Gap + sipmWindowThickness; // no small gap of air 
 //-------------------------------------------------------------------
 
   // PMMA Staff
   // Outer_tube
-  G4double delta_Z_Outer_tube = SctZ/2 - (Length_WOM - Thickness_Steel_Add - Thickness_Hat - WallThick) + Length_Out/2 + Thickness_Ring;
+  G4double delta_Z_Outer_tube = SctZ/2 - (Length_WOM - Thickness_Steel_Add_Bot - Thickness_Hat - WallThick) + Length_Out/2 + Thickness_Ring;
   // WOM tube
-  G4double delta_Z_WOM = SctZ/2 - (Length_WOM - Thickness_Steel_Add - Thickness_Hat - WallThick) + Length_WOM/2 + Thickness_Ring +Thickness_Gap;
+  G4double delta_Z_WOM = SctZ/2 - (Length_WOM - Thickness_Steel_Add_Bot - Thickness_Hat - WallThick) + Length_WOM/2 + Thickness_Ring + Thickness_Gap;
   // Inner tube
-  G4double delta_Z_Inner_tube = SctZ/2 - (Length_WOM - Thickness_Steel_Add - Thickness_Hat - WallThick) + Length_In/2 + Thickness_Ring;
+  G4double delta_Z_Inner_tube = SctZ/2 - (Length_WOM - Thickness_Steel_Add_Bot - Thickness_Hat - WallThick) + Length_In/2 + Thickness_Ring;
   // PMMA Ring
-  G4double delta_Z_PMMA_Ring = SctZ/2 - (Length_WOM - Thickness_Steel_Add - Thickness_Hat - WallThick) + Thickness_Ring/2;
+  G4double delta_Z_PMMA_Ring = SctZ/2 - (Length_WOM - Thickness_Steel_Add_Bot - Thickness_Hat - WallThick) + Thickness_Ring/2;
   // PMMA Disk
-  G4double delta_Z_PMMA_Disk = SctZ/2 - (Length_WOM - Thickness_Steel_Add - Thickness_Hat - WallThick) + Length_In + Thickness_Ring + Thickness_Disk/2;
+  G4double delta_Z_PMMA_Disk = SctZ/2 - (Length_WOM - Thickness_Steel_Add_Bot - Thickness_Hat - WallThick) + Length_In + Thickness_Ring + Thickness_Disk/2;
   // PMMA Hat
-  G4double delta_Z_PMMA_Hat = SteelZ/2 + Thickness_Steel_Add + Thickness_Hat/2;
+  G4double delta_Z_PMMA_Hat = SteelZ/2 + Thickness_Steel_Add_Bot + Thickness_Hat/2;
   // Additional Steel
-  G4double delta_Z_Steel_Add = SteelZ/2 + Thickness_Steel_Add/2;
+  G4double delta_Z_Steel_Add = SteelZ/2 + Thickness_Steel_Add_Bot/2 + (Thickness_Steel_Add_Top - Thickness_Steel_Add_Bot)/4;
   // LAB&PPO inside tube
-  G4double delta_Z_Sct_Inside = SteelZ/2  -  (Length_WOM - Thickness_Steel_Add + ReflectThick)/2+Thickness_Hat;
+  G4double delta_Z_Sct_Inside = SteelZ/2 - (Length_WOM - Thickness_Steel_Add_Bot + ReflectThick)/2 + Thickness_Hat;
   // Air ring
-  G4double delta_Z_upper_ring = SctZ/2 - (Length_WOM - Thickness_Steel_Add - Thickness_Hat - WallThick) + Thickness_Ring + Thickness_Gap/2;
+  G4double delta_Z_upper_ring = SctZ/2 - (Length_WOM - Thickness_Steel_Add_Bot - Thickness_Hat - WallThick) + Thickness_Ring + Thickness_Gap/2;
 
   G4int n_sipm = 40;
   G4double radius_sipm = (Diam_WOM_In + Diam_WOM_Out)/4.;
   G4int sipm_id = 0;
 
   for(unsigned int pos = 0; pos < WOM_coord_vec.size(); pos++) {
-    RM1 = new G4RotationMatrix();
-    Outer_tube_phys_vect.push_back(new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Outer_tube), Outer_tube_log, "Outer_tube", expHall_log, false, 400, intersect_check));
-    WOM_tube_phys_vect.push_back(new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_WOM), WOM_tube_log, "WOM_tube", expHall_log, false, 500, intersect_check));
-    Inner_tube_phys_vect.push_back(new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Inner_tube), Inner_tube_log, "Inner_tube", expHall_log, false, 401, intersect_check));
-    PMMA_Ring_phys_vect.push_back(new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_PMMA_Ring), PMMA_Ring_log, "PMMA_Ring", expHall_log, false, 402, intersect_check));
-    PMMA_Disk_phys_vect.push_back(new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_PMMA_Disk), PMMA_disk_log, "PMMA_Disk", expHall_log, false, 403, intersect_check));
-    Air_gap_1_phys_vect.push_back(new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Inner_tube), Air_gap1_log, "Air_gap1", expHall_log, false, 600, intersect_check));
-    Air_gap_2_phys_vect.push_back(new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Inner_tube), Air_gap2_log, "Air_gap2", expHall_log, false, 601, intersect_check));
-    WLS_tube1_phys_vect.push_back(new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_WOM), WLS_tube1_log, "WLS1", expHall_log, false, 700, intersect_check));
-    WLS_tube2_phys_vect.push_back(new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_WOM), WLS_tube2_log, "WLS2", expHall_log, false, 701, intersect_check));
-    PMMA_Hat_phys_vect.push_back(new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_PMMA_Hat), PMMA_Hat_log, "PMMA_Hat", expHall_log, false, 404, intersect_check));
-    Air_ring_1_phys_vect.push_back(new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_upper_ring), Air_ring1_log, "Air_ring1", expHall_log, false, 602, intersect_check));
-    Air_ring_2_phys_vect.push_back(new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_upper_ring), Air_ring2_log, "Air_ring2", expHall_log, false, 603, intersect_check));
-    PMMA_ring_lower_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_upper_ring), PMMA_ring_lower_log, "PMMA_ring_lower", expHall_log, false, 405, intersect_check));
-    Steel_Add_phys_vect.push_back( new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Steel_Add), Steel_Add_log, "Steel_Add", expHall_log, false, 102, intersect_check));
-    Sct_Inside_phys_vect.push_back(new G4PVPlacement(RM1, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Sct_Inside), Sct_Inside_log, "Sct_Inside", expHall_log, false, 301, intersect_check));
+    G4Transform3D t_Outer_tube = G4Translate3D(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second-Diam_Steel_Add/2, SteelZ/2+Thickness_Steel_Add_Bot)*G4Rotate3D(*RM1)*G4Translate3D(0, Diam_Steel_Add/2, delta_Z_Outer_tube-SteelZ/2-Thickness_Steel_Add_Bot);
+    Outer_tube_phys_vect.push_back(new G4PVPlacement(t_Outer_tube, Outer_tube_log, "Outer_tube", expHall_log, false, 400, intersect_check));
+    G4Transform3D t_WOM_tube = G4Translate3D(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second-Diam_Steel_Add/2, SteelZ/2+Thickness_Steel_Add_Bot)*G4Rotate3D(*RM1)*G4Translate3D(0, Diam_Steel_Add/2, delta_Z_WOM-SteelZ/2-Thickness_Steel_Add_Bot);
+    WOM_tube_phys_vect.push_back(new G4PVPlacement(t_WOM_tube, WOM_tube_log, "WOM_tube", expHall_log, false, 500, intersect_check));
+    G4Transform3D t_Inner_tube = G4Translate3D(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second-Diam_Steel_Add/2, SteelZ/2+Thickness_Steel_Add_Bot)*G4Rotate3D(*RM1)*G4Translate3D(0, Diam_Steel_Add/2, delta_Z_Inner_tube-SteelZ/2-Thickness_Steel_Add_Bot);
+    Inner_tube_phys_vect.push_back(new G4PVPlacement(t_Inner_tube, Inner_tube_log, "Inner_tube", expHall_log, false, 401, intersect_check));
+    G4Transform3D t_PMMA_Ring = G4Translate3D(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second-Diam_Steel_Add/2, SteelZ/2+Thickness_Steel_Add_Bot)*G4Rotate3D(*RM1)*G4Translate3D(0, Diam_Steel_Add/2, delta_Z_PMMA_Ring-SteelZ/2-Thickness_Steel_Add_Bot);
+    PMMA_Ring_phys_vect.push_back(new G4PVPlacement(t_PMMA_Ring, PMMA_Ring_log, "PMMA_Ring", expHall_log, false, 402, intersect_check));
+    G4Transform3D t_PMMA_Disk = G4Translate3D(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second-Diam_Steel_Add/2, SteelZ/2+Thickness_Steel_Add_Bot)*G4Rotate3D(*RM1)*G4Translate3D(0, Diam_Steel_Add/2, delta_Z_PMMA_Disk-SteelZ/2-Thickness_Steel_Add_Bot);
+    PMMA_Disk_phys_vect.push_back(new G4PVPlacement(t_PMMA_Disk, PMMA_disk_log, "PMMA_Disk", expHall_log, false, 403, intersect_check));
+    Air_gap_1_phys_vect.push_back(new G4PVPlacement(t_Inner_tube, Air_gap1_log, "Air_gap1", expHall_log, false, 600, intersect_check));
+    Air_gap_2_phys_vect.push_back(new G4PVPlacement(t_Inner_tube, Air_gap2_log, "Air_gap2", expHall_log, false, 601, intersect_check));
+    WLS_tube1_phys_vect.push_back(new G4PVPlacement(t_WOM_tube, WLS_tube1_log, "WLS1", expHall_log, false, 700, intersect_check));
+    WLS_tube2_phys_vect.push_back(new G4PVPlacement(t_WOM_tube, WLS_tube2_log, "WLS2", expHall_log, false, 701, intersect_check));
+    G4Transform3D t_PMMA_Hat = G4Translate3D(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second-Diam_Steel_Add/2, SteelZ/2+Thickness_Steel_Add_Bot)*G4Rotate3D(*RM1)*G4Translate3D(0, Diam_Steel_Add/2, delta_Z_PMMA_Hat-SteelZ/2-Thickness_Steel_Add_Bot);
+    PMMA_Hat_phys_vect.push_back(new G4PVPlacement(t_PMMA_Hat, PMMA_Hat_log, "PMMA_Hat", expHall_log, false, 404, intersect_check));
+    G4Transform3D t_upper_ring = G4Translate3D(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second-Diam_Steel_Add/2, SteelZ/2+Thickness_Steel_Add_Bot)*G4Rotate3D(*RM1)*G4Translate3D(0, Diam_Steel_Add/2, delta_Z_upper_ring-SteelZ/2-Thickness_Steel_Add_Bot);
+    Air_ring_1_phys_vect.push_back(new G4PVPlacement(t_upper_ring, Air_ring1_log, "Air_ring1", expHall_log, false, 602, intersect_check));
+    Air_ring_2_phys_vect.push_back(new G4PVPlacement(t_upper_ring, Air_ring2_log, "Air_ring2", expHall_log, false, 603, intersect_check));
+    PMMA_ring_lower_phys_vect.push_back(new G4PVPlacement(t_upper_ring, PMMA_ring_lower_log, "PMMA_ring_lower", expHall_log, false, 405, intersect_check));
+    Steel_Add_phys_vect.push_back(new G4PVPlacement(0, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Steel_Add), Steel_Add_log, "Steel_Add", expHall_log, false, 102, intersect_check));
+    G4Transform3D t_Sct_Inside = G4Translate3D(WOM_coord_vec[pos].first,WOM_coord_vec[pos].second-Diam_Steel_Add/2,SteelZ/2+Thickness_Steel_Add_Bot)*G4Rotate3D(*RM1)*G4Translate3D(0,Diam_Steel_Add/2,delta_Z_Sct_Inside-SteelZ/2-Thickness_Steel_Add_Bot);
+    Sct_Inside_phys_vect.push_back(new G4PVPlacement(t_Sct_Inside, Sct_Inside_log, "Sct_Inside", expHall_log, false, 301, intersect_check));
     if(pos == 0) sipm_id = 1000;
     if(pos == 2) sipm_id = 2000;
     if(pos == 4) sipm_id = 3000;
     if(pos == 6) sipm_id = 4000;
-  for(int i = 0; i < n_sipm; i++) {
-    RM1 = new G4RotationMatrix();
-    RM1->rotateZ(-(i+0.5)*360./n_sipm*deg);
-    G4double Xrotation = WOM_coord_vec[pos].first + radius_sipm*std::cos((i + 0.5)*2*pi/n_sipm);
-    G4double Yrotation = WOM_coord_vec[pos].second + radius_sipm*std::sin((i + 0.5)*2*pi/n_sipm);
-    sipm_phys_vect.push_back(new G4PVPlacement(RM1, G4ThreeVector(Xrotation, Yrotation, sipmSensThicknessTop + sipmSensThickness/2 + delta_Z_sipm), sipmSens_log, "sipmSens", expHall_log, false, sipm_id++, intersect_check));
-    sipmSensTop_phys = new G4PVPlacement(RM1, G4ThreeVector(Xrotation, Yrotation, sipmSensThicknessTop/2 + delta_Z_sipm), sipmSensTop_log, "sipmSensTop", expHall_log, false, 124 , intersect_check);
-    sipmWindow_phys = new G4PVPlacement(RM1, G4ThreeVector(Xrotation, Yrotation, delta_Z_sipm), sipmWindow_log, "sipmWindow", expHall_log, false, 122, intersect_check);
-    sipmBase_phys = new G4PVPlacement(RM1, G4ThreeVector(Xrotation, Yrotation, sipmWindowThickness + sipmBaseThickness/2. + delta_Z_sipm), sipmBaseBox_log, "sipmBase", expHall_log, false, 123, intersect_check);
-    } 
+    for(int i = 0; i < n_sipm; i++) {
+      G4RotationMatrix* RM2 = new G4RotationMatrix();
+      RM2->rotateZ(-(i+0.5)*360./n_sipm*deg);
+      G4double Xrotation = radius_sipm*std::cos((i + 0.5)*2*pi/n_sipm);
+      G4double Yrotation = radius_sipm*std::sin((i + 0.5)*2*pi/n_sipm);
+      sipm_phys_vect.push_back(new G4PVPlacement(RM2, G4ThreeVector(Xrotation, Yrotation, -Length_sipm_box/2+sipmWindowThickness+sipmSensThicknessTop+sipmSensThickness/2), sipmSens_log, "sipmSens", sipmBox_log, false, sipm_id++, intersect_check));
+      sipmSensTop_phys = new G4PVPlacement(RM2, G4ThreeVector(Xrotation, Yrotation, -Length_sipm_box/2+sipmWindowThickness+sipmSensThicknessTop/2), sipmSensTop_log, "sipmSensTop", sipmBox_log, false, 801, intersect_check);
+      sipmWindow_phys = new G4PVPlacement(RM2, G4ThreeVector(Xrotation, Yrotation, -Length_sipm_box/2+sipmWindowThickness), sipmWindow_log, "sipmWindow", sipmBox_log, false, 800, intersect_check);
+      sipmBase_phys = new G4PVPlacement(RM2, G4ThreeVector(Xrotation, Yrotation, -Length_sipm_box/2+sipmWindowThickness+sipmWindowThickness+sipmBaseThickness/2), sipmBaseBox_log, "sipmBase", sipmBox_log, false, 802, intersect_check);
+    }
+    G4Transform3D t_sipm_box = G4Translate3D(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second-Diam_Steel_Add/2, SteelZ/2+Thickness_Steel_Add_Bot)*G4Rotate3D(*RM1)*G4Translate3D(0, Diam_Steel_Add/2, delta_Z_WOM+Length_WOM/2+Length_sipm_box/2-SteelZ/2-Thickness_Steel_Add_Bot);
+    sipmBox_phys = new G4PVPlacement(t_sipm_box, sipmBox_log, "sipmBox", expHall_log, false,0, intersect_check);
   }
 }
 
@@ -819,6 +835,7 @@ void OpNoviceDetectorConstruction::DefineVisAttributes()
   worldVisAtt->SetVisibility(false);
   worldVisAtt->SetColor(blue);
   expHall_log->SetVisAttributes(worldVisAtt);
+  sipmBox_log->SetVisAttributes(worldVisAtt);
   
   G4VisAttributes *steelBoxVisAtt = new G4VisAttributes;
   steelBoxVisAtt->SetVisibility(true);
@@ -836,7 +853,7 @@ void OpNoviceDetectorConstruction::DefineVisAttributes()
   ScintillatorBox_log->SetVisAttributes(sctBoxVisAtt);
   G4VisAttributes *sctBoxVisAtt1 = new G4VisAttributes;
   sctBoxVisAtt1->SetColor(red);
-  sctBoxVisAtt1->SetVisibility(false);
+  sctBoxVisAtt1->SetVisibility(true);
   Sct_Inside_log->SetVisAttributes(sctBoxVisAtt1);
 
   G4VisAttributes *PMMAVisAtt = new G4VisAttributes;
@@ -871,18 +888,18 @@ void OpNoviceDetectorConstruction::DefineVisAttributes()
 
   G4VisAttributes *sipmVisAtt1 = new G4VisAttributes;
   sipmVisAtt1->SetColor(blue);
-  sipmVisAtt1->SetVisibility(true);
+  sipmVisAtt1->SetVisibility(false);
   sipmWindow_log->SetVisAttributes(sipmVisAtt1);
   G4VisAttributes *sipmVisAtt2 = new G4VisAttributes;
   sipmVisAtt2->SetColor(red);
-  sipmVisAtt2->SetVisibility(true);
+  sipmVisAtt2->SetVisibility(false);
   sipmBaseBox_log->SetVisAttributes(sipmVisAtt2);
   G4VisAttributes *sipmVisAtt3 = new G4VisAttributes;
   sipmVisAtt3->SetColor(green);
-  sipmVisAtt3->SetVisibility(true);
+  sipmVisAtt3->SetVisibility(false);
   sipmSens_log->SetVisAttributes(sipmVisAtt3);
   G4VisAttributes *sipmVisAtt4 = new G4VisAttributes;
-  sipmVisAtt4->SetColor(blue);
+  sipmVisAtt4->SetColor(cyan);
   sipmVisAtt4->SetVisibility(true);
   sipmSensTop_log->SetVisAttributes(sipmVisAtt4);
 }
