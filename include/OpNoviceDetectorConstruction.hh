@@ -214,7 +214,6 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4VPhysicalVolume* SteelBeam_phys;
     G4VPhysicalVolume* ScintillatorBox_phys;
     G4VPhysicalVolume* ReflectBox_phys;
-    G4VPhysicalVolume* sipmBox_phys;
     G4VPhysicalVolume* sipmBase_phys;
     G4VPhysicalVolume* sipmWindow_phys;
     G4VPhysicalVolume* sipmSens_phys;
@@ -236,7 +235,7 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     std::vector<G4VPhysicalVolume*> Steel_Add_phys_vect;
     std::vector<G4VPhysicalVolume*> Sct_Inside_phys_vect;
     std::vector<G4VPhysicalVolume*> sipm_phys_vect;
-    std::vector<G4VPhysicalVolume*> WOM_cells_phys_vect;
+    std::vector<G4VPhysicalVolume*> sipmBox_phys_vect;
 
     // visualisation
     G4Color blue;

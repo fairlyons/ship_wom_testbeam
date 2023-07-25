@@ -729,7 +729,7 @@ void OpNoviceDetectorConstruction::DefineLogicalVolumes()
   sipmSensTop_log = new G4LogicalVolume(sipmSensTop, Silicon, "sipmSensTop");  ////?????
   sipmWindow_log = new G4LogicalVolume(sipmWindow, ResinSi, "sipmWindow");
   sipmBaseBox_log = new G4LogicalVolume(sipmBaseBox, Al, "sipmBaseBox");
-  sipmBox_log = new G4LogicalVolume(sipmBox, air, "sipmBox");
+  sipmBox_log = new G4LogicalVolume(sipmBox, Al, "sipmBox");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -774,9 +774,10 @@ void OpNoviceDetectorConstruction::ConstructVolumes()
 
   G4int n_sipm = 40;
   G4double radius_sipm = (Diam_WOM_In + Diam_WOM_Out)/4.;
-  G4int sipm_id = 0;
+  G4int wom_id = 0;
 
   for(unsigned int pos = 0; pos < WOM_coord_vec.size(); pos++) {
+    G4int sipm_id = 0;
     G4Transform3D t_Outer_tube = G4Translate3D(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second-Diam_Steel_Add/2, SteelZ/2+Thickness_Steel_Add_Bot)*G4Rotate3D(*RM1)*G4Translate3D(0, Diam_Steel_Add/2, delta_Z_Outer_tube-SteelZ/2-Thickness_Steel_Add_Bot);
     Outer_tube_phys_vect.push_back(new G4PVPlacement(t_Outer_tube, Outer_tube_log, "Outer_tube", expHall_log, false, 400, intersect_check));
     G4Transform3D t_WOM_tube = G4Translate3D(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second-Diam_Steel_Add/2, SteelZ/2+Thickness_Steel_Add_Bot)*G4Rotate3D(*RM1)*G4Translate3D(0, Diam_Steel_Add/2, delta_Z_WOM-SteelZ/2-Thickness_Steel_Add_Bot);
@@ -800,10 +801,6 @@ void OpNoviceDetectorConstruction::ConstructVolumes()
     Steel_Add_phys_vect.push_back(new G4PVPlacement(0, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Steel_Add), Steel_Add_log, "Steel_Add", expHall_log, false, 102, intersect_check));
     G4Transform3D t_Sct_Inside = G4Translate3D(WOM_coord_vec[pos].first,WOM_coord_vec[pos].second-Diam_Steel_Add/2,SteelZ/2+Thickness_Steel_Add_Bot)*G4Rotate3D(*RM1)*G4Translate3D(0,Diam_Steel_Add/2,delta_Z_Sct_Inside-SteelZ/2-Thickness_Steel_Add_Bot);
     Sct_Inside_phys_vect.push_back(new G4PVPlacement(t_Sct_Inside, Sct_Inside_log, "Sct_Inside", expHall_log, false, 301, intersect_check));
-    if(pos == 0) sipm_id = 1000;
-    if(pos == 2) sipm_id = 2000;
-    if(pos == 4) sipm_id = 3000;
-    if(pos == 6) sipm_id = 4000;
     for(int i = 0; i < n_sipm; i++) {
       G4RotationMatrix* RM2 = new G4RotationMatrix();
       RM2->rotateZ(-(i+0.5)*360./n_sipm*deg);
@@ -815,7 +812,7 @@ void OpNoviceDetectorConstruction::ConstructVolumes()
       sipmBase_phys = new G4PVPlacement(RM2, G4ThreeVector(Xrotation, Yrotation, -Length_sipm_box/2+sipmWindowThickness+sipmWindowThickness+sipmBaseThickness/2), sipmBaseBox_log, "sipmBase", sipmBox_log, false, 802, intersect_check);
     }
     G4Transform3D t_sipm_box = G4Translate3D(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second-Diam_Steel_Add/2, SteelZ/2+Thickness_Steel_Add_Bot)*G4Rotate3D(*RM1)*G4Translate3D(0, Diam_Steel_Add/2, delta_Z_WOM+Length_WOM/2+Length_sipm_box/2-SteelZ/2-Thickness_Steel_Add_Bot);
-    sipmBox_phys = new G4PVPlacement(t_sipm_box, sipmBox_log, "sipmBox", expHall_log, false,0, intersect_check);
+    sipmBox_phys_vect.push_back(new G4PVPlacement(t_sipm_box, sipmBox_log, "sipmBox", expHall_log, false, wom_id++, intersect_check));
   }
 }
 
