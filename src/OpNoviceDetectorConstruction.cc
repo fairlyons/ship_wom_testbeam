@@ -68,7 +68,7 @@ OpNoviceDetectorConstruction::OpNoviceDetectorConstruction()
   sipmSensThickness = 0.149*mm;
   sipmSensThicknessTop = 0.001*mm;
 
-  SteelZ = 27*cm;
+  SteelZ = 22*cm;
   WallThick = 10*mm;
   WallThickness_Z_Cover = 5*mm;
   ReflectThick = 0.05*mm;
@@ -84,17 +84,17 @@ OpNoviceDetectorConstruction::OpNoviceDetectorConstruction()
   Diam_Hole = 72*mm;
   Diam_Steel_Add = 120*mm;
   Diam_Hat = 120*mm;
-  Thickness_Disk = 5*mm;
-  Thickness_Ring = 4*mm;
-  Thickness_Hat = 10*mm;
+  Thickness_Disk = 3*mm;
+  Thickness_Ring = 3*mm;
+  Thickness_Hat = 5*mm;
   Thickness_WLS = 0.02*mm;
   Thickness_Gap = 1*mm;
   Thickness_Steel_Add = 12*mm;
   Thickness_Steel_Add_Top = 16.19*mm;
   Thickness_Steel_Add_Bot = 12*mm;
-  Length_Out = 225*mm;
-  Length_WOM = 230*mm;
-  Length_In = 225*mm;
+  Length_Out = 200*mm;
+  Length_WOM = 200*mm;
+  Length_In = 195*mm;
   Length_sipm_box = 15*cm;
 
   WOM_coord_vec = {{-397*mm,321.88*mm}, {-397*mm,953.7975*mm}, {397*mm,285.1*mm}, {397*mm,905.2025*mm}, {-397*mm,-762.54125*mm}, {-397*mm,-240.12*mm}, {397*mm,-778.45875*mm}, {397*mm,-266.88*mm}};
@@ -596,7 +596,7 @@ void OpNoviceDetectorConstruction::DefineSolids()
   // Air gap 1
   Rin = Diam_WOM_Out/2 + Thickness_WLS;
   Rout = Diam_Out_In/2;
-  Air_gap1  = new G4Tubs("Air_gap1", Rin, Rout, Length_Out/2, 0, 360*deg);
+  Air_gap1  = new G4Tubs("Air_gap1", Rin, Rout, (Length_WOM + Thickness_Gap)/2, 0, 360*deg);
   // WLS tube 1
   Rin = Diam_WOM_Out/2;
   Rout = Diam_WOM_Out/2 + Thickness_WLS;
@@ -612,7 +612,7 @@ void OpNoviceDetectorConstruction::DefineSolids()
   // Air gap 2
   Rin = Diam_In_Out/2;
   Rout = Diam_WOM_In/2 - Thickness_WLS;
-  Air_gap2  = new G4Tubs("Air_gap2", Rin, Rout, Length_Out/2, 0, 360*deg);
+  Air_gap2  = new G4Tubs("Air_gap2", Rin, Rout, (Length_WOM + Thickness_Gap)/2, 0, 360*deg);
   // Inner tube
   Rin = Diam_In_In/2;
   Rout = Diam_In_Out/2;
@@ -640,7 +640,7 @@ void OpNoviceDetectorConstruction::DefineSolids()
   // Hole in box
   Rin = 0.0*mm;
   Rout = Diam_Out_Out/2; 
-  Hole_box  = new G4Tubs("Hole_box", Rin, Rout, (Length_Out+Thickness_Ring)/2, 0, 360*deg);
+  Hole_box  = new G4Tubs("Hole_box", Rin, Rout, (Length_Out + Thickness_Ring)/2, 0, 360*deg);
   // PMMA "hat"
   Rin = Diam_Out_Out/2;
   Rout = Diam_Hat/2;
@@ -656,7 +656,7 @@ void OpNoviceDetectorConstruction::DefineSolids()
   // LAB&PPO inside tube
   Rin = 0.0*mm;
   Rout = Diam_In_In/2;
-  SctInside = new G4Tubs("Sct_inside", Rin, Rout, (Length_WOM - Thickness_Steel_Add_Bot + ReflectThick)/2, 0, 360*deg);
+  SctInside = new G4Tubs("Sct_inside", Rin, Rout, (Length_In + Thickness_Ring)/2, 0, 360*deg);
   
   G4SubtractionSolid* EmptySteelBox = new G4SubtractionSolid("EmptySteelBox", SteelBox, ReflectBox, 0, G4ThreeVector(0, 0, 0));
   G4SubtractionSolid* EmptyReflectBox_temp = new G4SubtractionSolid("EmptyReflectBox_temp", ReflectBox, SteelBeam, 0, G4ThreeVector(0, 0, 0));
@@ -753,8 +753,10 @@ void OpNoviceDetectorConstruction::ConstructVolumes()
 //-------------------------------------------------------------------
 
   // PMMA Staff
-  // Outer_tube
+  // Outer tube
   G4double delta_Z_Outer_tube = SctZ/2 - (Length_WOM - Thickness_Steel_Add_Bot - Thickness_Hat - WallThick) + Length_Out/2 + Thickness_Ring;
+  // Air gap
+  G4double delta_Z_Air_gap = SctZ/2 - (Length_WOM - Thickness_Steel_Add_Bot - Thickness_Hat - WallThick) + Length_WOM/2 + Thickness_Ring + Thickness_Gap/2;
   // WOM tube
   G4double delta_Z_WOM = SctZ/2 - (Length_WOM - Thickness_Steel_Add_Bot - Thickness_Hat - WallThick) + Length_WOM/2 + Thickness_Ring + Thickness_Gap;
   // Inner tube
@@ -768,7 +770,7 @@ void OpNoviceDetectorConstruction::ConstructVolumes()
   // Additional Steel
   G4double delta_Z_Steel_Add = SteelZ/2 + Thickness_Steel_Add_Bot/2 + (Thickness_Steel_Add_Top - Thickness_Steel_Add_Bot)/4;
   // LAB&PPO inside tube
-  G4double delta_Z_Sct_Inside = SteelZ/2 - (Length_WOM - Thickness_Steel_Add_Bot + ReflectThick)/2 + Thickness_Hat;
+  G4double delta_Z_Sct_Inside = SctZ/2 - (Length_WOM - Thickness_Steel_Add_Bot - Thickness_Hat - WallThick) + (Length_In + Thickness_Ring)/2;
   // Air ring
   G4double delta_Z_upper_ring = SctZ/2 - (Length_WOM - Thickness_Steel_Add_Bot - Thickness_Hat - WallThick) + Thickness_Ring + Thickness_Gap/2;
 
@@ -788,8 +790,9 @@ void OpNoviceDetectorConstruction::ConstructVolumes()
     PMMA_Ring_phys_vect.push_back(new G4PVPlacement(t_PMMA_Ring, PMMA_Ring_log, "PMMA_Ring", expHall_log, false, 402, intersect_check));
     G4Transform3D t_PMMA_Disk = G4Translate3D(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second-Diam_Steel_Add/2, SteelZ/2+Thickness_Steel_Add_Bot)*G4Rotate3D(*RM1)*G4Translate3D(0, Diam_Steel_Add/2, delta_Z_PMMA_Disk-SteelZ/2-Thickness_Steel_Add_Bot);
     PMMA_Disk_phys_vect.push_back(new G4PVPlacement(t_PMMA_Disk, PMMA_disk_log, "PMMA_Disk", expHall_log, false, 403, intersect_check));
-    Air_gap_1_phys_vect.push_back(new G4PVPlacement(t_Inner_tube, Air_gap1_log, "Air_gap1", expHall_log, false, 600, intersect_check));
-    Air_gap_2_phys_vect.push_back(new G4PVPlacement(t_Inner_tube, Air_gap2_log, "Air_gap2", expHall_log, false, 601, intersect_check));
+    G4Transform3D t_Air_gap = G4Translate3D(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second-Diam_Steel_Add/2, SteelZ/2+Thickness_Steel_Add_Bot)*G4Rotate3D(*RM1)*G4Translate3D(0, Diam_Steel_Add/2, delta_Z_Air_gap-SteelZ/2-Thickness_Steel_Add_Bot);
+    Air_gap_1_phys_vect.push_back(new G4PVPlacement(t_Air_gap, Air_gap1_log, "Air_gap1", expHall_log, false, 600, intersect_check));
+    Air_gap_2_phys_vect.push_back(new G4PVPlacement(t_Air_gap, Air_gap2_log, "Air_gap2", expHall_log, false, 601, intersect_check));
     WLS_tube1_phys_vect.push_back(new G4PVPlacement(t_WOM_tube, WLS_tube1_log, "WLS1", expHall_log, false, 700, intersect_check));
     WLS_tube2_phys_vect.push_back(new G4PVPlacement(t_WOM_tube, WLS_tube2_log, "WLS2", expHall_log, false, 701, intersect_check));
     G4Transform3D t_PMMA_Hat = G4Translate3D(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second-Diam_Steel_Add/2, SteelZ/2+Thickness_Steel_Add_Bot)*G4Rotate3D(*RM1)*G4Translate3D(0, Diam_Steel_Add/2, delta_Z_PMMA_Hat-SteelZ/2-Thickness_Steel_Add_Bot);
@@ -854,7 +857,7 @@ void OpNoviceDetectorConstruction::DefineVisAttributes()
   Sct_Inside_log->SetVisAttributes(sctBoxVisAtt1);
 
   G4VisAttributes *PMMAVisAtt = new G4VisAttributes;
-  PMMAVisAtt->SetVisibility(true);
+  PMMAVisAtt->SetVisibility(false);
   PMMAVisAtt->SetColor(grey);
   PMMA_disk_log->SetVisAttributes(PMMAVisAtt);
   PMMA_Ring_log->SetVisAttributes(PMMAVisAtt);
@@ -865,7 +868,7 @@ void OpNoviceDetectorConstruction::DefineVisAttributes()
 
   G4VisAttributes *airVisAtt = new G4VisAttributes;
   airVisAtt->SetColor(green);
-  airVisAtt->SetVisibility(false);
+  airVisAtt->SetVisibility(true);
   Air_gap1_log->SetVisAttributes(airVisAtt);
   Air_gap2_log->SetVisAttributes(airVisAtt);
   Air_ring1_log->SetVisAttributes(airVisAtt);
