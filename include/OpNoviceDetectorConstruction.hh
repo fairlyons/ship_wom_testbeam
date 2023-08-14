@@ -74,13 +74,10 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     std::vector<std::pair<G4double,G4double>>  WOM_coord_vec;
 
   private:
-    G4double fExpHall_x;
-    G4double fExpHall_y;
-    G4double fExpHall_z;
+    G4double fExpHall;
 
     G4Material* steel;
     G4Material* Al;
-    G4Material* Si;
     G4Material* Silicon;
     G4Material* ResinSi;
     G4Material* air;
@@ -94,15 +91,9 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4Material* BaSO4;
 
     // geometrical parameters
-    G4double SteelX;
-    G4double SteelY;
     G4double SteelZ;
     G4double WallThick;
-    G4double WallThickness_Z_Bottom;
-    G4double WallThickness_Z_Cover;
     G4double ReflectZ;
-    G4double SctX;
-    G4double SctY;
     G4double SctZ;
     G4double ReflectThick;
     
@@ -120,19 +111,13 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4double Thickness_Ring;
     G4double Thickness_Disk;
     G4double Thickness_Hat;
-    G4double Thickness_Steel_Add;
     G4double Thickness_Steel_Add_Top;
     G4double Thickness_Steel_Add_Bot;
     G4double Thickness_Gap;
     G4double Length_WOM;
     G4double Thickness_WLS;
-    G4double Length_Scint_Hole;
     G4double Length_sipm_box;
-    
-    G4double delta_X;
-    G4double delta_Y;
 
-    G4double sipmbasewidth;
     G4double sipmSize;
     G4double sipmSizeSens;
     G4double sipmWindowThickness;
@@ -150,7 +135,6 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4GenericTrap* SteelBox;
     G4UnionSolid* SteelBeam;
     G4GenericTrap* ReflectBox;
-    G4Box* WOM_cellBox;
     G4Box* sipmBaseBox;
     G4Box* sipmSens;
     G4Box* sipmSensTop;
@@ -158,13 +142,13 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4Box* sipmHole;
     G4Box* sipmBox;
     G4VSolid *Outer_tube;
-    G4VSolid *Air_gap1;
-    G4VSolid *WLS_tube1;
+    G4VSolid *Air_gap_out;
+    G4VSolid *WLS_tube_out;
     G4VSolid *WOM_tube;
     G4VSolid *Hole_box;
     G4VSolid *Hole_sct;
-    G4VSolid *WLS_tube2;
-    G4VSolid *Air_gap2;
+    G4VSolid *WLS_tube_in;
+    G4VSolid *Air_gap_in;
     G4VSolid * Inner_tube;
     G4VSolid * PMMA_Ring;
     G4VSolid * PMMA_disk;
@@ -172,8 +156,8 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4VSolid *SteelAdd;
     G4VSolid *SctInside;
     G4VSolid *WLS_ring;
-    G4VSolid *Air_ring1;
-    G4VSolid *Air_ring2;
+    G4VSolid *Air_ring_out;
+    G4VSolid *Air_ring_in;
     G4VSolid *PMMA_ring_lower;
     G4SubtractionSolid *EmptySteelBoxWithHole;
     G4SubtractionSolid *EmptyReflectBoxWithHole;
@@ -197,13 +181,13 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4LogicalVolume *Inner_tube_log;
     G4LogicalVolume *PMMA_Ring_log;
     G4LogicalVolume *PMMA_disk_log;
-    G4LogicalVolume *Air_gap1_log;
-    G4LogicalVolume *Air_gap2_log;
-    G4LogicalVolume *WLS_tube1_log;
-    G4LogicalVolume *WLS_tube2_log;
+    G4LogicalVolume *Air_gap_out_log;
+    G4LogicalVolume *Air_gap_in_log;
+    G4LogicalVolume *WLS_tube_out_log;
+    G4LogicalVolume *WLS_tube_in_log;
     G4LogicalVolume *PMMA_Hat_log;
-    G4LogicalVolume *Air_ring1_log;
-    G4LogicalVolume *Air_ring2_log;
+    G4LogicalVolume *Air_ring_out_log;
+    G4LogicalVolume *Air_ring_in_log;
     G4LogicalVolume *PMMA_ring_lower_log;
     G4LogicalVolume *Steel_Add_log;
     G4LogicalVolume *Sct_Inside_log;
@@ -224,13 +208,13 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     std::vector<G4VPhysicalVolume*> Inner_tube_phys_vect;
     std::vector<G4VPhysicalVolume*> PMMA_Ring_phys_vect;
     std::vector<G4VPhysicalVolume*> PMMA_Disk_phys_vect;
-    std::vector<G4VPhysicalVolume*> Air_gap_1_phys_vect;
-    std::vector<G4VPhysicalVolume*> Air_gap_2_phys_vect;
-    std::vector<G4VPhysicalVolume*> WLS_tube1_phys_vect;
-    std::vector<G4VPhysicalVolume*> WLS_tube2_phys_vect;
+    std::vector<G4VPhysicalVolume*> Air_gap_out_phys_vect;
+    std::vector<G4VPhysicalVolume*> Air_gap_in_phys_vect;
+    std::vector<G4VPhysicalVolume*> WLS_tube_out_phys_vect;
+    std::vector<G4VPhysicalVolume*> WLS_tube_in_phys_vect;
     std::vector<G4VPhysicalVolume*> PMMA_Hat_phys_vect;
-    std::vector<G4VPhysicalVolume*> Air_ring_1_phys_vect;
-    std::vector<G4VPhysicalVolume*> Air_ring_2_phys_vect;
+    std::vector<G4VPhysicalVolume*> Air_ring_out_phys_vect;
+    std::vector<G4VPhysicalVolume*> Air_ring_in_phys_vect;
     std::vector<G4VPhysicalVolume*> PMMA_ring_lower_phys_vect;
     std::vector<G4VPhysicalVolume*> Steel_Add_phys_vect;
     std::vector<G4VPhysicalVolume*> Sct_Inside_phys_vect;
@@ -240,15 +224,11 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     // visualisation
     G4Color blue;
     G4Color grey;
-    G4Color blue_trans;
     G4Color green;
     G4Color red;
     G4Color white;
-    G4Color white_trans;
     G4Color cyan;
     G4Color magenta;
-    G4Color DircColor;
-    G4Color SensColor;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
