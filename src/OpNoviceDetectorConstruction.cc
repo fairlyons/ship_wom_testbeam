@@ -89,7 +89,7 @@ OpNoviceDetectorConstruction::OpNoviceDetectorConstruction()
   Thickness_Steel_Add_Top = 16.19*mm;
   Thickness_Steel_Add_Bot = 12*mm;
   Length_Out = 200*mm;
-  Length_WOM = 200*mm;
+  Length_WOM = 205*mm;
   Length_In = 195*mm;
   Length_sipm_box = 15*cm;
 
