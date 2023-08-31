@@ -380,10 +380,22 @@ void OpNoviceDetectorConstruction::DefineSurfaces()
   //------------------------------------------------------------------------------
   //----------------------------- BaSO4 (reflective coating) -----------------------------
   //------------------------------------------------------------------------------
-  G4OpticalSurface* BaSO4_surface = new G4OpticalSurface("BaSO4_surface");
-  BaSO4_surface->SetType(dielectric_metal);
-  BaSO4_surface->SetFinish(ground);
-  BaSO4_surface->SetModel(glisur);
+  G4OpticalSurface* BaSO4_surfaceLT = new G4OpticalSurface("BaSO4_surfaceLT");
+  BaSO4_surfaceLT->SetType(dielectric_metal);
+  BaSO4_surfaceLT->SetFinish(ground);
+  BaSO4_surfaceLT->SetModel(glisur);
+  G4OpticalSurface* BaSO4_surfaceRT = new G4OpticalSurface("BaSO4_surfaceRT");
+  BaSO4_surfaceRT->SetType(dielectric_metal);
+  BaSO4_surfaceRT->SetFinish(ground);
+  BaSO4_surfaceRT->SetModel(glisur);
+  G4OpticalSurface* BaSO4_surfaceLB = new G4OpticalSurface("BaSO4_surfaceLB");
+  BaSO4_surfaceLB->SetType(dielectric_metal);
+  BaSO4_surfaceLB->SetFinish(ground);
+  BaSO4_surfaceLB->SetModel(glisur);
+  G4OpticalSurface* BaSO4_surfaceRB = new G4OpticalSurface("BaSO4_surfaceRB");
+  BaSO4_surfaceRB->SetType(dielectric_metal);
+  BaSO4_surfaceRB->SetFinish(ground);
+  BaSO4_surfaceRB->SetModel(glisur);
   
   G4double waveLength6[59] = {837.9882615,828.5013155,818.487317,807.9462659,798.45932,787.9182689,778.4313229,767.8902719,758.9303785,748.3893274,739.429434,727.8342778,717.8202793,709.3874384,697.2652297,687.2512312,678.8183903,668.8043918,658.7903933,648.7763948,638.2353437,627.6942927,618.7343992,609.2474533,598.7064022,589.2194563,580.2595628,568.1373541,558.1233556,546.0011469,537.568306,528.6084126,518.0673615,508.053363,499.6205222,487.4983134,478.0113675,467.997369,458.510423,447.9693719,439.5365311,427.4143223,418.4544289,408.4404304,399.480537,387.8853808,378.3984349,368.3844363,357.8433853,347.8293868,338.3424408,327.8013897,318.3144438,308.8274978,299.3405518,287.7453957,278.7855023,269.8256089,258.2304527}; 
    
@@ -401,19 +413,45 @@ void OpNoviceDetectorConstruction::DefineSurfaces()
    0.973531353135314,0.977491749174918,0.978151815181518,0.98013201320132,0.980792079207921,0.970891089108911,
    0.960990099009901,0.953729372937294}; // reflectivity of the coating https://www.optopolymer.de/produktuebersicht/diffuse-reflecting-materials/bariumsulfate-baso4-coating-oprc/
        
-  G4MaterialPropertiesTable* MTP_BaSO = new G4MaterialPropertiesTable();
-  MTP_BaSO->AddProperty("SPECULARLOBECONSTANT", photonEnergy8, specular_coating, 59); // In order to have diffuse reclectivity (Lambertian), it is necessary define all the other three.
-  MTP_BaSO->AddProperty("SPECULARSPIKECONSTANT", photonEnergy9, other_coating, 2); //  The diffuse is 1-other three (in this case 1-sppecular). 
-  MTP_BaSO->AddProperty("BACKSCATTERCONSTANT", photonEnergy9, other_coating, 2);
-  
-  G4double refl_test[19];
-  for(int i = 0; i < 19; ++i) refl_test[i] = 0.65*refl_coating[i];
- 
-  MTP_BaSO->AddProperty("REFLECTIVITY", p_coating_refl, refl_coating, 19);
+  G4MaterialPropertiesTable* MTP_BaSOLT = new G4MaterialPropertiesTable();
+  MTP_BaSOLT->AddProperty("SPECULARLOBECONSTANT", photonEnergy8, specular_coating, 59); // In order to have diffuse reclectivity (Lambertian), it is necessary define all the other three.
+  MTP_BaSOLT->AddProperty("SPECULARSPIKECONSTANT", photonEnergy9, other_coating, 2); //  The diffuse is 1-other three (in this case 1-sppecular). 
+  MTP_BaSOLT->AddProperty("BACKSCATTERCONSTANT", photonEnergy9, other_coating, 2);
+  G4MaterialPropertiesTable* MTP_BaSORT = new G4MaterialPropertiesTable();
+  MTP_BaSORT->AddProperty("SPECULARLOBECONSTANT", photonEnergy8, specular_coating, 59); // In order to have diffuse reclectivity (Lambertian), it is necessary define all the other three.
+  MTP_BaSORT->AddProperty("SPECULARSPIKECONSTANT", photonEnergy9, other_coating, 2); //  The diffuse is 1-other three (in this case 1-sppecular). 
+  MTP_BaSORT->AddProperty("BACKSCATTERCONSTANT", photonEnergy9, other_coating, 2);
+  G4MaterialPropertiesTable* MTP_BaSOLB = new G4MaterialPropertiesTable();
+  MTP_BaSOLB->AddProperty("SPECULARLOBECONSTANT", photonEnergy8, specular_coating, 59); // In order to have diffuse reclectivity (Lambertian), it is necessary define all the other three.
+  MTP_BaSOLB->AddProperty("SPECULARSPIKECONSTANT", photonEnergy9, other_coating, 2); //  The diffuse is 1-other three (in this case 1-sppecular). 
+  MTP_BaSOLB->AddProperty("BACKSCATTERCONSTANT", photonEnergy9, other_coating, 2);
+  G4MaterialPropertiesTable* MTP_BaSORB = new G4MaterialPropertiesTable();
+  MTP_BaSORB->AddProperty("SPECULARLOBECONSTANT", photonEnergy8, specular_coating, 59); // In order to have diffuse reclectivity (Lambertian), it is necessary define all the other three.
+  MTP_BaSORB->AddProperty("SPECULARSPIKECONSTANT", photonEnergy9, other_coating, 2); //  The diffuse is 1-other three (in this case 1-sppecular). 
+  MTP_BaSORB->AddProperty("BACKSCATTERCONSTANT", photonEnergy9, other_coating, 2);
 
-  BaSO4_surface->SetMaterialPropertiesTable(MTP_BaSO); 	
+  G4double reflLT[19], reflRT[19], reflLB[19], reflRB[19];
+  for(int i = 0; i < 19; ++i) {
+    reflLT[i] = refl_coating[i];
+    reflRT[i] = refl_coating[i]; 
+    reflLB[i] = refl_coating[i];
+    reflRB[i] = refl_coating[i]; 
+  }
+ 
+  MTP_BaSOLT->AddProperty("REFLECTIVITY", p_coating_refl, reflLT, 19);
+  MTP_BaSORT->AddProperty("REFLECTIVITY", p_coating_refl, reflRT, 19);
+  MTP_BaSOLB->AddProperty("REFLECTIVITY", p_coating_refl, reflLB, 19);
+  MTP_BaSORB->AddProperty("REFLECTIVITY", p_coating_refl, reflRB, 19);
+
+  BaSO4_surfaceLT->SetMaterialPropertiesTable(MTP_BaSOLT);
+  BaSO4_surfaceRT->SetMaterialPropertiesTable(MTP_BaSORT);
+  BaSO4_surfaceLB->SetMaterialPropertiesTable(MTP_BaSOLB);
+  BaSO4_surfaceRB->SetMaterialPropertiesTable(MTP_BaSORB);
    
-  G4LogicalSkinSurface* Surface1 = new G4LogicalSkinSurface("BaSO4_surface", ReflectBox_log, BaSO4_surface);
+  G4LogicalSkinSurface* SurfaceLT = new G4LogicalSkinSurface("BaSO4_surfaceLT", ReflectBoxLT_log, BaSO4_surfaceLT);
+  G4LogicalSkinSurface* SurfaceRT = new G4LogicalSkinSurface("BaSO4_surfaceRT", ReflectBoxRT_log, BaSO4_surfaceRT);
+  G4LogicalSkinSurface* SurfaceLB = new G4LogicalSkinSurface("BaSO4_surfaceLB", ReflectBoxLB_log, BaSO4_surfaceLB);
+  G4LogicalSkinSurface* SurfaceRB = new G4LogicalSkinSurface("BaSO4_surfaceRB", ReflectBoxRB_log, BaSO4_surfaceRB);
 
    
   //------------------------------------------------------------------------------
@@ -461,20 +499,40 @@ void OpNoviceDetectorConstruction::DefineSolids()
 
   // Steel box
   std::vector<G4TwoVector> det = {G4TwoVector(-x, -ybl), G4TwoVector(-x, ytl), G4TwoVector(x, ytr), G4TwoVector(x, -ybr), G4TwoVector(-x, -ybl), G4TwoVector(-x, ytl), G4TwoVector(x, ytr), G4TwoVector(x, -ybr)};
-  SteelBox = new G4GenericTrap("SteelBox", SteelZ/2., det);
+  G4GenericTrap* SteelBox = new G4GenericTrap("SteelBox", SteelZ/2., det);
 
   // Reflectivity box
-  std::vector<G4TwoVector> refl = 
-  {G4TwoVector(-x+WallThick, -ybl+WallThick), G4TwoVector(-x+WallThick, ytl-WallThick), G4TwoVector(x-WallThick, ytr-WallThick), G4TwoVector(x-WallThick, -ybr+WallThick),
-  G4TwoVector(-x+WallThick, -ybl+WallThick), G4TwoVector(-x+WallThick, ytl-WallThick), G4TwoVector(x-WallThick, ytr-WallThick), G4TwoVector(x-WallThick, -ybr+WallThick)};
-  ReflectBox = new G4GenericTrap("ReflectBox", ReflectZ/2., refl);
-  
+   std::vector<G4TwoVector> reflLT =
+  {G4TwoVector(-x+WallThick, slopem*(x-WallThick)+WallThick/2.),    G4TwoVector(-x+WallThick, ytl-WallThick),
+   G4TwoVector(-WallThick/2., ytm-WallThick+slopet*(WallThick/2.)), G4TwoVector(-WallThick/2., WallThick/2.+slopem*(WallThick/2.)),
+   G4TwoVector(-x+WallThick, slopem*(x-WallThick)+WallThick/2.),    G4TwoVector(-x+WallThick, ytl-WallThick),
+   G4TwoVector(-WallThick/2., ytm-WallThick+slopet*(WallThick/2.)), G4TwoVector(-WallThick/2., WallThick/2.+slopem*(WallThick/2.))};
+  G4GenericTrap* ReflectBoxLT = new G4GenericTrap("ReflectBoxLT", ReflectZ/2., reflLT);
+  std::vector<G4TwoVector> reflRT =
+  {G4TwoVector(WallThick/2., WallThick/2.-slopem*(WallThick/2.)), G4TwoVector(WallThick/2., ytm-WallThick-slopet*(WallThick/2.)),
+   G4TwoVector(x-WallThick, ytr-WallThick),                       G4TwoVector(x-WallThick, -slopem*(x-WallThick)+WallThick/2.),
+   G4TwoVector(WallThick/2., WallThick/2.-slopem*(WallThick/2.)), G4TwoVector(WallThick/2., ytm-WallThick-slopet*(WallThick/2.)),
+   G4TwoVector(x-WallThick, ytr-WallThick),                      G4TwoVector(x-WallThick, -slopem*(x-WallThick)+WallThick/2.)};
+  G4GenericTrap* ReflectBoxRT = new G4GenericTrap("ReflectBoxRT", ReflectZ/2., reflRT);
+  std::vector<G4TwoVector> reflLB =
+  {G4TwoVector(-x+WallThick, -ybl+WallThick),                       G4TwoVector(-x+WallThick, slopem*(x-WallThick)-WallThick/2.),
+   G4TwoVector(-WallThick/2., -WallThick/2.+slopem*(WallThick/2.)), G4TwoVector(-WallThick/2., -ybm+WallThick+slopeb*(WallThick/2.)),
+   G4TwoVector(-x+WallThick, -ybl+WallThick),                       G4TwoVector(-x+WallThick, slopem*(x-WallThick)-WallThick/2.),
+   G4TwoVector(-WallThick/2., -WallThick/2.+slopem*(WallThick/2.)), G4TwoVector(-WallThick/2., -ybm+WallThick+slopeb*(WallThick/2.))};
+  G4GenericTrap* ReflectBoxLB = new G4GenericTrap("ReflectBoxLB", ReflectZ/2., reflLB);
+  std::vector<G4TwoVector> reflRB =
+  {G4TwoVector(WallThick/2., -ybm+WallThick-slopeb*(WallThick/2.)), G4TwoVector(WallThick/2., -WallThick/2.-slopem*(WallThick/2.)),
+   G4TwoVector(x-WallThick, -slopem*(x-WallThick)-WallThick/2.),    G4TwoVector(x-WallThick, -ybr+WallThick),
+   G4TwoVector(WallThick/2., -ybm+WallThick-slopeb*(WallThick/2.)), G4TwoVector(WallThick/2., -WallThick/2.-slopem*(WallThick/2.)),
+   G4TwoVector(x-WallThick, -slopem*(x-WallThick)-WallThick/2.),    G4TwoVector(x-WallThick, -ybr+WallThick)};
+  G4GenericTrap* ReflectBoxRB = new G4GenericTrap("ReflectBoxRB", ReflectZ/2., reflRB);
+ 
   // Steel vertical beam
   std::vector<G4TwoVector> beamv = 
   {G4TwoVector(-WallThick/2., -ybm+WallThick+slopeb*(WallThick/2.)), G4TwoVector(-WallThick/2., ytm-WallThick+slopet*(WallThick/2.)), 
-  G4TwoVector(WallThick/2., ytm-WallThick-slopet*(WallThick/2.)),    G4TwoVector(WallThick/2., -ybm+WallThick-slopeb*(WallThick/2.)),
-  G4TwoVector(-WallThick/2., -ybm+WallThick+slopeb*(WallThick/2.)),  G4TwoVector(-WallThick/2., ytm-WallThick+slopet*(WallThick/2.)), 
-  G4TwoVector(WallThick/2., ytm-WallThick-slopet*(WallThick/2.)),    G4TwoVector(WallThick/2., -ybm+WallThick-slopeb*(WallThick/2.))};
+   G4TwoVector(WallThick/2., ytm-WallThick-slopet*(WallThick/2.)),   G4TwoVector(WallThick/2., -ybm+WallThick-slopeb*(WallThick/2.)),
+   G4TwoVector(-WallThick/2., -ybm+WallThick+slopeb*(WallThick/2.)), G4TwoVector(-WallThick/2., ytm-WallThick+slopet*(WallThick/2.)), 
+   G4TwoVector(WallThick/2., ytm-WallThick-slopet*(WallThick/2.)),   G4TwoVector(WallThick/2., -ybm+WallThick-slopeb*(WallThick/2.))};
   G4GenericTrap* SteelBeamV = new G4GenericTrap("SteelBeamV", ReflectZ/2., beamv);
   // Holes in vertical beam
   G4Tubs* BeamHoleV = new G4Tubs("BeamHoleV", 0*mm, holeR, WallThick/2. + ReflectThick + 10*mm, 0*deg, 360*deg);
@@ -492,17 +550,17 @@ void OpNoviceDetectorConstruction::DefineSolids()
   // Steel horizontal Beam
   std::vector<G4TwoVector> beamh = 
   {G4TwoVector(-x+WallThick, slopem*(x-WallThick)-WallThick/2.), G4TwoVector(-x+WallThick, slopem*(x-WallThick)+WallThick/2.),
-  G4TwoVector(x-WallThick, -slopem*(x-WallThick)+WallThick/2.),  G4TwoVector(x-WallThick, -slopem*(x-WallThick)-WallThick/2.),
-  G4TwoVector(-x+WallThick, slopem*(x-WallThick)-WallThick/2.),  G4TwoVector(-x+WallThick, slopem*(x-WallThick)+WallThick/2.),
-  G4TwoVector(x-WallThick, -slopem*(x-WallThick)+WallThick/2.),  G4TwoVector(x-WallThick, -slopem*(x-WallThick)-WallThick/2.)};
+   G4TwoVector(x-WallThick, -slopem*(x-WallThick)+WallThick/2.), G4TwoVector(x-WallThick, -slopem*(x-WallThick)-WallThick/2.),
+   G4TwoVector(-x+WallThick, slopem*(x-WallThick)-WallThick/2.), G4TwoVector(-x+WallThick, slopem*(x-WallThick)+WallThick/2.),
+   G4TwoVector(x-WallThick, -slopem*(x-WallThick)+WallThick/2.), G4TwoVector(x-WallThick, -slopem*(x-WallThick)-WallThick/2.)};
   G4GenericTrap* SteelBeamH = new G4GenericTrap("SteelBeamH",ReflectZ/2.,beamh);
   // Holes in horizontal beam
   G4CutTubs* BeamHoleH = new G4CutTubs("BeamHoleH", 0*mm, holeR, WallThick/2.+ReflectThick+10*mm, 0*deg, 360*deg, G4ThreeVector(-0.03996, 0, -0.999), G4ThreeVector(0.03996, 0, 0.999));
   std::vector<G4ThreeVector> SteelBeamH_Holes = 
-  {G4ThreeVector(x-WallThick, -slopem*(x-WallThick), ReflectZ/2.),   G4ThreeVector(-x+WallThick, slopem*(x-WallThick), ReflectZ/2.),
-  G4ThreeVector(x-WallThick, -slopem*(x-WallThick), -ReflectZ/2.),   G4ThreeVector(-x+WallThick, slopem*(x-WallThick), -ReflectZ/2.),
-  G4ThreeVector(WallThick/2., -slopem*(WallThick/2.), ReflectZ/2.),  G4ThreeVector(-WallThick/2., slopem*(WallThick/2.), ReflectZ/2.),
-  G4ThreeVector(WallThick/2., -slopem*(WallThick/2.), -ReflectZ/2.), G4ThreeVector(-WallThick/2., slopem*(WallThick/2.), -ReflectZ/2.)};
+  {G4ThreeVector(x-WallThick, -slopem*(x-WallThick), ReflectZ/2.),    G4ThreeVector(-x+WallThick, slopem*(x-WallThick), ReflectZ/2.),
+   G4ThreeVector(x-WallThick, -slopem*(x-WallThick), -ReflectZ/2.),   G4ThreeVector(-x+WallThick, slopem*(x-WallThick), -ReflectZ/2.),
+   G4ThreeVector(WallThick/2., -slopem*(WallThick/2.), ReflectZ/2.),  G4ThreeVector(-WallThick/2., slopem*(WallThick/2.), ReflectZ/2.),
+   G4ThreeVector(WallThick/2., -slopem*(WallThick/2.), -ReflectZ/2.), G4ThreeVector(-WallThick/2., slopem*(WallThick/2.), -ReflectZ/2.)};
   G4RotationMatrix* RotH = new G4RotationMatrix(0, -pi/2, 0);
   std::vector<G4SubtractionSolid*> SteelBeamH_tempvec;
   for(unsigned int pos = 0; pos < SteelBeamH_Holes.size(); pos++) {
@@ -511,68 +569,65 @@ void OpNoviceDetectorConstruction::DefineSolids()
   }
   G4SubtractionSolid* SteelBeamHWithHoles = SteelBeamH_tempvec[SteelBeamH_Holes.size()-1];
   // Unified beams
-  SteelBeam = new G4UnionSolid("SteelBeam", SteelBeamVWithHoles, SteelBeamHWithHoles, 0, G4ThreeVector(0, 0, 0));
+  SteelBeamWithHoles = new G4UnionSolid("SteelBeam", SteelBeamVWithHoles, SteelBeamHWithHoles, 0, G4ThreeVector(0, 0, 0));
 
   // Scintillator box left top
   std::vector<G4TwoVector> scintLT = 
   {G4TwoVector(-x+WallThick+ReflectThick, slopem*(x-WallThick-ReflectThick)+WallThick/2.+ReflectThick),   G4TwoVector(-x+WallThick+ReflectThick, ytl-WallThick-ReflectThick),
-  G4TwoVector(-WallThick/2.-ReflectThick, ytm-WallThick-ReflectThick+slopet*(WallThick/2.+ReflectThick)), G4TwoVector(-WallThick/2.-ReflectThick, WallThick/2.+ReflectThick+slopem*(WallThick/2.+ReflectThick)),
-  G4TwoVector(-x+WallThick+ReflectThick, slopem*(x-WallThick-ReflectThick)+WallThick/2.+ReflectThick),    G4TwoVector(-x+WallThick+ReflectThick, ytl-WallThick-ReflectThick),
-  G4TwoVector(-WallThick/2.-ReflectThick, ytm-WallThick-ReflectThick+slopet*(WallThick/2.+ReflectThick)), G4TwoVector(-WallThick/2.-ReflectThick, WallThick/2.+ReflectThick+slopem*(WallThick/2.+ReflectThick))};
+   G4TwoVector(-WallThick/2.-ReflectThick, ytm-WallThick-ReflectThick+slopet*(WallThick/2.+ReflectThick)), G4TwoVector(-WallThick/2.-ReflectThick, WallThick/2.+ReflectThick+slopem*(WallThick/2.+ReflectThick)),
+   G4TwoVector(-x+WallThick+ReflectThick, slopem*(x-WallThick-ReflectThick)+WallThick/2.+ReflectThick),    G4TwoVector(-x+WallThick+ReflectThick, ytl-WallThick-ReflectThick),
+   G4TwoVector(-WallThick/2.-ReflectThick, ytm-WallThick-ReflectThick+slopet*(WallThick/2.+ReflectThick)), G4TwoVector(-WallThick/2.-ReflectThick, WallThick/2.+ReflectThick+slopem*(WallThick/2.+ReflectThick))};
   G4GenericTrap* ScintillatorBoxLT = new G4GenericTrap("ScintillatorBoxLT", SctZ/2., scintLT);
-
   // Scintillator box right top
   std::vector<G4TwoVector> scintRT = 
   {G4TwoVector(WallThick/2.+ReflectThick, WallThick/2.+ReflectThick-slopem*(WallThick/2.+ReflectThick)), G4TwoVector(WallThick/2.+ReflectThick, ytm-WallThick-ReflectThick-slopet*(WallThick/2.+ReflectThick)),
-  G4TwoVector(x-WallThick-ReflectThick, ytr-WallThick-ReflectThick),                                     G4TwoVector(x-WallThick-ReflectThick, -slopem*(x-WallThick-ReflectThick)+WallThick/2.+ReflectThick),
-  G4TwoVector(WallThick/2.+ReflectThick, WallThick/2.+ReflectThick-slopem*(WallThick/2.+ReflectThick)),  G4TwoVector(WallThick/2.+ReflectThick, ytm-WallThick-ReflectThick-slopet*(WallThick/2.+ReflectThick)),
-  G4TwoVector(x-WallThick-ReflectThick, ytr-WallThick-ReflectThick),                                     G4TwoVector(x-WallThick-ReflectThick, -slopem*(x-WallThick-ReflectThick)+WallThick/2.+ReflectThick)};
+   G4TwoVector(x-WallThick-ReflectThick, ytr-WallThick-ReflectThick),                                    G4TwoVector(x-WallThick-ReflectThick, -slopem*(x-WallThick-ReflectThick)+WallThick/2.+ReflectThick),
+   G4TwoVector(WallThick/2.+ReflectThick, WallThick/2.+ReflectThick-slopem*(WallThick/2.+ReflectThick)), G4TwoVector(WallThick/2.+ReflectThick, ytm-WallThick-ReflectThick-slopet*(WallThick/2.+ReflectThick)),
+   G4TwoVector(x-WallThick-ReflectThick, ytr-WallThick-ReflectThick),                                    G4TwoVector(x-WallThick-ReflectThick, -slopem*(x-WallThick-ReflectThick)+WallThick/2.+ReflectThick)};
   G4GenericTrap* ScintillatorBoxRT = new G4GenericTrap("ScintillatorBoxRT", SctZ/2., scintRT);
-
   // Scintillator box left bottom
   std::vector<G4TwoVector> scintLB = 
-  {G4TwoVector(-x+WallThick+ReflectThick, -ybl+WallThick+ReflectThick),                                   G4TwoVector(-x+WallThick+ReflectThick, slopem*(x-WallThick-ReflectThick)-WallThick/2.-ReflectThick),
-  G4TwoVector(-WallThick/2.-ReflectThick, -WallThick/2.-ReflectThick+slopem*(WallThick/2.+ReflectThick)), G4TwoVector(-WallThick/2.-ReflectThick, -ybm+WallThick+ReflectThick+slopeb*(WallThick/2.+ReflectThick)),
-  G4TwoVector(-x+WallThick+ReflectThick, -ybl+WallThick+ReflectThick),                                    G4TwoVector(-x+WallThick+ReflectThick, slopem*(x-WallThick-ReflectThick)-WallThick/2.-ReflectThick),
-  G4TwoVector(-WallThick/2.-ReflectThick, -WallThick/2.-ReflectThick+slopem*(WallThick/2.+ReflectThick)), G4TwoVector(-WallThick/2.-ReflectThick, -ybm+WallThick+ReflectThick+slopeb*(WallThick/2.+ReflectThick))};
+  {G4TwoVector(-x+WallThick+ReflectThick, -ybl+WallThick+ReflectThick),                                    G4TwoVector(-x+WallThick+ReflectThick, slopem*(x-WallThick-ReflectThick)-WallThick/2.-ReflectThick),
+   G4TwoVector(-WallThick/2.-ReflectThick, -WallThick/2.-ReflectThick+slopem*(WallThick/2.+ReflectThick)), G4TwoVector(-WallThick/2.-ReflectThick, -ybm+WallThick+ReflectThick+slopeb*(WallThick/2.+ReflectThick)),
+   G4TwoVector(-x+WallThick+ReflectThick, -ybl+WallThick+ReflectThick),                                    G4TwoVector(-x+WallThick+ReflectThick, slopem*(x-WallThick-ReflectThick)-WallThick/2.-ReflectThick),
+   G4TwoVector(-WallThick/2.-ReflectThick, -WallThick/2.-ReflectThick+slopem*(WallThick/2.+ReflectThick)), G4TwoVector(-WallThick/2.-ReflectThick, -ybm+WallThick+ReflectThick+slopeb*(WallThick/2.+ReflectThick))};
   G4GenericTrap* ScintillatorBoxLB = new G4GenericTrap("ScintillatorBoxLB", SctZ/2., scintLB);
-  
   // Scintillator box right bottom
   std::vector<G4TwoVector> scintRB =
   {G4TwoVector(WallThick/2.+ReflectThick, -ybm+WallThick+ReflectThick-slopeb*(WallThick/2.+ReflectThick)), G4TwoVector(WallThick/2.+ReflectThick, -WallThick/2.-ReflectThick-slopem*(WallThick/2.+ReflectThick)),
-  G4TwoVector(x-WallThick-ReflectThick, -slopem*(x-WallThick-ReflectThick)-WallThick/2.-ReflectThick),     G4TwoVector(x-WallThick-ReflectThick, -ybr+WallThick+ReflectThick),
-  G4TwoVector(WallThick/2.+ReflectThick, -ybm+WallThick+ReflectThick-slopeb*(WallThick/2.+ReflectThick)),  G4TwoVector(WallThick/2.+ReflectThick, -WallThick/2.-ReflectThick-slopem*(WallThick/2.+ReflectThick)),
-  G4TwoVector(x-WallThick-ReflectThick, -slopem*(x-WallThick-ReflectThick)-WallThick/2.-ReflectThick),     G4TwoVector(x-WallThick-ReflectThick, -ybr+WallThick+ReflectThick)};
+   G4TwoVector(x-WallThick-ReflectThick, -slopem*(x-WallThick-ReflectThick)-WallThick/2.-ReflectThick),    G4TwoVector(x-WallThick-ReflectThick, -ybr+WallThick+ReflectThick),
+   G4TwoVector(WallThick/2.+ReflectThick, -ybm+WallThick+ReflectThick-slopeb*(WallThick/2.+ReflectThick)), G4TwoVector(WallThick/2.+ReflectThick, -WallThick/2.-ReflectThick-slopem*(WallThick/2.+ReflectThick)),
+   G4TwoVector(x-WallThick-ReflectThick, -slopem*(x-WallThick-ReflectThick)-WallThick/2.-ReflectThick),    G4TwoVector(x-WallThick-ReflectThick, -ybr+WallThick+ReflectThick)};
   G4GenericTrap* ScintillatorBoxRB = new G4GenericTrap("ScintillatorBoxRB", SctZ/2., scintRB);
   
   // Scintillator in beam holes
   G4double gap = 1*mm;
   std::vector<G4ThreeVector> ScintillatorV_Holes = 
-  {G4ThreeVector(0, -ybm+WallThick+ReflectThick, SctZ/2.), G4ThreeVector(0, -ybm+WallThick+ReflectThick, -SctZ/2.),
-  G4ThreeVector(0, ytm-WallThick-ReflectThick, SctZ/2.),   G4ThreeVector(0, ytm-WallThick-ReflectThick, -SctZ/2.)};
+  {G4ThreeVector(0, -ybm+WallThick, SctZ/2.), G4ThreeVector(0, -ybm+WallThick, -SctZ/2.),
+   G4ThreeVector(0, ytm-WallThick, SctZ/2.),   G4ThreeVector(0, ytm-WallThick, -SctZ/2.)};
   std::vector<G4TwoVector> beamvrefl =
-  {G4TwoVector(-WallThick/2.-ReflectThick-gap, -ybm+WallThick+slopeb*(WallThick/2.+ReflectThick+gap)), G4TwoVector(-WallThick/2.-ReflectThick-gap, ytm-WallThick+slopet*(WallThick/2.+ReflectThick+gap)),
-  G4TwoVector(WallThick/2.+ReflectThick+gap, ytm-WallThick-slopet*(WallThick/2.+ReflectThick+gap)),    G4TwoVector(WallThick/2.+ReflectThick+gap, -ybm+WallThick-slopeb*(WallThick/2.+ReflectThick+gap)),
-  G4TwoVector(-WallThick/2.-ReflectThick-gap, -ybm+WallThick+slopeb*(WallThick/2.+ReflectThick+gap)), G4TwoVector(-WallThick/2.-ReflectThick-gap, ytm-WallThick+slopet*(WallThick/2.+ReflectThick+gap)),
-  G4TwoVector(WallThick/2.+ReflectThick+gap, ytm-WallThick-slopet*(WallThick/2.+ReflectThick+gap)),    G4TwoVector(WallThick/2.+ReflectThick+gap, -ybm+WallThick-slopeb*(WallThick/2.+ReflectThick+gap))};
+  {G4TwoVector(-WallThick/2.-gap, -ybm+WallThick+slopeb*(WallThick/2.+gap)), G4TwoVector(-WallThick/2.-gap, ytm-WallThick+slopet*(WallThick/2.+gap)),
+   G4TwoVector(WallThick/2.+gap, ytm-WallThick-slopet*(WallThick/2.+gap)),   G4TwoVector(WallThick/2.+gap, -ybm+WallThick-slopeb*(WallThick/2.+gap)),
+   G4TwoVector(-WallThick/2.-gap, -ybm+WallThick+slopeb*(WallThick/2.+gap)), G4TwoVector(-WallThick/2.-gap, ytm-WallThick+slopet*(WallThick/2.+gap)),
+   G4TwoVector(WallThick/2.+gap, ytm-WallThick-slopet*(WallThick/2.+gap)),   G4TwoVector(WallThick/2.+gap, -ybm+WallThick-slopeb*(WallThick/2.+gap))};
   G4GenericTrap* SteelBeamVWithRefl = new G4GenericTrap("SteelBeamVWithRefl", ReflectZ/2., beamvrefl);
-  G4Tubs* ScintHoleV = new G4Tubs("ScintHoleV", 0*mm, holeR-(ReflectThick*2), WallThick/2.+ReflectThick+gap, 0*deg, 360*deg);
+  G4Tubs* ScintHoleV = new G4Tubs("ScintHoleV", 0*mm, holeR, WallThick/2.+gap, 0*deg, 360*deg);
   std::vector<G4IntersectionSolid*> ScintillatorHoleV;
   for(unsigned int pos = 0; pos < ScintillatorV_Holes.size(); pos++) 
   ScintillatorHoleV.push_back(new G4IntersectionSolid((std::string("ScintillatorHoleV_")+std::to_string(pos)).c_str(), SteelBeamVWithRefl, ScintHoleV, RotV, ScintillatorV_Holes[pos]));
   std::vector<G4ThreeVector> ScintillatorH_Holes = 
-  {G4ThreeVector(x-WallThick-ReflectThick, -slopem*(x-WallThick-ReflectThick), SctZ/2.),   G4ThreeVector(-x+WallThick+ReflectThick, slopem*(x-WallThick-ReflectThick), SctZ/2.),
-  G4ThreeVector(x-WallThick-ReflectThick, -slopem*(x-WallThick-ReflectThick), -SctZ/2.),   G4ThreeVector(-x+WallThick+ReflectThick, slopem*(x-WallThick-ReflectThick), -SctZ/2.),
-  G4ThreeVector(WallThick/2.+ReflectThick, -slopem*(WallThick/2.+ReflectThick), SctZ/2.),  G4ThreeVector(-WallThick/2.-ReflectThick, slopem*(WallThick/2.+ReflectThick), SctZ/2.),
-  G4ThreeVector(WallThick/2.+ReflectThick, -slopem*(WallThick/2.+ReflectThick), -SctZ/2.), G4ThreeVector(-WallThick/2.-ReflectThick, slopem*(WallThick/2.+ReflectThick), -SctZ/2.)};
+  {G4ThreeVector(x-WallThick, -slopem*(x-WallThick), SctZ/2.),    G4ThreeVector(-x+WallThick, slopem*(x-WallThick), SctZ/2.),
+   G4ThreeVector(x-WallThick, -slopem*(x-WallThick), -SctZ/2.),   G4ThreeVector(-x+WallThick, slopem*(x-WallThick), -SctZ/2.),
+   G4ThreeVector(WallThick/2., -slopem*(WallThick/2.), SctZ/2.),  G4ThreeVector(-WallThick/2., slopem*(WallThick/2.), SctZ/2.),
+   G4ThreeVector(WallThick/2., -slopem*(WallThick/2.), -SctZ/2.), G4ThreeVector(-WallThick/2., slopem*(WallThick/2.), -SctZ/2.)};
   std::vector<G4Transform3D> TrH1 =
   {G4Transform3D(G4RotationMatrix(0,pi/2,pi),ScintillatorH_Holes[0]), G4Transform3D(G4RotationMatrix(0,pi/2,0),ScintillatorH_Holes[1]),
-  G4Transform3D(G4RotationMatrix(0,pi/2,0),ScintillatorH_Holes[4]),   G4Transform3D(G4RotationMatrix(0,pi/2,pi),ScintillatorH_Holes[5])}; 
+   G4Transform3D(G4RotationMatrix(0,pi/2,0),ScintillatorH_Holes[4]),  G4Transform3D(G4RotationMatrix(0,pi/2,pi),ScintillatorH_Holes[5])}; 
   std::vector<G4Transform3D> TrH2 =
   {G4Transform3D(G4RotationMatrix(0, -pi/2, pi),ScintillatorH_Holes[2]), G4Transform3D(G4RotationMatrix(0, -pi/2, 0),ScintillatorH_Holes[3]),
-  G4Transform3D(G4RotationMatrix(0, -pi/2, 0),ScintillatorH_Holes[6]),   G4Transform3D(G4RotationMatrix(0, -pi/2, pi),ScintillatorH_Holes[7])};
-  G4CutTubs* ScintillatorHoleH1 = new G4CutTubs("BeamHoleH1", 0*mm, holeR-(ReflectThick*2), WallThick/2.+ReflectThick+gap, 0*deg, 90*deg, G4ThreeVector(-0.03996, 0, -0.999), G4ThreeVector(0.03996, 0, 0.999));
-  G4CutTubs* ScintillatorHoleH2 = new G4CutTubs("BeamHoleH2", 0*mm, holeR-(ReflectThick*2), WallThick/2.+ReflectThick+gap, 0*deg, 90*deg, G4ThreeVector(0.03996, 0, -0.999), G4ThreeVector(-0.03996, 0, 0.999));
+   G4Transform3D(G4RotationMatrix(0, -pi/2, 0),ScintillatorH_Holes[6]),  G4Transform3D(G4RotationMatrix(0, -pi/2, pi),ScintillatorH_Holes[7])};
+  G4CutTubs* ScintillatorHoleH1 = new G4CutTubs("BeamHoleH1", 0*mm, holeR, WallThick/2.+gap, 0*deg, 90*deg, G4ThreeVector(-0.03996, 0, -0.999), G4ThreeVector(0.03996, 0, 0.999));
+  G4CutTubs* ScintillatorHoleH2 = new G4CutTubs("BeamHoleH2", 0*mm, holeR, WallThick/2.+gap, 0*deg, 90*deg, G4ThreeVector(0.03996, 0, -0.999), G4ThreeVector(-0.03996, 0, 0.999));
   G4Transform3D Tr = G4Transform3D(G4RotationMatrix(0, 0, 0),G4ThreeVector(0, 0, 0));
   std::vector<G4UnionSolid*> ScintillatorBox_tempvec;
   ScintillatorBox_tempvec.push_back(new G4UnionSolid("ScintillatorBox_temp", ScintillatorBoxLB, ScintillatorHoleV[0], Tr));
@@ -583,9 +638,43 @@ void OpNoviceDetectorConstruction::DefineSolids()
   ScintillatorBox_tempvec.push_back(new G4UnionSolid("ScintillatorBox_temp", ScintillatorBox_tempvec.back(), ScintillatorBoxLT, Tr));
   ScintillatorBox_tempvec.push_back(new G4UnionSolid("ScintillatorBox_temp", ScintillatorBox_tempvec.back(), ScintillatorHoleV[2], Tr));
   ScintillatorBox_tempvec.push_back(new G4UnionSolid("ScintillatorBox_temp", ScintillatorBox_tempvec.back(), ScintillatorHoleV[3], Tr));
-  ScintillatorBox_tempvec.push_back(new G4UnionSolid("ScintillatorBox_temp", ScintillatorBox_tempvec.back(), ScintillatorBoxRT, Tr));
+  ScintillatorBox_tempvec.push_back(new G4UnionSolid("ScintillatorBox", ScintillatorBox_tempvec.back(), ScintillatorBoxRT, Tr));
   ScintillatorBox = ScintillatorBox_tempvec.back();
-  
+ 
+  // Holes in reflectivity
+  std::vector<G4SubtractionSolid*> ReflectBoxCornerHolesLT_tempvec;
+  std::vector<G4SubtractionSolid*> ReflectBoxCornerHolesRT_tempvec;
+  std::vector<G4SubtractionSolid*> ReflectBoxCornerHolesLB_tempvec;
+  std::vector<G4SubtractionSolid*> ReflectBoxCornerHolesRB_tempvec;
+  ReflectBoxCornerHolesLT_tempvec.push_back(new G4SubtractionSolid("ReflectBoxBoxLT_temp", ReflectBoxLT, ScintillatorHoleV[2], Tr));
+  ReflectBoxCornerHolesLT_tempvec.push_back(new G4SubtractionSolid("ReflectBoxBoxLT_temp", ReflectBoxCornerHolesLT_tempvec.back(), ScintillatorHoleV[3], Tr));
+  ReflectBoxCornerHolesRT_tempvec.push_back(new G4SubtractionSolid("ReflectBoxBoxRT_temp", ReflectBoxRT, ScintillatorHoleV[2], Tr));
+  ReflectBoxCornerHolesRT_tempvec.push_back(new G4SubtractionSolid("ReflectBoxBoxRT_temp", ReflectBoxCornerHolesRT_tempvec.back(), ScintillatorHoleV[3], Tr));
+  ReflectBoxCornerHolesLB_tempvec.push_back(new G4SubtractionSolid("ReflectBoxBoxLB_temp", ReflectBoxLB, ScintillatorHoleV[0], Tr));
+  ReflectBoxCornerHolesLB_tempvec.push_back(new G4SubtractionSolid("ReflectBoxBoxLB_temp", ReflectBoxCornerHolesLB_tempvec.back(), ScintillatorHoleV[1], Tr));
+  ReflectBoxCornerHolesRB_tempvec.push_back(new G4SubtractionSolid("ReflectBoxBoxRB_temp", ReflectBoxRB, ScintillatorHoleV[0], Tr));
+  ReflectBoxCornerHolesRB_tempvec.push_back(new G4SubtractionSolid("ReflectBoxBoxRB_temp", ReflectBoxCornerHolesRB_tempvec.back(), ScintillatorHoleV[1], Tr));
+  ReflectBoxCornerHolesLT_tempvec.push_back(new G4SubtractionSolid("ReflectBoxBoxLT_temp", ReflectBoxCornerHolesLT_tempvec.back(), ScintillatorHoleH1, TrH1[1]));
+  ReflectBoxCornerHolesLT_tempvec.push_back(new G4SubtractionSolid("ReflectBoxBoxLT_temp", ReflectBoxCornerHolesLT_tempvec.back(), ScintillatorHoleH1, TrH1[3]));
+  ReflectBoxCornerHolesLT_tempvec.push_back(new G4SubtractionSolid("ReflectBoxBoxLT_temp", ReflectBoxCornerHolesLT_tempvec.back(), ScintillatorHoleH2, TrH2[1]));
+  ReflectBoxCornerHolesLT_tempvec.push_back(new G4SubtractionSolid("ReflectBoxBoxLT_temp", ReflectBoxCornerHolesLT_tempvec.back(), ScintillatorHoleH2, TrH2[3]));
+  ReflectBoxCornerHolesRT_tempvec.push_back(new G4SubtractionSolid("ReflectBoxBoxRT_temp", ReflectBoxCornerHolesRT_tempvec.back(), ScintillatorHoleH1, TrH1[0]));
+  ReflectBoxCornerHolesRT_tempvec.push_back(new G4SubtractionSolid("ReflectBoxBoxRT_temp", ReflectBoxCornerHolesRT_tempvec.back(), ScintillatorHoleH1, TrH1[2]));
+  ReflectBoxCornerHolesRT_tempvec.push_back(new G4SubtractionSolid("ReflectBoxBoxRT_temp", ReflectBoxCornerHolesRT_tempvec.back(), ScintillatorHoleH2, TrH2[0]));
+  ReflectBoxCornerHolesRT_tempvec.push_back(new G4SubtractionSolid("ReflectBoxBoxRT_temp", ReflectBoxCornerHolesRT_tempvec.back(), ScintillatorHoleH2, TrH2[2]));
+  ReflectBoxCornerHolesLB_tempvec.push_back(new G4SubtractionSolid("ReflectBoxBoxLB_temp", ReflectBoxCornerHolesLB_tempvec.back(), ScintillatorHoleH1, TrH1[1]));
+  ReflectBoxCornerHolesLB_tempvec.push_back(new G4SubtractionSolid("ReflectBoxBoxLB_temp", ReflectBoxCornerHolesLB_tempvec.back(), ScintillatorHoleH1, TrH1[3]));
+  ReflectBoxCornerHolesLB_tempvec.push_back(new G4SubtractionSolid("ReflectBoxBoxLB_temp", ReflectBoxCornerHolesLB_tempvec.back(), ScintillatorHoleH2, TrH2[1]));
+  ReflectBoxCornerHolesLB_tempvec.push_back(new G4SubtractionSolid("ReflectBoxBoxLB_temp", ReflectBoxCornerHolesLB_tempvec.back(), ScintillatorHoleH2, TrH2[3]));
+  ReflectBoxCornerHolesRB_tempvec.push_back(new G4SubtractionSolid("ReflectBoxBoxRB_temp", ReflectBoxCornerHolesRB_tempvec.back(), ScintillatorHoleH1, TrH1[0]));
+  ReflectBoxCornerHolesRB_tempvec.push_back(new G4SubtractionSolid("ReflectBoxBoxRB_temp", ReflectBoxCornerHolesRB_tempvec.back(), ScintillatorHoleH1, TrH1[2]));
+  ReflectBoxCornerHolesRB_tempvec.push_back(new G4SubtractionSolid("ReflectBoxBoxRB_temp", ReflectBoxCornerHolesRB_tempvec.back(), ScintillatorHoleH2, TrH2[0]));
+  ReflectBoxCornerHolesRB_tempvec.push_back(new G4SubtractionSolid("ReflectBoxBoxRB_temp", ReflectBoxCornerHolesRB_tempvec.back(), ScintillatorHoleH2, TrH2[2]));
+  G4SubtractionSolid *ReflectBoxWithCornerHolesLT = ReflectBoxCornerHolesLT_tempvec.back();
+  G4SubtractionSolid *ReflectBoxWithCornerHolesRT = ReflectBoxCornerHolesRT_tempvec.back();
+  G4SubtractionSolid *ReflectBoxWithCornerHolesLB = ReflectBoxCornerHolesLB_tempvec.back();
+  G4SubtractionSolid *ReflectBoxWithCornerHolesRB = ReflectBoxCornerHolesRB_tempvec.back();
+
   G4double Rin, Rout;
 
   // Outer tube
@@ -656,35 +745,52 @@ void OpNoviceDetectorConstruction::DefineSolids()
   Rin = 0.0*mm;
   Rout = Diam_In_In/2;
   SctInside = new G4Tubs("Sct_inside", Rin, Rout, (Length_In + Thickness_Ring)/2, 0, 360*deg);
-  
+
+  std::vector<G4TwoVector> refl = 
+  {G4TwoVector(-x+WallThick, -ybl+WallThick), G4TwoVector(-x+WallThick, ytl-WallThick), G4TwoVector(x-WallThick, ytr-WallThick), G4TwoVector(x-WallThick, -ybr+WallThick),
+  G4TwoVector(-x+WallThick, -ybl+WallThick), G4TwoVector(-x+WallThick, ytl-WallThick), G4TwoVector(x-WallThick, ytr-WallThick), G4TwoVector(x-WallThick, -ybr+WallThick)};
+  G4GenericTrap *ReflectBox = new G4GenericTrap("ReflectBox", ReflectZ/2., refl);
   G4SubtractionSolid* EmptySteelBox = new G4SubtractionSolid("EmptySteelBox", SteelBox, ReflectBox, 0, G4ThreeVector(0, 0, 0));
-  G4SubtractionSolid* EmptyReflectBox_temp = new G4SubtractionSolid("EmptyReflectBox_temp", ReflectBox, SteelBeam, 0, G4ThreeVector(0, 0, 0));
-  G4SubtractionSolid* EmptyReflectBox = new G4SubtractionSolid("EmptyReflectBox", EmptyReflectBox_temp, ScintillatorBox, 0, G4ThreeVector(0, 0, 0));
+  G4SubtractionSolid* EmptyReflectBoxLT = new G4SubtractionSolid("EmptyReflectBoxLT", ReflectBoxWithCornerHolesLT, ScintillatorBoxLT, 0, G4ThreeVector(0, 0, 0));
+  G4SubtractionSolid* EmptyReflectBoxRT = new G4SubtractionSolid("EmptyReflectBoxRT", ReflectBoxWithCornerHolesRT, ScintillatorBoxRT, 0, G4ThreeVector(0, 0, 0));
+  G4SubtractionSolid* EmptyReflectBoxLB = new G4SubtractionSolid("EmptyReflectBoxLB", ReflectBoxWithCornerHolesLB, ScintillatorBoxLB, 0, G4ThreeVector(0, 0, 0));
+  G4SubtractionSolid* EmptyReflectBoxRB = new G4SubtractionSolid("EmptyReflectBoxRB", ReflectBoxWithCornerHolesRB, ScintillatorBoxRB, 0, G4ThreeVector(0, 0, 0));
   
   G4double delta_Z_ScintillatorBoxWithHole = SctZ/2 - (Length_WOM - Thickness_Steel_Add_Bot - Thickness_Hat - WallThick) + (Length_Out + Thickness_Ring)/2;
   G4double xrot = atan((Thickness_Steel_Add_Top - Thickness_Steel_Add_Bot)/Diam_Steel_Add)*180/pi;
   G4RotationMatrix* RM1 = new G4RotationMatrix(0*deg, 0*deg, 0*deg); RM1->rotateX(xrot*deg); 
 
   std::vector<G4SubtractionSolid*> EmptySteelBoxWithHole_tempvec;
-  std::vector<G4SubtractionSolid*> EmptyReflectBoxWithHole_tempvec;
+  std::vector<G4SubtractionSolid*> EmptyReflectBoxWithHoleLT_tempvec;
+  std::vector<G4SubtractionSolid*> EmptyReflectBoxWithHoleRT_tempvec;
+  std::vector<G4SubtractionSolid*> EmptyReflectBoxWithHoleLB_tempvec;
+  std::vector<G4SubtractionSolid*> EmptyReflectBoxWithHoleRB_tempvec;
   std::vector<G4SubtractionSolid*> ScintillatorBoxWithHole_tempvec;
-
 
   for(unsigned int pos = 0; pos<WOM_coord_vec.size(); pos++) {
     G4Transform3D t_Steel_hole = G4Translate3D(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second-Diam_Steel_Add/2, SteelZ/2+Thickness_Steel_Add_Bot)*G4Rotate3D(*RM1)*G4Translate3D(0, Diam_Steel_Add/2, delta_Z_ScintillatorBoxWithHole-SteelZ/2-Thickness_Steel_Add_Bot);
     if(pos == 0) {
       EmptySteelBoxWithHole_tempvec.push_back(new G4SubtractionSolid((std::string("EmptySteelBoxWithHole_")+std::to_string(pos)).c_str(), EmptySteelBox, Hole_box, t_Steel_hole));
-      EmptyReflectBoxWithHole_tempvec.push_back(new G4SubtractionSolid((std::string("EmptyReflectBoxWithHole_")+std::to_string(pos)).c_str(), EmptyReflectBox, Hole_box, t_Steel_hole));
+      EmptyReflectBoxWithHoleLT_tempvec.push_back(new G4SubtractionSolid("EmptyReflectBoxWithHoleLT_temp", EmptyReflectBoxLT, Hole_box, t_Steel_hole));
       ScintillatorBoxWithHole_tempvec.push_back(new G4SubtractionSolid((std::string("ScintillatorBoxWithHole_")+std::to_string(pos)).c_str(), ScintillatorBox, Hole_box, t_Steel_hole));
     }
     else {
       EmptySteelBoxWithHole_tempvec.push_back(new G4SubtractionSolid((std::string("EmptySteelBoxWithHole_")+std::to_string(pos)).c_str(), EmptySteelBoxWithHole_tempvec[pos-1], Hole_box, t_Steel_hole));
-      EmptyReflectBoxWithHole_tempvec.push_back(new G4SubtractionSolid((std::string("EmptyReflectBoxWithHole_")+std::to_string(pos)).c_str(), EmptyReflectBoxWithHole_tempvec[pos-1], Hole_box, t_Steel_hole));
+      if(pos == 1) EmptyReflectBoxWithHoleLT_tempvec.push_back(new G4SubtractionSolid("EmptyReflectBoxWithHoleLT", EmptyReflectBoxWithHoleLT_tempvec[0], Hole_box, t_Steel_hole));
+      if(pos == 2) EmptyReflectBoxWithHoleRT_tempvec.push_back(new G4SubtractionSolid("EmptyReflectBoxWithHoleRT_temp", EmptyReflectBoxRT, Hole_box, t_Steel_hole));
+      if(pos == 3) EmptyReflectBoxWithHoleRT_tempvec.push_back(new G4SubtractionSolid("EmptyReflectBoxWithHoleRT", EmptyReflectBoxWithHoleRT_tempvec[0], Hole_box, t_Steel_hole)); 
+      if(pos == 4) EmptyReflectBoxWithHoleLB_tempvec.push_back(new G4SubtractionSolid("EmptyReflectBoxWithHoleLB_temp", EmptyReflectBoxLB, Hole_box, t_Steel_hole));
+      if(pos == 5) EmptyReflectBoxWithHoleLB_tempvec.push_back(new G4SubtractionSolid("EmptyReflectBoxWithHoleLB", EmptyReflectBoxWithHoleLB_tempvec[0], Hole_box, t_Steel_hole));
+      if(pos == 6) EmptyReflectBoxWithHoleRB_tempvec.push_back(new G4SubtractionSolid("EmptyReflectBoxWithHoleRB_temp", EmptyReflectBoxRB, Hole_box, t_Steel_hole));
+      if(pos == 7) EmptyReflectBoxWithHoleRB_tempvec.push_back(new G4SubtractionSolid("EmptyReflectBoxWithHoleRB", EmptyReflectBoxWithHoleRB_tempvec[0], Hole_box, t_Steel_hole));
       ScintillatorBoxWithHole_tempvec.push_back(new G4SubtractionSolid((std::string("ScintillatorBoxWithHole_")+std::to_string(pos)).c_str(), ScintillatorBoxWithHole_tempvec[pos-1], Hole_box, t_Steel_hole));
     }
   }
   EmptySteelBoxWithHole = EmptySteelBoxWithHole_tempvec[WOM_coord_vec.size()-1];
-  EmptyReflectBoxWithHole = EmptyReflectBoxWithHole_tempvec[WOM_coord_vec.size()-1];
+  EmptyReflectBoxWithHoleLT = EmptyReflectBoxWithHoleLT_tempvec.back();
+  EmptyReflectBoxWithHoleRT = EmptyReflectBoxWithHoleRT_tempvec.back();
+  EmptyReflectBoxWithHoleLB = EmptyReflectBoxWithHoleLB_tempvec.back();
+  EmptyReflectBoxWithHoleRB = EmptyReflectBoxWithHoleRB_tempvec.back();
   ScintillatorBoxWithHole = ScintillatorBoxWithHole_tempvec[WOM_coord_vec.size()-1];
  
   sipmBox = new G4Box("sipm", Length_sipm_box/2,Length_sipm_box/2,Length_sipm_box/2);
@@ -705,10 +811,13 @@ void OpNoviceDetectorConstruction::DefineSolids()
 void OpNoviceDetectorConstruction::DefineLogicalVolumes()
 {
   expHall_log = new G4LogicalVolume(expHall_box, air, "WorldLV", 0, 0, 0);
-  SteelBeam_log = new G4LogicalVolume(SteelBeam, steel, "SteelBeamLV", 0, 0, 0);
+  SteelBeam_log = new G4LogicalVolume(SteelBeamWithHoles, steel, "SteelBeamLV", 0, 0, 0);
   ScintillatorBox_log = new G4LogicalVolume(ScintillatorBoxWithHole, LAB_PPO, "ScintillatorBoxLV", 0, 0, 0);
   SteelBox_log = new G4LogicalVolume(EmptySteelBoxWithHole, steel, "SteelBoxLV", 0, 0, 0);
-  ReflectBox_log = new G4LogicalVolume(EmptyReflectBoxWithHole, BaSO4, "ReflectBoxLV", 0, 0, 0);
+  ReflectBoxLT_log = new G4LogicalVolume(EmptyReflectBoxWithHoleLT, BaSO4, "ReflectBoxLTLV", 0, 0, 0);
+  ReflectBoxRT_log = new G4LogicalVolume(EmptyReflectBoxWithHoleRT, BaSO4, "ReflectBoxRTLV", 0, 0, 0);
+  ReflectBoxLB_log = new G4LogicalVolume(EmptyReflectBoxWithHoleLB, BaSO4, "ReflectBoxLBLV", 0, 0, 0);
+  ReflectBoxRB_log = new G4LogicalVolume(EmptyReflectBoxWithHoleRB, BaSO4, "ReflectBoxRBLV", 0, 0, 0);
   Outer_tube_log = new G4LogicalVolume(Outer_tube, PMMA_side, "OuterTubeLV");
   WOM_tube_log = new G4LogicalVolume(WOM_tube, PMMA_bottom, "WOMTubeLV");
   Inner_tube_log = new G4LogicalVolume(Inner_tube, PMMA_side, "InnerTubeLV");
@@ -744,7 +853,10 @@ void OpNoviceDetectorConstruction::ConstructVolumes()
 
   SteelBox_phys = new G4PVPlacement(0, G4ThreeVector(), SteelBox_log, "SteelBoxPV", expHall_log, false, 100, intersect_check);
   SteelBeam_phys = new G4PVPlacement(0, G4ThreeVector(), SteelBeam_log, "SteelBeamPV", expHall_log, false, 101, intersect_check);
-  ReflectBox_phys = new G4PVPlacement(0, G4ThreeVector(), ReflectBox_log, "ReflectBoxPV", expHall_log, false, 200, intersect_check);
+  ReflectBoxLT_phys = new G4PVPlacement(0, G4ThreeVector(), ReflectBoxLT_log, "ReflectBoxLTPV", expHall_log, false, 200, intersect_check);
+  ReflectBoxRT_phys = new G4PVPlacement(0, G4ThreeVector(), ReflectBoxRT_log, "ReflectBoxRTPV", expHall_log, false, 201, intersect_check);
+  ReflectBoxLB_phys = new G4PVPlacement(0, G4ThreeVector(), ReflectBoxLB_log, "ReflectBoxLBPV", expHall_log, false, 202, intersect_check);
+  ReflectBoxRB_phys = new G4PVPlacement(0, G4ThreeVector(), ReflectBoxRB_log, "ReflectBoxRBPV", expHall_log, false, 203, intersect_check);
   ScintillatorBox_phys = new G4PVPlacement(0, G4ThreeVector(), ScintillatorBox_log, "ScintillatorBoxPV", expHall_log, false, 300, intersect_check);
 
   // PMMA Staff
@@ -823,6 +935,7 @@ void OpNoviceDetectorConstruction::DefineVisAttributes()
   white       = G4Color(1.0, 1.0, 1.0, 0.2);
   cyan        = G4Color(0.0, 1.0, 1.0, 0.3);
   magenta     = G4Color(1.0, 0.0, 1.0, 0.3);
+  yellow      = G4Color(1.0, 1.0, 0.0, 0.3);
 
   G4VisAttributes *worldVisAtt = new G4VisAttributes;
   worldVisAtt->SetVisibility(false);
@@ -839,6 +952,14 @@ void OpNoviceDetectorConstruction::DefineVisAttributes()
   steelBoxVisAtt1->SetVisibility(true);
   steelBoxVisAtt1->SetColor(white);
   Steel_Add_log->SetVisAttributes(steelBoxVisAtt1);
+
+  G4VisAttributes *ReflectVisAtt = new G4VisAttributes;
+  ReflectVisAtt->SetColor(yellow);
+  ReflectVisAtt->SetVisibility(false);
+  ReflectBoxLT_log->SetVisAttributes(ReflectVisAtt);
+  ReflectBoxRT_log->SetVisAttributes(ReflectVisAtt);
+  ReflectBoxLB_log->SetVisAttributes(ReflectVisAtt);
+  ReflectBoxRB_log->SetVisAttributes(ReflectVisAtt);
 
   G4VisAttributes *sctBoxVisAtt = new G4VisAttributes;
   sctBoxVisAtt->SetColor(blue);
@@ -872,7 +993,6 @@ void OpNoviceDetectorConstruction::DefineVisAttributes()
   WLSVisAtt->SetVisibility(false);
   WLS_tube_out_log->SetVisAttributes(WLSVisAtt);
   WLS_tube_in_log->SetVisAttributes(WLSVisAtt);
-  ReflectBox_log->SetVisAttributes(WLSVisAtt);
 
   G4VisAttributes *WOMVisAtt = new G4VisAttributes;
   WOMVisAtt->SetColor(magenta);

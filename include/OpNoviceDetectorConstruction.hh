@@ -132,9 +132,7 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4VSolid *sipm_base;
   //-------------------------------------------------------------------
     G4UnionSolid* ScintillatorBox;
-    G4GenericTrap* SteelBox;
-    G4UnionSolid* SteelBeam;
-    G4GenericTrap* ReflectBox;
+    G4UnionSolid* SteelBeamWithHoles;
     G4Box* sipmBaseBox;
     G4Box* sipmSens;
     G4Box* sipmSensTop;
@@ -160,7 +158,10 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4VSolid *Air_ring_in;
     G4VSolid *PMMA_ring_lower;
     G4SubtractionSolid *EmptySteelBoxWithHole;
-    G4SubtractionSolid *EmptyReflectBoxWithHole;
+    G4SubtractionSolid *EmptyReflectBoxWithHoleLT;
+    G4SubtractionSolid *EmptyReflectBoxWithHoleRT;
+    G4SubtractionSolid *EmptyReflectBoxWithHoleLB;
+    G4SubtractionSolid *EmptyReflectBoxWithHoleRB;
     G4SubtractionSolid *ScintillatorBoxWithHole;
     G4SubtractionSolid *sipmWindow;
 
@@ -175,7 +176,10 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4LogicalVolume* ScintillatorBox_log;
     G4LogicalVolume* SteelBox_log;
     G4LogicalVolume* SteelBeam_log;
-    G4LogicalVolume* ReflectBox_log;
+    G4LogicalVolume* ReflectBoxLT_log;
+    G4LogicalVolume* ReflectBoxRT_log;
+    G4LogicalVolume* ReflectBoxLB_log;
+    G4LogicalVolume* ReflectBoxRB_log;
     G4LogicalVolume *Outer_tube_log;
     G4LogicalVolume *WOM_tube_log;
     G4LogicalVolume *Inner_tube_log;
@@ -197,7 +201,10 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4VPhysicalVolume* SteelBox_phys;
     G4VPhysicalVolume* SteelBeam_phys;
     G4VPhysicalVolume* ScintillatorBox_phys;
-    G4VPhysicalVolume* ReflectBox_phys;
+    G4VPhysicalVolume* ReflectBoxLT_phys;
+    G4VPhysicalVolume* ReflectBoxRT_phys;
+    G4VPhysicalVolume* ReflectBoxLB_phys;
+    G4VPhysicalVolume* ReflectBoxRB_phys;
     G4VPhysicalVolume* sipmBase_phys;
     G4VPhysicalVolume* sipmWindow_phys;
     G4VPhysicalVolume* sipmSens_phys;
@@ -229,6 +236,7 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4Color white;
     G4Color cyan;
     G4Color magenta;
+    G4Color yellow;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
