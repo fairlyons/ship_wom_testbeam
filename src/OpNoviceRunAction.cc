@@ -64,8 +64,8 @@ OpNoviceRunAction::OpNoviceRunAction()
 
 //--------------------------------------------------------------------
   analysisManager -> CreateNtuple("Detected","Results");
-  //analysisManager -> CreateNtupleDColumn("x");
-  //analysisManager -> CreateNtupleDColumn("y");
+  analysisManager -> CreateNtupleDColumn("x");
+  analysisManager -> CreateNtupleDColumn("y");
   //analysisManager -> CreateNtupleIColumn("process");
   //analysisManager -> CreateNtupleIColumn("WomNo");
   //analysisManager -> CreateNtupleDColumn("waveLen");

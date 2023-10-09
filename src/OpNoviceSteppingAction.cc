@@ -146,14 +146,14 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
     if(postphysvolname == "sipmSens") {
       if(sipm_detection(1.24e-3 / track->GetKineticEnergy())) {
         //G4cout << "sipm hit !!!!!!!!! " << posttouchable->GetCopyNumber(0) << G4endl;
-        //analysisManager->FillNtupleDColumn(0,0, aStep->GetPostStepPoint()->GetPosition().getX());
-        //analysisManager->FillNtupleDColumn(0,1, aStep->GetPostStepPoint()->GetPosition().getY());
+        analysisManager->FillNtupleDColumn(0,0, aStep->GetPostStepPoint()->GetPosition().getX());
+        analysisManager->FillNtupleDColumn(0,1, aStep->GetPostStepPoint()->GetPosition().getY());
         //analysisManager->FillNtupleIColumn(0,2, process);
         //if(posttouchable->GetCopyNumber(0) < 40) {analysisManager->FillNtupleIColumn(0,3,1);} // WOM number
         //if(posttouchable->GetCopyNumber(0) > 39) {analysisManager->FillNtupleIColumn(0,3,2);} // WOM number
         //analysisManager->FillNtupleDColumn(0,4, 1.24e-3 / track->GetKineticEnergy());
-        analysisManager->FillNtupleDColumn(0,0, track->GetGlobalTime());
-        analysisManager->FillNtupleIColumn(0,1, eventNumber);
+        analysisManager->FillNtupleDColumn(0,2, track->GetGlobalTime());
+        analysisManager->FillNtupleIColumn(0,3, eventNumber);
         int sipm;
         // Top left
         if(posttouchable->GetCopyNumber(0) >= 0 && posttouchable->GetCopyNumber(0) < 5)        sipm = 0;
@@ -164,8 +164,8 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
         else if(posttouchable->GetCopyNumber(0) >= 25 && posttouchable->GetCopyNumber(0) < 30) sipm = 5;
         else if(posttouchable->GetCopyNumber(0) >= 30 && posttouchable->GetCopyNumber(0) < 35) sipm = 6;
         else if(posttouchable->GetCopyNumber(0) >= 35 && posttouchable->GetCopyNumber(0) < 40) sipm = 7;
-        analysisManager->FillNtupleIColumn(0,2, sipm); //sipm number
-        analysisManager->FillNtupleIColumn(0,3, posttouchable->GetCopyNumber(1)); //WOM number
+        analysisManager->FillNtupleIColumn(0,4, sipm); //sipm number
+        analysisManager->FillNtupleIColumn(0,5, posttouchable->GetCopyNumber(1)); //WOM number
         analysisManager->AddNtupleRow(0);
         analysisManager->FillH3(0,eventNumber,sipm,track->GetGlobalTime()); // quadrant 
       }
