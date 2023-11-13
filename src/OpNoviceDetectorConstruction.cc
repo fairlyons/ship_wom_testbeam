@@ -93,10 +93,10 @@ OpNoviceDetectorConstruction::OpNoviceDetectorConstruction()
   Length_In = 195*mm;
   Length_sipm_box = 15*cm;
 
-  WOM_coord_vec = {{-397*mm, 321.88*mm},  {-397*mm, 953.80*mm}, 
-                   {397*mm, 285.10*mm},   {397*mm, 905.20*mm}, 
-                   {-397*mm, -762.54*mm}, {-397*mm, -240.12*mm}, 
-                   {397*mm, -778.46*mm},  {397*mm, -266.88*mm}};
+  WOM_coord_vec = {{-397*mm, 953.80*mm}, {-397*mm, 321.88*mm},
+                   {397*mm, 905.20*mm}, {397*mm, 285.10*mm},
+                   {-397*mm, -240.12*mm}, {-397*mm, -762.54*mm},
+                   {397*mm, -266.88*mm}, {397*mm, -778.46*mm}};
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -900,7 +900,7 @@ void OpNoviceDetectorConstruction::ConstructVolumes()
 
   G4int n_sipm = 40;
   G4double radius_sipm = (Diam_WOM_In + Diam_WOM_Out)/4.;
-  G4int wom_id = 0;
+  G4int wom_id = 1;
 
   for(unsigned int pos = 0; pos < WOM_coord_vec.size(); pos++) {
     G4int sipm_id = 0;
