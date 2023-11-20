@@ -58,8 +58,8 @@ OpNoviceSteppingAction::OpNoviceSteppingAction(OpNoviceEventAction* EvAct):G4Use
 OpNoviceSteppingAction::~OpNoviceSteppingAction()
 {}
 
-std::G4double eff_CT = 0.102026825; //average value from DESY dark counts 
-std::G4double DC_prob = 0.5891604;  //average value from DESY dark counts
+G4double eff_CT = 0.102026825; //average value from DESY dark counts 
+G4double DC_prob = 0.5891604;  //average value from DESY dark counts
 G4int sipm_detection(G4double wl)
 {
   std::vector<double> wl_vec = {283.32062824769,289.582356019053,291.851293147889,291.715757914742,291.542247040993,291.147787961894,293.34486564184,293.282467883949,295.507643349451,294.293612273865,296.340897745862
@@ -192,7 +192,7 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
         //DARK COUNTS
         G4double rnd_time = double(rand())/RAND_MAX;  //to have dark count in random position in the wfs
         G4double rnd_DC = double(rand())/RAND_MAX;
-        if( rnd_DC < DC_prob[i] ){
+        if( rnd_DC < DC_prob ){
 	     analysisManager->FillNtupleIColumn(0,4, sipm); //sipm number
              analysisManager->FillNtupleIColumn(0,5, posttouchable->GetCopyNumber(1)); //WOM number
              analysisManager->AddNtupleRow(0);
@@ -200,7 +200,7 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
 
              //CROSSTALK PHOTONS for dark count
              G4double rnd_CT = double(rand())/RAND_MAX;
-             if( rnd_CT < eff_CT[i] ){
+             if( rnd_CT < eff_CT ){
                   analysisManager->FillNtupleIColumn(0,4, sipm); //sipm number
                   analysisManager->FillNtupleIColumn(0,5, posttouchable->GetCopyNumber(1)); //WOM number
                   analysisManager->AddNtupleRow(0);
