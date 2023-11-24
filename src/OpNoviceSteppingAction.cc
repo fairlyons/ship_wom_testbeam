@@ -178,7 +178,7 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
         analysisManager->FillNtupleIColumn(0,4, sipm); //sipm number
         analysisManager->FillNtupleIColumn(0,5, posttouchable->GetCopyNumber(1)); //WOM number
         analysisManager->AddNtupleRow(0);
-        analysisManager->FillH3(0,eventNumber,sipm,track->GetGlobalTime()); // quadrant 
+        analysisManager->FillH3(0,eventNumber,sipm+8*(posttouchable->GetCopyNumber(1)-1),track->GetGlobalTime()); // quadrant 
      
 
         ////CROSSTALK PHOTONS
@@ -187,7 +187,7 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
              analysisManager->FillNtupleIColumn(0,4, sipm); //sipm number
              analysisManager->FillNtupleIColumn(0,5, posttouchable->GetCopyNumber(1)); //WOM number
              analysisManager->AddNtupleRow(0);
-             analysisManager->FillH3(0,eventNumber,sipm,track->GetGlobalTime()); // quadrant  
+             analysisManager->FillH3(0,eventNumber,sipm+8*(posttouchable->GetCopyNumber(1)-1),track->GetGlobalTime()); // quadrant  
         }
         //DARK COUNTS
         G4double rnd_time = double(rand())/RAND_MAX;  //to have dark count in random position in the wfs
@@ -196,7 +196,7 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
 	     analysisManager->FillNtupleIColumn(0,4, sipm); //sipm number
              analysisManager->FillNtupleIColumn(0,5, posttouchable->GetCopyNumber(1)); //WOM number
              analysisManager->AddNtupleRow(0);
-             analysisManager->FillH3(0,eventNumber,sipm,rnd_time*320.); // quadrant 
+             analysisManager->FillH3(0,eventNumber,sipm+8*(posttouchable->GetCopyNumber(1)-1),rnd_time*320.); // quadrant 
 
              //CROSSTALK PHOTONS for dark count
              G4double rnd_CT = double(rand())/RAND_MAX;
@@ -204,7 +204,7 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
                   analysisManager->FillNtupleIColumn(0,4, sipm); //sipm number
                   analysisManager->FillNtupleIColumn(0,5, posttouchable->GetCopyNumber(1)); //WOM number
                   analysisManager->AddNtupleRow(0);
-                  analysisManager->FillH3(0,eventNumber,sipm,rnd_time*320.); // quadrant
+                  analysisManager->FillH3(0,eventNumber,sipm+8*(posttouchable->GetCopyNumber(1)-1),rnd_time*320.); // quadrant
              }
         }
 

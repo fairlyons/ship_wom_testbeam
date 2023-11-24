@@ -73,7 +73,7 @@ OpNoviceRunAction::OpNoviceRunAction()
   analysisManager -> CreateNtupleIColumn("eventNumber");
   analysisManager -> CreateNtupleIColumn("sipmNumber");
   analysisManager -> CreateNtupleIColumn("WOMNumber");
-  analysisManager -> CreateH3("evt_quadrant_time","",10,0,1000,64,0,64,1024,0,300);
+  analysisManager -> CreateH3("evt_quadrant_time","",10,0,10,64,0,64,1024,0,300);
   analysisManager -> FinishNtuple(0);
 //--------------------------------------------------------------------
 
