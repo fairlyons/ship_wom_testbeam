@@ -78,7 +78,6 @@ OpNoviceDetectorConstruction::OpNoviceDetectorConstruction()
   Diam_Out_Out = 70*mm;
   Diam_WOM_In = 54*mm;
   Diam_WOM_Out = 60*mm;
-  Diam_Hole = 72*mm;
   Diam_Steel_Add = 120*mm;
   Diam_Hat = 120*mm;
   Thickness_Disk = 3*mm;
@@ -86,8 +85,8 @@ OpNoviceDetectorConstruction::OpNoviceDetectorConstruction()
   Thickness_Hat = 5*mm;
   Thickness_WLS = 0.02*mm;
   Thickness_Gap = 1*mm;
-  Thickness_Steel_Add_Top = 16.19*mm;
-  Thickness_Steel_Add_Bot = 12*mm;
+  Thickness_Steel_Add_Top = 16.19*mm - Thickness_Hat;
+  Thickness_Steel_Add_Bot = 12*mm - Thickness_Hat;
   Length_Out = 200*mm;
   Length_WOM = 205*mm;
   Length_In = 195*mm;
@@ -238,8 +237,8 @@ void OpNoviceDetectorConstruction::DefineMPTs()
   G4double absLen_purified[151] = {8.69251407037729*m,9.02995755323176*m,9.27373907607242*m,9.2987694632999*m,9.37254639295624*m,9.31493016410715*m,9.32945396614867*m,9.36095897891052*m,9.48082544118919*m,9.60814130202656*m,9.82801139775702*m,10.1046947101091*m,10.4907062873286*m,10.5108807867562*m,10.4753853636081*m,10.8002040964469*m,11.4980811433371*m,11.9325107778151*m,11.6636028590624*m,11.7094782859565*m,10.9852633716743*m,10.670267622928*m,10.3800086540752*m,10.3082593229783*m,10.3275701553562*m,10.3319544221576*m,10.2662283365215*m,10.2925732890662*m,10.3153782242223*m,10.3860868021326*m,10.3365901053944*m,10.231517114707*m,9.92788014563769*m,9.61898800830966*m,9.54402290594051*m,9.62746317964499*m,9.79692373936646*m,9.91423094765397*m,9.9643151940587*m,10.0187720504539*m,10.0358961669191*m,10.0802588950859*m,10.1054177127325*m,10.0818415254723*m,10.086029649153*m,10.1133311242014*m,10.1350472968498*m,10.0761167690658*m,9.90904041225772*m,9.77530373579883*m,9.66256670125958*m,9.65338010651176*m,9.63069786946983*m,9.62140630852179*m,9.71997172370098*m,9.79744658014088*m,9.80672901676583*m,9.78343285609755*m,9.72163465573446*m,9.80518793240826*m,9.69593799132894*m,9.67791627886446*m,9.59985620139408*m,9.55705239801755*m,9.57416795211246*m,9.56671620921144*m,9.59797651082656*m,9.56114765877604*m,9.53375540026655*m,9.55647549660189*m,9.54447464256824*m,9.53291003815433*m,9.49239969544417*m,9.49917662439382*m,9.42391963661282*m,9.3663798468712*m,9.32376570267581*m,9.22629281746381*m,9.17977310076775*m,9.12179277182491*m,9.00886669573072*m,8.85479490604375*m,8.71252334840956*m,8.50086621234753*m,8.33199872471845*m,8.18529383430015*m,8.02793280531241*m,7.84805101504057*m,7.67375314752583*m,7.46193191606457*m,7.24933185585757*m,7.00057529008316*m,6.78144433425612*m,6.57082163294415*m,6.3463075559428*m,6.13214412943496*m,5.9379419460511*m,5.73334467669744*m,5.53766879317458*m,5.3394385508064*m,5.15238124063095*m,4.98340338198499*m,4.8012155457967*m,4.60195158864653*m,4.41961657539783*m,4.22693302308812*m,4.0416225005906*m,3.87499604590985*m,3.71820540936771*m,3.5472216422986*m,3.36485969966114*m,3.15134802038665*m,2.90168745463681*m,2.5867387338465*m,2.16375663283064*m,1.66966271660288*m,1.14377099881739*m,0.680589789294733*m,0.360363924864896*m,0.181782601946722*m,0.093267712946957*m,0.0503991725824*m,0.02880952553709*m,0.01737142379557*m,0.013310009583829*m,0.013096262643175*m,0.013063354253155*m,0.013043343934459*m,0.013030737069578*m,0.013019803591978*m,0.013008275438005*m,0.012998844829755*m,0.012996396487048*m,0.012992079547825*m,0.012984198598302*m,0.012978816961298*m,0.012975348745523*m,0.012968698731763*m,0.012962219216222*m,0.012956981482458*m,0.012941499851657*m,0.012919404279236*m,0.012913555972765*m,0.012909301261196*m,0.012901893060039*m,0.012901203446858*m,0.012897730665173*m,0.012889608969039*m,0.012882419482255*m,0.012878996045324*m,0.0128715069987*m}; // Patrick measurement Mainz Column00+ppo
   MPT_LAB_PPO->AddProperty("ABSLENGTH", photon_en_LAB_PPO_3, absLen_purified, 151)->SetSpline(true);
   MPT_LAB_PPO->AddConstProperty("RESOLUTIONSCALE", 1.0); //??
-  MPT_LAB_PPO->AddConstProperty("FASTTIMECONSTANT", 4.3*ns); // Main results 
-  MPT_LAB_PPO->AddConstProperty("SLOWTIMECONSTANT", 13.4*ns); // Main results 
+  MPT_LAB_PPO->AddConstProperty("FASTTIMECONSTANT", 4.3*ns); // https://pubs.rsc.org/en/content/articlepdf/2020/ma/d0ma00055h
+  MPT_LAB_PPO->AddConstProperty("SLOWTIMECONSTANT", 13.4*ns); // https://pubs.rsc.org/en/content/articlepdf/2020/ma/d0ma00055h
   MPT_LAB_PPO->AddConstProperty("YIELDRATIO", 0.5);
   LAB_PPO->SetMaterialPropertiesTable(MPT_LAB_PPO);
 
@@ -750,13 +749,14 @@ void OpNoviceDetectorConstruction::DefineSolids()
   Rout = Diam_Hat/2;
   PMMA_Hat = new G4Tubs("PMMA_hat", Rin, Rout, Thickness_Hat/2, 0, 360*deg);
   // Additional steel
-  Rin = Diam_Hole/2;
+  Rin = 0.0*mm;
   Rout = Diam_Steel_Add/2;
   G4double y1 = Diam_Steel_Add;
   G4double z1 = Thickness_Steel_Add_Top - Thickness_Steel_Add_Bot;
   G4double y2 = z1/y1*(1/(1+z1/y1));
   G4double z2 = 1-y2;
-  SteelAdd = new G4CutTubs("Steel_add", Rin, Rout, Thickness_Steel_Add_Bot/2+z1/4, 0, 360*deg, G4ThreeVector(0, 0, -1), G4ThreeVector(0, -y2, z2));
+  G4double overlap = 0.01*mm;
+  SteelAdd = new G4CutTubs("Steel_add", Rin, Rout, Thickness_Steel_Add_Bot/2+z1/4+overlap/2, 0, 360*deg, G4ThreeVector(0, 0, -1), G4ThreeVector(0, -y2, z2));
   // LAB&PPO inside tube
   Rin = 0.0*mm;
   Rout = Diam_In_In/2;
@@ -773,9 +773,11 @@ void OpNoviceDetectorConstruction::DefineSolids()
   G4SubtractionSolid* EmptyReflectBoxRB = new G4SubtractionSolid("EmptyReflectBoxRB", ReflectBoxWithCornerHolesRB, ScintillatorBoxRB, 0, G4ThreeVector(0, 0, 0));
   
   G4double delta_Z_ScintillatorBoxWithHole = SctZ/2 - (Length_WOM - Thickness_Steel_Add_Bot - Thickness_Hat - WallThick) + (Length_Out + Thickness_Ring)/2;
+  G4double delta_Z_Steel_Add = SteelZ/2 + Thickness_Steel_Add_Bot/2 + (Thickness_Steel_Add_Top - Thickness_Steel_Add_Bot)/4 - overlap;
   G4double xrot = atan((Thickness_Steel_Add_Top - Thickness_Steel_Add_Bot)/Diam_Steel_Add)*180/pi;
-  G4RotationMatrix* RM1 = new G4RotationMatrix(0*deg, 0*deg, 0*deg); RM1->rotateX(xrot*deg); 
+  G4RotationMatrix* RM1 = new G4RotationMatrix(0*deg, 0*deg, 0*deg); RM1->rotateX(xrot*deg);
 
+  std::vector<G4UnionSolid*> EmptySteelBoxWithAdd_tempvec;
   std::vector<G4SubtractionSolid*> EmptySteelBoxWithHole_tempvec;
   std::vector<G4SubtractionSolid*> EmptyReflectBoxWithHoleLT_tempvec;
   std::vector<G4SubtractionSolid*> EmptyReflectBoxWithHoleRT_tempvec;
@@ -784,14 +786,22 @@ void OpNoviceDetectorConstruction::DefineSolids()
   std::vector<G4SubtractionSolid*> ScintillatorBoxWithHole_tempvec;
 
   for(unsigned int pos = 0; pos<WOM_coord_vec.size(); pos++) {
+    if(pos == 0) {
+      EmptySteelBoxWithAdd_tempvec.push_back(new G4UnionSolid((std::string("EmptySteelBoxWithAdd_")+std::to_string(pos)).c_str(), EmptySteelBox, SteelAdd, 0, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Steel_Add)));
+    }
+    else {
+      EmptySteelBoxWithAdd_tempvec.push_back(new G4UnionSolid((std::string("EmptySteelBoxWithAdd_")+std::to_string(pos)).c_str(), EmptySteelBoxWithAdd_tempvec.back(), SteelAdd, 0, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Steel_Add)));
+    }
+  }
+  for(unsigned int pos = 0; pos<WOM_coord_vec.size(); pos++) {
     G4Transform3D t_Steel_hole = G4Translate3D(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second-Diam_Steel_Add/2, SteelZ/2+Thickness_Steel_Add_Bot)*G4Rotate3D(*RM1)*G4Translate3D(0, Diam_Steel_Add/2, delta_Z_ScintillatorBoxWithHole-SteelZ/2-Thickness_Steel_Add_Bot);
     if(pos == 0) {
-      EmptySteelBoxWithHole_tempvec.push_back(new G4SubtractionSolid((std::string("EmptySteelBoxWithHole_")+std::to_string(pos)).c_str(), EmptySteelBox, Hole_box, t_Steel_hole));
+      EmptySteelBoxWithHole_tempvec.push_back(new G4SubtractionSolid((std::string("EmptySteelBoxWithHole_")+std::to_string(pos)).c_str(), EmptySteelBoxWithAdd_tempvec.back(), Hole_box, t_Steel_hole));
       EmptyReflectBoxWithHoleLT_tempvec.push_back(new G4SubtractionSolid("EmptyReflectBoxWithHoleLT_temp", EmptyReflectBoxLT, Hole_box, t_Steel_hole));
       ScintillatorBoxWithHole_tempvec.push_back(new G4SubtractionSolid((std::string("ScintillatorBoxWithHole_")+std::to_string(pos)).c_str(), ScintillatorBox, Hole_box, t_Steel_hole));
     }
     else {
-      EmptySteelBoxWithHole_tempvec.push_back(new G4SubtractionSolid((std::string("EmptySteelBoxWithHole_")+std::to_string(pos)).c_str(), EmptySteelBoxWithHole_tempvec[pos-1], Hole_box, t_Steel_hole));
+      EmptySteelBoxWithHole_tempvec.push_back(new G4SubtractionSolid((std::string("EmptySteelBoxWithHole_")+std::to_string(pos)).c_str(), EmptySteelBoxWithHole_tempvec.back(), Hole_box, t_Steel_hole));
       if(pos == 1) EmptyReflectBoxWithHoleLT_tempvec.push_back(new G4SubtractionSolid("EmptyReflectBoxWithHoleLT", EmptyReflectBoxWithHoleLT_tempvec[0], Hole_box, t_Steel_hole));
       if(pos == 2) EmptyReflectBoxWithHoleRT_tempvec.push_back(new G4SubtractionSolid("EmptyReflectBoxWithHoleRT_temp", EmptyReflectBoxRT, Hole_box, t_Steel_hole));
       if(pos == 3) EmptyReflectBoxWithHoleRT_tempvec.push_back(new G4SubtractionSolid("EmptyReflectBoxWithHoleRT", EmptyReflectBoxWithHoleRT_tempvec[0], Hole_box, t_Steel_hole)); 
@@ -802,7 +812,7 @@ void OpNoviceDetectorConstruction::DefineSolids()
       ScintillatorBoxWithHole_tempvec.push_back(new G4SubtractionSolid((std::string("ScintillatorBoxWithHole_")+std::to_string(pos)).c_str(), ScintillatorBoxWithHole_tempvec[pos-1], Hole_box, t_Steel_hole));
     }
   }
-  EmptySteelBoxWithHole = EmptySteelBoxWithHole_tempvec[WOM_coord_vec.size()-1];
+  EmptySteelBoxWithHole = EmptySteelBoxWithHole_tempvec.back();
   EmptyReflectBoxWithHoleLT = EmptyReflectBoxWithHoleLT_tempvec.back();
   EmptyReflectBoxWithHoleRT = EmptyReflectBoxWithHoleRT_tempvec.back();
   EmptyReflectBoxWithHoleLB = EmptyReflectBoxWithHoleLB_tempvec.back();
@@ -842,12 +852,11 @@ void OpNoviceDetectorConstruction::DefineLogicalVolumes()
   Air_gap_out_log = new G4LogicalVolume(Air_gap_out, air, "AirGapOutLV");
   Air_gap_in_log = new G4LogicalVolume(Air_gap_in, air, "AirGapInLV");
   WLS_tube_out_log = new G4LogicalVolume(WLS_tube_out, WLS_Coat, "WLSOutLV");
-  WLS_tube_in_log = new G4LogicalVolume(WLS_tube_in, WLS_Coat, "WLSInLV"); //we should keep it without
+  WLS_tube_in_log = new G4LogicalVolume(WLS_tube_in, WLS_Coat, "WLSInLV");
   PMMA_Hat_log = new G4LogicalVolume(PMMA_Hat, PMMA_side, "PMMAHatLV");
   Air_ring_out_log = new G4LogicalVolume(Air_ring_out, air, "AirRingOutLV");
   Air_ring_in_log = new G4LogicalVolume(Air_ring_in, air, "AirRingInLV");
   PMMA_ring_lower_log = new G4LogicalVolume(PMMA_ring_lower, PMMA_bottom, "PMMARingLowerLV");
-  Steel_Add_log = new G4LogicalVolume(SteelAdd, steel, "SteelAddLV");
   Sct_Inside_log = new G4LogicalVolume(SctInside, LAB_PPO, "SctInsideLV");
   sipmSens_log = new G4LogicalVolume(sipmSens, Silicon, "sipmSensLV");  ////?????
   sipmSensTop_log = new G4LogicalVolume(sipmSensTop, Silicon, "sipmSensTopLV");  ////?????
@@ -890,8 +899,6 @@ void OpNoviceDetectorConstruction::ConstructVolumes()
   G4double delta_Z_PMMA_Disk = SctZ/2 - (Length_WOM - Thickness_Steel_Add_Bot - Thickness_Hat - WallThick) + Length_In + Thickness_Ring + Thickness_Disk/2;
   // PMMA Hat
   G4double delta_Z_PMMA_Hat = SteelZ/2 + Thickness_Steel_Add_Bot + Thickness_Hat/2;
-  // Additional Steel
-  G4double delta_Z_Steel_Add = SteelZ/2 + Thickness_Steel_Add_Bot/2 + (Thickness_Steel_Add_Top - Thickness_Steel_Add_Bot)/4;
   // LAB&PPO inside tube
   G4double delta_Z_Sct_Inside = SctZ/2 - (Length_WOM - Thickness_Steel_Add_Bot - Thickness_Hat - WallThick) + (Length_In + Thickness_Ring)/2;
   // Air ring
@@ -924,7 +931,6 @@ void OpNoviceDetectorConstruction::ConstructVolumes()
     Air_ring_out_phys_vect.push_back(new G4PVPlacement(t_upper_ring, Air_ring_out_log, "AirRingOut", expHall_log, false, 602, intersect_check));
     Air_ring_in_phys_vect.push_back(new G4PVPlacement(t_upper_ring, Air_ring_in_log, "AirRingIn", expHall_log, false, 603, intersect_check));
     PMMA_ring_lower_phys_vect.push_back(new G4PVPlacement(t_upper_ring, PMMA_ring_lower_log, "PMMARingLower", expHall_log, false, 405, intersect_check));
-    Steel_Add_phys_vect.push_back(new G4PVPlacement(0, G4ThreeVector(WOM_coord_vec[pos].first, WOM_coord_vec[pos].second, delta_Z_Steel_Add), Steel_Add_log, "SteelAdd", expHall_log, false, 102, intersect_check));
     G4Transform3D t_Sct_Inside = G4Translate3D(WOM_coord_vec[pos].first,WOM_coord_vec[pos].second-Diam_Steel_Add/2,SteelZ/2+Thickness_Steel_Add_Bot)*G4Rotate3D(*RM1)*G4Translate3D(0,Diam_Steel_Add/2,delta_Z_Sct_Inside-SteelZ/2-Thickness_Steel_Add_Bot);
     Sct_Inside_phys_vect.push_back(new G4PVPlacement(t_Sct_Inside, Sct_Inside_log, "SctInside", expHall_log, false, 301, intersect_check));
     for(int i = 0; i < n_sipm; i++) {
@@ -964,10 +970,6 @@ void OpNoviceDetectorConstruction::DefineVisAttributes()
   steelBoxVisAtt->SetColor(white);
   SteelBox_log->SetVisAttributes(steelBoxVisAtt);
   SteelBeam_log->SetVisAttributes(steelBoxVisAtt);
-  G4VisAttributes *steelBoxVisAtt1 = new G4VisAttributes;
-  steelBoxVisAtt1->SetVisibility(true);
-  steelBoxVisAtt1->SetColor(white);
-  Steel_Add_log->SetVisAttributes(steelBoxVisAtt1);
 
   G4VisAttributes *ReflectVisAtt = new G4VisAttributes;
   ReflectVisAtt->SetColor(yellow);

@@ -103,7 +103,6 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4double Diam_Out_Out;
     G4double Diam_WOM_In;
     G4double Diam_WOM_Out;
-    G4double Diam_Hole;
     G4double Diam_Steel_Add;
     G4double Diam_Hat;
     G4double Length_Out;
@@ -147,9 +146,9 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4VSolid *Hole_sct;
     G4VSolid *WLS_tube_in;
     G4VSolid *Air_gap_in;
-    G4VSolid * Inner_tube;
-    G4VSolid * PMMA_Ring;
-    G4VSolid * PMMA_disk;
+    G4VSolid *Inner_tube;
+    G4VSolid *PMMA_Ring;
+    G4VSolid *PMMA_disk;
     G4VSolid *PMMA_Hat;
     G4VSolid *SteelAdd;
     G4VSolid *SctInside;
@@ -157,7 +156,7 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4VSolid *Air_ring_out;
     G4VSolid *Air_ring_in;
     G4VSolid *PMMA_ring_lower;
-    G4SubtractionSolid *EmptySteelBoxWithHole;
+    G4VSolid *EmptySteelBoxWithHole;
     G4SubtractionSolid *EmptyReflectBoxWithHoleLT;
     G4SubtractionSolid *EmptyReflectBoxWithHoleRT;
     G4SubtractionSolid *EmptyReflectBoxWithHoleLB;
