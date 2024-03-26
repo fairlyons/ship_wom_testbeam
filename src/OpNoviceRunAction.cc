@@ -66,8 +66,7 @@ OpNoviceRunAction::OpNoviceRunAction()
   analysisManager -> CreateNtuple("Detected","Results");
   analysisManager -> CreateNtupleDColumn("x");
   analysisManager -> CreateNtupleDColumn("y");
-  //analysisManager -> CreateNtupleDColumn("z");
-  analysisManager -> CreateNtupleIColumn("process");
+  //analysisManager -> CreateNtupleIColumn("process");
   //analysisManager -> CreateNtupleIColumn("WomNo");
   //analysisManager -> CreateNtupleDColumn("waveLen");
   analysisManager -> CreateNtupleDColumn("time");
@@ -77,12 +76,6 @@ OpNoviceRunAction::OpNoviceRunAction()
   analysisManager -> CreateH3("evt_quadrant_time","",10,0,10,64,0,64,1024,0,300);
   analysisManager -> FinishNtuple(0);
 //--------------------------------------------------------------------
-
-  analysisManager -> CreateNtuple("Initial","Results");
-  analysisManager -> CreateNtupleDColumn("x");
-  analysisManager -> CreateNtupleDColumn("y");
-  analysisManager -> CreateNtupleDColumn("z");
-  analysisManager -> FinishNtuple(1);
 
 //--------------------------------------------------------------------
 /*  analysisManager -> CreateNtuple("EventStat","Results");
