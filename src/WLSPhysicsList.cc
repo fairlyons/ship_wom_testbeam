@@ -265,8 +265,6 @@ void WLSPhysicsList::SetCuts()
 {
     if (verboseLevel >0) {
         G4cout << "WLSPhysicsList::SetCuts:";
-        G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length")
-               << G4endl;
     }
 
     // set cut values for gamma at first and for e- second and next for e+,

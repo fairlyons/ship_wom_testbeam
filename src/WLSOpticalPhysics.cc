@@ -70,7 +70,6 @@ void WLSOpticalPhysics::ConstructProcess()
   fWLSProcess = new G4OpWLS();
 
   fScintProcess = new G4Scintillation();
-  fScintProcess->SetScintillationYieldFactor(1.0);
   //fScintProcess->SetScintillationByParticleType(true);
   //fScintProcess->SetScintillationExcitationRatio(0.001);
   fScintProcess->SetTrackSecondariesFirst(true);
