@@ -34,7 +34,7 @@
 #include "G4Event.hh"
 #include "G4RunManager.hh"
 #include <cmath>
-#include "g4root.hh"
+#include "G4AnalysisManager.hh"
 #include "G4Step.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4VTouchable.hh"

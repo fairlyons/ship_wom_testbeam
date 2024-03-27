@@ -33,7 +33,7 @@
 
 #include "OpNoviceEventAction.hh"
 #include "G4RunManager.hh"
-#include "g4root.hh"
+#include "G4AnalysisManager.hh"
 #include "G4Event.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"

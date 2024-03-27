@@ -36,7 +36,7 @@
 #include "G4Run.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
-#include "g4root.hh"
+#include "G4AnalysisManager.hh"
 #include "Randomize.hh"
 #include "G4HCofThisEvent.hh"
 
