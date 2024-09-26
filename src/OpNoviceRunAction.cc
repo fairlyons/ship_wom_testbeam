@@ -78,14 +78,16 @@ OpNoviceRunAction::OpNoviceRunAction()
 //--------------------------------------------------------------------
 
 //--------------------------------------------------------------------
-/*  analysisManager -> CreateNtuple("EventStat","Results");
+/*
+  analysisManager -> CreateNtuple("EventStat","Results");
   analysisManager -> CreateNtupleIColumn("scintillation_photons");
   analysisManager -> CreateNtupleIColumn("Cerenkov_photons");
   analysisManager -> CreateNtupleDColumn("Edep_other");
   analysisManager -> CreateNtupleDColumn("Edep_scintillator");
   analysisManager -> CreateNtupleDColumn("Edep_walls");
   analysisManager -> CreateNtupleIColumn("eventNumber");
-  analysisManager -> FinishNtuple(1);*/
+  analysisManager -> FinishNtuple(1);
+*/
 //--------------------------------------------------------------------
 /*
   analysisManager -> CreateNtuple("entersWOM","Results");
