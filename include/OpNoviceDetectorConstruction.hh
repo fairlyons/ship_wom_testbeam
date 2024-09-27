@@ -93,9 +93,7 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     // geometrical parameters
     G4double SteelZ;
     G4double WallThick;
-    G4double ReflectZ;
     G4double SctZ;
-    G4double ReflectThick;
     
     G4double Diam_In_In;
     G4double Diam_In_Out;
@@ -131,7 +129,6 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4VSolid *sipm_base;
   //-------------------------------------------------------------------
     G4UnionSolid* ScintillatorBox;
-    G4UnionSolid* SteelBeamWithHoles;
     G4Box* sipmBaseBox;
     G4Box* sipmSens;
     G4Box* sipmSensTop;
@@ -157,10 +154,6 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4VSolid *Air_ring_in;
     G4VSolid *PMMA_ring_lower;
     G4VSolid *EmptySteelBoxWithHole;
-    G4SubtractionSolid *EmptyReflectBoxWithHoleLT;
-    G4SubtractionSolid *EmptyReflectBoxWithHoleRT;
-    G4SubtractionSolid *EmptyReflectBoxWithHoleLB;
-    G4SubtractionSolid *EmptyReflectBoxWithHoleRB;
     G4SubtractionSolid *ScintillatorBoxWithHole;
     G4SubtractionSolid *sipmWindow;
 
@@ -174,11 +167,6 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4LogicalVolume* sipmBox_log;
     G4LogicalVolume* ScintillatorBox_log;
     G4LogicalVolume* SteelBox_log;
-    G4LogicalVolume* SteelBeam_log;
-    G4LogicalVolume* ReflectBoxLT_log;
-    G4LogicalVolume* ReflectBoxRT_log;
-    G4LogicalVolume* ReflectBoxLB_log;
-    G4LogicalVolume* ReflectBoxRB_log;
     G4LogicalVolume *Outer_tube_log;
     G4LogicalVolume *WOM_tube_log;
     G4LogicalVolume *Inner_tube_log;
@@ -198,12 +186,7 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     // physical volumes
     G4VPhysicalVolume* expHall_phys;
     G4VPhysicalVolume* SteelBox_phys;
-    G4VPhysicalVolume* SteelBeam_phys;
     G4VPhysicalVolume* ScintillatorBox_phys;
-    G4VPhysicalVolume* ReflectBoxLT_phys;
-    G4VPhysicalVolume* ReflectBoxRT_phys;
-    G4VPhysicalVolume* ReflectBoxLB_phys;
-    G4VPhysicalVolume* ReflectBoxRB_phys;
     G4VPhysicalVolume* sipmBase_phys;
     G4VPhysicalVolume* sipmWindow_phys;
     G4VPhysicalVolume* sipmSens_phys;
