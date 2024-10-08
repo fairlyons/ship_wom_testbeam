@@ -36,7 +36,7 @@
 #include "G4Run.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
-#include "g4root.hh"
+#include "G4AnalysisManager.hh"
 #include "Randomize.hh"
 #include "G4HCofThisEvent.hh"
 
@@ -64,26 +64,30 @@ OpNoviceRunAction::OpNoviceRunAction()
 
 //--------------------------------------------------------------------
   analysisManager -> CreateNtuple("Detected","Results");
-  //analysisManager -> CreateNtupleDColumn("x");
-  //analysisManager -> CreateNtupleDColumn("y");
+  analysisManager -> CreateNtupleDColumn("x");
+  analysisManager -> CreateNtupleDColumn("y");
   //analysisManager -> CreateNtupleIColumn("process");
   //analysisManager -> CreateNtupleIColumn("WomNo");
   //analysisManager -> CreateNtupleDColumn("waveLen");
   analysisManager -> CreateNtupleDColumn("time");
   analysisManager -> CreateNtupleIColumn("eventNumber");
   analysisManager -> CreateNtupleIColumn("sipmNumber");
+  analysisManager -> CreateNtupleIColumn("WOMNumber");
+  analysisManager -> CreateH3("evt_quadrant_time","",10,0,10,64,0,64,1024,0,300);
   analysisManager -> FinishNtuple(0);
 //--------------------------------------------------------------------
 
 //--------------------------------------------------------------------
-/*  analysisManager -> CreateNtuple("EventStat","Results");
+/*
+  analysisManager -> CreateNtuple("EventStat","Results");
   analysisManager -> CreateNtupleIColumn("scintillation_photons");
   analysisManager -> CreateNtupleIColumn("Cerenkov_photons");
   analysisManager -> CreateNtupleDColumn("Edep_other");
   analysisManager -> CreateNtupleDColumn("Edep_scintillator");
   analysisManager -> CreateNtupleDColumn("Edep_walls");
   analysisManager -> CreateNtupleIColumn("eventNumber");
-  analysisManager -> FinishNtuple(1);*/
+  analysisManager -> FinishNtuple(1);
+*/
 //--------------------------------------------------------------------
 /*
   analysisManager -> CreateNtuple("entersWOM","Results");

@@ -59,7 +59,7 @@
 
 #include "G4UIExecutive.hh"
 
-#include "g4root.hh"
+#include "G4AnalysisManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -131,7 +131,7 @@ int main(int argc,char** argv)
 
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   if ( file.size() ) analysisManager->SetFileName(file);
-  else analysisManager->SetFileName("test");
+  else analysisManager->SetFileName("test.root");
 
   // Initialize visualization
   //
