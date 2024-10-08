@@ -239,7 +239,7 @@ void OpNoviceDetectorConstruction::DefineMPTs()
 
   for(unsigned int i = 0; i < sizeof(absLen_purified_April2024)/sizeof(absLen_purified_April2024[0]); i++) absLen_purified_April2024[i] = absLen_purified_April2024[i]*m;
 
-  MPT_LAB_PPO->AddProperty("ABSLENGTH", photon_April2024, absLen_purified_April2024, 398, true, true);
+  MPT_LAB_PPO->AddProperty("ABSLENGTH", photon_April2024, absLen_purified_April2024, 399, true, true);
   MPT_LAB_PPO->AddConstProperty("RESOLUTIONSCALE", 1.0); //??
   MPT_LAB_PPO->AddConstProperty("SCINTILLATIONTIMECONSTANT1", 4.3*ns); // https://pubs.rsc.org/en/content/articlepdf/2020/ma/d0ma00055h
   MPT_LAB_PPO->AddConstProperty("SCINTILLATIONTIMECONSTANT2", 13.4*ns); // https://pubs.rsc.org/en/content/articlepdf/2020/ma/d0ma00055h

@@ -7,7 +7,7 @@ A Geant4 simulation of liquid scintillator cells being developed for the Surroun
 
 <dl>
   <dt><code>master</code></dt>
-  <dd>Main development branch. Contains most up to date parameters of 1 SBT cell (Aluminum with 5 cm wall thickness).</dd>
+  <dd>Main development branch. Contains most up to date parameters of 1 SBT cell (Aluminum with 5 mm wall thickness).</dd>
   <dt><code>4cellsv11</code></dt>
   <dd>4 cell prototype geometry.</dd>
   <dt><code>other</code></dt>
