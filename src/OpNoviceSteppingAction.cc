@@ -97,160 +97,159 @@ std::vector<double> eff_vec = {0.031566876321049,0.050221482039271,0.11835930336
 
 void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
 {
-  G4int eventNumber = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
 
-  if (eventNumber != fEventNumber) fEventNumber = eventNumber;
+  double HalfExpHall = 5*m;
+  if(abs(aStep->GetPostStepPoint()->GetPosition().getX())<HalfExpHall && abs(aStep->GetPostStepPoint()->GetPosition().getY())<HalfExpHall && abs(aStep->GetPostStepPoint()->GetPosition().getZ()<HalfExpHall)) {
 
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+    G4int eventNumber = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
+    if (eventNumber != fEventNumber) fEventNumber = eventNumber;
 
-  G4String ParticleName = aStep->GetTrack()->GetDynamicParticle()->GetParticleDefinition()->GetParticleName();
+    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
 
-  if(aStep->GetTrack()->GetDynamicParticle()->GetParticleDefinition() == G4OpticalPhoton::OpticalPhotonDefinition()) {
-    G4Track* track = aStep->GetTrack();
+    G4String ParticleName = aStep->GetTrack()->GetDynamicParticle()->GetParticleDefinition()->GetParticleName();
 
-    G4int stepnum = track->GetCurrentStepNumber();
-    G4int parentid = track->GetParentID();
+    if(aStep->GetTrack()->GetDynamicParticle()->GetParticleDefinition() == G4OpticalPhoton::OpticalPhotonDefinition()) {
+      G4Track* track = aStep->GetTrack();
 
-    G4int trackid = track->GetTrackID();
+      G4int stepnum = track->GetCurrentStepNumber();
+      G4int parentid = track->GetParentID();
+      G4int trackid = track->GetTrackID();
 
-    G4int process = 0;
-    std::string processname = "";
-    if(track->GetCreatorProcess()) processname = track->GetCreatorProcess()->GetProcessName();
-    if(processname == "Scintillation") process = 1;
-    else if( processname == "OpWLS") process = 3;
-    else if( processname == "Cerenkov") process = 2;
+      G4int process = 0;
+      std::string processname = "";
+      if(track->GetCreatorProcess()) processname = track->GetCreatorProcess()->GetProcessName();
+      if(processname == "Scintillation") process = 1;
+      else if( processname == "OpWLS") process = 3;
+      else if( processname == "Cerenkov") process = 2;
 
-    G4VPhysicalVolume* prevolumephys = NULL;
-    prevolumephys = aStep->GetPreStepPoint()->GetPhysicalVolume();
-    G4String prephysvolname = prevolumephys->GetName();
-    G4int pre_copynum = prevolumephys->GetCopyNo();
-    G4VPhysicalVolume* postvolumephys = NULL;
-    postvolumephys = aStep->GetPostStepPoint()->GetPhysicalVolume();
-/*    if(track->GetTrackStatus() == fStopAndKill) {
-      analysisManager->FillNtupleIColumn(6,0, pre_copynum);
-      analysisManager->FillNtupleDColumn(6,1, 1.24e-3 / track->GetKineticEnergy());
-      analysisManager->FillNtupleDColumn(6,2, aStep->GetPostStepPoint()->GetPosition().getX());
-      analysisManager->FillNtupleDColumn(6,3, aStep->GetPostStepPoint()->GetPosition().getY());
-      analysisManager->AddNtupleRow(6);
-    }*/
-    if(!postvolumephys) return;
-    G4String postphysvolname = postvolumephys->GetName();
-    G4int post_copynum = postvolumephys->GetCopyNo();
-    const G4VTouchable* posttouchable = NULL;
-    posttouchable = aStep->GetPostStepPoint()->GetTouchable();
-    if(!posttouchable) return;
+      G4VPhysicalVolume* prevolumephys = NULL;
+      prevolumephys = aStep->GetPreStepPoint()->GetPhysicalVolume();
+      G4String prephysvolname = prevolumephys->GetName();
+      G4int pre_copynum = prevolumephys->GetCopyNo();
+      G4VPhysicalVolume* postvolumephys = NULL;
+      postvolumephys = aStep->GetPostStepPoint()->GetPhysicalVolume();
+/*      if(track->GetTrackStatus() == fStopAndKill) {
+        analysisManager->FillNtupleIColumn(6,0, pre_copynum);
+        analysisManager->FillNtupleDColumn(6,1, 1.24e-3 / track->GetKineticEnergy());
+        analysisManager->FillNtupleDColumn(6,2, aStep->GetPostStepPoint()->GetPosition().getX());
+        analysisManager->FillNtupleDColumn(6,3, aStep->GetPostStepPoint()->GetPosition().getY());
+        analysisManager->AddNtupleRow(6);
+      }*/
+      if(!postvolumephys) return;
+      G4String postphysvolname = postvolumephys->GetName();
+      G4int post_copynum = postvolumephys->GetCopyNo();
+      const G4VTouchable* posttouchable = NULL;
+      posttouchable = aStep->GetPostStepPoint()->GetTouchable();
+      if(!posttouchable) return;
 
-    if(stepnum == 1) {
-      if(process == 1) fEventAction->scintillation_photons++;
-      if(process == 2) fEventAction->cherenkov_photons++;
-    }
+      if(stepnum == 1) {
+        if(process == 1) fEventAction->scintillation_photons++;
+        if(process == 2) fEventAction->cherenkov_photons++;
+      }
 
-    //---------------- 2. Born in WLS
-    if(process == 3) {
-      PhotonInfo info = {parentid, process, pre_copynum, post_copynum, 1.24e-3 / track -> GetKineticEnergy(), stepnum};
-      fEventAction->map_bornWLS[trackid] = info;
-    }
-    //---------------- 2. Born in WLS END
+      //---------------- 2. Born in WLS
+      if(process == 3) {
+        PhotonInfo info = {parentid, process, pre_copynum, post_copynum, 1.24e-3 / track -> GetKineticEnergy(), stepnum};
+        fEventAction->map_bornWLS[trackid] = info;
+      }
+      //---------------- 2. Born in WLS END
 
-    //---------------- 4. photons that reached SiPM's
-    if(postphysvolname == "sipmSens") {
-      if(sipm_detection(1.24e-3 / track->GetKineticEnergy())) {
-        //G4cout << "sipm hit !!!!!!!!! " << posttouchable->GetCopyNumber(0) << G4endl;
-        analysisManager->FillNtupleDColumn(0,0,aStep->GetPostStepPoint()->GetPosition().getX());
-        analysisManager->FillNtupleDColumn(0,1,aStep->GetPostStepPoint()->GetPosition().getY());
-        //analysisManager->FillNtupleIColumn(0,2, process);
-        //if(posttouchable->GetCopyNumber(0) < 40) {analysisManager->FillNtupleIColumn(0,3,1);} // WOM number
-        //if(posttouchable->GetCopyNumber(0) > 39) {analysisManager->FillNtupleIColumn(0,3,2);} // WOM number
-        //analysisManager->FillNtupleDColumn(0,4, 1.24e-3 / track->GetKineticEnergy());
-        analysisManager->FillNtupleDColumn(0,2,track->GetGlobalTime());
-        analysisManager->FillNtupleIColumn(0,3,eventNumber);
-        int sipm;
-        // Top left
-        if(posttouchable->GetCopyNumber(0) >= 0 && posttouchable->GetCopyNumber(0) < 5)        sipm = 0;
-        else if(posttouchable->GetCopyNumber(0) >= 5 && posttouchable->GetCopyNumber(0) < 10)  sipm = 1;
-        else if(posttouchable->GetCopyNumber(0) >= 10 && posttouchable->GetCopyNumber(0) < 15) sipm = 2;
-        else if(posttouchable->GetCopyNumber(0) >= 15 && posttouchable->GetCopyNumber(0) < 20) sipm = 3;
-        else if(posttouchable->GetCopyNumber(0) >= 20 && posttouchable->GetCopyNumber(0) < 25) sipm = 4;
-        else if(posttouchable->GetCopyNumber(0) >= 25 && posttouchable->GetCopyNumber(0) < 30) sipm = 5;
-        else if(posttouchable->GetCopyNumber(0) >= 30 && posttouchable->GetCopyNumber(0) < 35) sipm = 6;
-        else if(posttouchable->GetCopyNumber(0) >= 35 && posttouchable->GetCopyNumber(0) < 40) sipm = 7;
-        analysisManager->FillNtupleIColumn(0,4,sipm); //sipm number
-        analysisManager->FillNtupleIColumn(0,5,posttouchable->GetCopyNumber(1)); //WOM number
-        analysisManager->AddNtupleRow(0);
-        analysisManager->FillH3(0,eventNumber,sipm+8*(posttouchable->GetCopyNumber(1)-1),track->GetGlobalTime()); // quadrant 
+      //---------------- 4. photons that reached SiPM's
+      if(postphysvolname == "sipm_Sens_PV") {
+        if(sipm_detection(1.24e-3 / track->GetKineticEnergy())) {
+          //G4cout << "sipm hit !!!!!!!!! " << posttouchable->GetCopyNumber(0) << G4endl;
+          analysisManager->FillNtupleDColumn(0,0,aStep->GetPostStepPoint()->GetPosition().getX());
+          analysisManager->FillNtupleDColumn(0,1,aStep->GetPostStepPoint()->GetPosition().getY());
+          //analysisManager->FillNtupleIColumn(0,2, process);
+          //if(posttouchable->GetCopyNumber(0) < 40) {analysisManager->FillNtupleIColumn(0,3,1);} // WOM number
+          //if(posttouchable->GetCopyNumber(0) > 39) {analysisManager->FillNtupleIColumn(0,3,2);} // WOM number
+          //analysisManager->FillNtupleDColumn(0,4, 1.24e-3 / track->GetKineticEnergy());
+          analysisManager->FillNtupleDColumn(0,2,track->GetGlobalTime());
+          analysisManager->FillNtupleIColumn(0,3,eventNumber);
+          int sipm;
+          if(posttouchable->GetCopyNumber(0) >= 0 && posttouchable->GetCopyNumber(0) < 5)        sipm = 0;
+          else if(posttouchable->GetCopyNumber(0) >= 5 && posttouchable->GetCopyNumber(0) < 10)  sipm = 1;
+          else if(posttouchable->GetCopyNumber(0) >= 10 && posttouchable->GetCopyNumber(0) < 15) sipm = 2;
+          else if(posttouchable->GetCopyNumber(0) >= 15 && posttouchable->GetCopyNumber(0) < 20) sipm = 3;
+          else if(posttouchable->GetCopyNumber(0) >= 20 && posttouchable->GetCopyNumber(0) < 25) sipm = 4;
+          else if(posttouchable->GetCopyNumber(0) >= 25 && posttouchable->GetCopyNumber(0) < 30) sipm = 5;
+          else if(posttouchable->GetCopyNumber(0) >= 30 && posttouchable->GetCopyNumber(0) < 35) sipm = 6;
+          else if(posttouchable->GetCopyNumber(0) >= 35 && posttouchable->GetCopyNumber(0) < 40) sipm = 7;
+          analysisManager->FillNtupleIColumn(0,4,sipm); //sipm number
+          analysisManager->FillNtupleIColumn(0,5,posttouchable->GetCopyNumber(1)); //WOM number
+          analysisManager->AddNtupleRow(0);
+          analysisManager->FillH3(0,eventNumber,sipm+8*(posttouchable->GetCopyNumber(1)-1),track->GetGlobalTime()); // quadrant 
      
 
-        ////CROSSTALK PHOTONS
-        G4double rnd = double(rand())/RAND_MAX;
-        if( rnd < eff_CT ){
-             analysisManager->FillNtupleIColumn(0,4,sipm); //sipm number
-             analysisManager->FillNtupleIColumn(0,5,posttouchable->GetCopyNumber(1)); //WOM number
-             analysisManager->AddNtupleRow(0);
-             analysisManager->FillH3(0,eventNumber,sipm+8*(posttouchable->GetCopyNumber(1)-1),track->GetGlobalTime()); // quadrant  
+          ////CROSSTALK PHOTONS
+          G4double rnd = double(rand())/RAND_MAX;
+          if( rnd < eff_CT ){
+               analysisManager->FillNtupleIColumn(0,4,sipm); //sipm number
+               analysisManager->FillNtupleIColumn(0,5,posttouchable->GetCopyNumber(1)); //WOM number
+               analysisManager->AddNtupleRow(0);
+               analysisManager->FillH3(0,eventNumber,sipm+8*(posttouchable->GetCopyNumber(1)-1),track->GetGlobalTime()); // quadrant  
+          }
+          //DARK COUNTS
+          G4double rnd_time = double(rand())/RAND_MAX;  //to have dark count in random position in the wfs
+          G4double rnd_DC = double(rand())/RAND_MAX;
+          if( rnd_DC < DC_prob ){
+	        analysisManager->FillNtupleIColumn(0,4,sipm); //sipm number
+            analysisManager->FillNtupleIColumn(0,5,posttouchable->GetCopyNumber(1)); //WOM number
+            analysisManager->AddNtupleRow(0);
+            analysisManager->FillH3(0,eventNumber,sipm+8*(posttouchable->GetCopyNumber(1)-1),rnd_time*320.); // quadrant 
+
+            //CROSSTALK PHOTONS for dark count
+            G4double rnd_CT = double(rand())/RAND_MAX;
+            if( rnd_CT < eff_CT ){
+              analysisManager->FillNtupleIColumn(0,4,sipm); //sipm number
+              analysisManager->FillNtupleIColumn(0,5,posttouchable->GetCopyNumber(1)); //WOM number
+              analysisManager->AddNtupleRow(0);
+              analysisManager->FillH3(0,eventNumber,sipm+8*(posttouchable->GetCopyNumber(1)-1),rnd_time*320.); // quadrant
+            }
+          }
         }
-        //DARK COUNTS
-        G4double rnd_time = double(rand())/RAND_MAX;  //to have dark count in random position in the wfs
-        G4double rnd_DC = double(rand())/RAND_MAX;
-        if( rnd_DC < DC_prob ){
-	         analysisManager->FillNtupleIColumn(0,4,sipm); //sipm number
-             analysisManager->FillNtupleIColumn(0,5,posttouchable->GetCopyNumber(1)); //WOM number
-             analysisManager->AddNtupleRow(0);
-             analysisManager->FillH3(0,eventNumber,sipm+8*(posttouchable->GetCopyNumber(1)-1),rnd_time*320.); // quadrant 
-
-             //CROSSTALK PHOTONS for dark count
-             G4double rnd_CT = double(rand())/RAND_MAX;
-             if( rnd_CT < eff_CT ){
-                  analysisManager->FillNtupleIColumn(0,4,sipm); //sipm number
-                  analysisManager->FillNtupleIColumn(0,5,posttouchable->GetCopyNumber(1)); //WOM number
-                  analysisManager->AddNtupleRow(0);
-                  analysisManager->FillH3(0,eventNumber,sipm+8*(posttouchable->GetCopyNumber(1)-1),rnd_time*320.); // quadrant
-             }
-        }
-    }
-    track->SetTrackStatus(fStopAndKill);
-    }
-    //---------------- 4. photons that reached SiPM's END
-
-    //---------------- 3. Absorbed in WLS
-    if((postphysvolname == "WLS1") || (postphysvolname == "WLS2") || (postphysvolname == "WLSring")) {
-      PhotonInfo info = {parentid, process, pre_copynum, post_copynum, 1.24e-3 / track -> GetKineticEnergy(), stepnum};
-      fEventAction->map_absorbedWLS[trackid] = true;
-      fEventAction->map_absorbedWLS_info[trackid] = info;
-    }
-    else if(fEventAction->map_absorbedWLS.find(trackid) != fEventAction->map_absorbedWLS.end()) fEventAction->map_absorbedWLS[trackid] = false;
-    //---------------- 3. Absorbed in WLS END 
-
-    //---------------- 1. Fallen on WOM
-    if((postphysvolname == "WOM_tube")) {
-      PhotonInfo info = {parentid, process, pre_copynum, post_copynum, 1.24e-3 / track -> GetKineticEnergy(), stepnum};
-      fEventAction->map_entersWOM[trackid] = info;
-    }
-    //---------------- 1. Fallen on WOM END 
-
-    //---------------- 5. Fallen on PMMA vessel from scintillator
-    if((postphysvolname == "Outer_tube") || (postphysvolname == "Inner_tube") || (postphysvolname == "PMMA_Ring")  || (postphysvolname == "PMMA_Disk") || (postphysvolname == "PMMA_ring_lower")) {
-      if((prephysvolname == "ScintillatorBoxPV") || (prephysvolname == "SteelBox") || (prephysvolname == "Sct_Inside") || (prephysvolname == "ReflectBox")) {
-        PhotonInfo info = {parentid, process, pre_copynum, post_copynum, 1.24e-3 / track -> GetKineticEnergy(), stepnum};
-        fEventAction->map_entersPMMAvessel[trackid] = info;
+        track->SetTrackStatus(fStopAndKill);
       }
-    }
-    //---------------- 5. Fallen on PMMA vessel from scintillator END
-  }
+      //---------------- 4. photons that reached SiPM's END
 
-  else {
-    // non-optical particles
-    G4int volume_index;
-    G4VPhysicalVolume* prevolumephys = NULL;
-    prevolumephys = aStep->GetPreStepPoint()->GetPhysicalVolume();
-    G4String prephysvolname = prevolumephys->GetName();
-    if(prephysvolname == "ScintillatorBoxPV") volume_index = 1;
-    else if(prephysvolname == "SteelBoxPV" or prephysvolname == "SteelBeamPV") volume_index = 2;
-    else volume_index = 0;
-    fEventAction->addEdep(volume_index, aStep -> GetTotalEnergyDeposit());
+      //---------------- 3. Absorbed in WLS
+      if((postphysvolname == "WLS_In_PV") || (postphysvolname == "WLS_Out_PV")) {
+        PhotonInfo info = {parentid, process, pre_copynum, post_copynum, 1.24e-3 / track->GetKineticEnergy(), stepnum};
+        fEventAction->map_absorbedWLS[trackid] = true;
+        fEventAction->map_absorbedWLS_info[trackid] = info;
+      }
+      else if(fEventAction->map_absorbedWLS.find(trackid) != fEventAction->map_absorbedWLS.end()) fEventAction->map_absorbedWLS[trackid] = false;
+      //---------------- 3. Absorbed in WLS END 
+
+      //---------------- 1. Fallen on WOM
+      if((postphysvolname == "WOM_Tub_PV")) {
+        PhotonInfo info = {parentid, process, pre_copynum, post_copynum, 1.24e-3 / track -> GetKineticEnergy(), stepnum};
+        fEventAction->map_entersWOM[trackid] = info;
+      }
+      //---------------- 1. Fallen on WOM END 
+
+      //---------------- 5. Fallen on PMMA vessel from scintillator
+      if((postphysvolname == "Outer_Tube_PV") || (postphysvolname == "Inner_Tube_PV") || (postphysvolname == "PMMA_Ring_PV")  || (postphysvolname == "PMMA_Disk_PV") || (postphysvolname == "PMMA_Ring_Lower_PV")) {
+        if((prephysvolname == "Scintillator_Box_PV") || (prephysvolname == "Steel_Box_PV") || (prephysvolname == "Sct_Inside_PV")) {
+          PhotonInfo info = {parentid, process, pre_copynum, post_copynum, 1.24e-3 / track -> GetKineticEnergy(), stepnum};
+          fEventAction->map_entersPMMAvessel[trackid] = info;
+        }
+      }
+      //---------------- 5. Fallen on PMMA vessel from scintillator END
+    }
+
+    else {
+      // non-optical particles
+      G4int volume_index;
+      G4VPhysicalVolume* prevolumephys = NULL;
+      prevolumephys = aStep->GetPreStepPoint()->GetPhysicalVolume();
+      G4String prephysvolname = prevolumephys->GetName();
+      if(prephysvolname == "Scintillator_Box_PV") volume_index = 1;
+      else if(prephysvolname == "Steel_Box_PV") volume_index = 2;
+      else volume_index = 0;
+      fEventAction->addEdep(volume_index, aStep->GetTotalEnergyDeposit());
+    }
   }
 }
-
-
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

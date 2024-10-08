@@ -131,7 +131,7 @@ int main(int argc,char** argv)
 
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   if ( file.size() ) analysisManager->SetFileName(file);
-  else analysisManager->SetFileName("test");
+  else analysisManager->SetFileName("test.root");
 
   // Initialize visualization
   //

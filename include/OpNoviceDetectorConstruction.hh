@@ -71,6 +71,10 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     virtual ~OpNoviceDetectorConstruction();
     G4bool intersect_check;
 
+    double ytl;
+    double ytr;
+    double ybl;
+    double ybr;
     std::vector<std::pair<G4double,G4double>>  WOM_coord_vec;
 
   private:
@@ -124,9 +128,9 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
 
 
     // solids
-    G4Box* expHall_box;
+    G4Box* ExpHallBox;
   //-------------------------------------------------------------------
-    G4VSolid *sipm_base;
+    G4VSolid *sipmBase;
   //-------------------------------------------------------------------
     G4UnionSolid* ScintillatorBox;
     G4Box* sipmBaseBox;
@@ -135,80 +139,78 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4Box* sipmWindowAll;
     G4Box* sipmHole;
     G4Box* sipmBox;
-    G4VSolid *Outer_tube;
-    G4VSolid *Air_gap_out;
-    G4VSolid *WLS_tube_out;
-    G4VSolid *WOM_tube;
-    G4VSolid *Hole_box;
-    G4VSolid *Hole_sct;
-    G4VSolid *WLS_tube_in;
-    G4VSolid *Air_gap_in;
-    G4VSolid *Inner_tube;
-    G4VSolid *PMMA_Ring;
-    G4VSolid *PMMA_disk;
-    G4VSolid *PMMA_Hat;
+    G4VSolid *OuterTube;
+    G4VSolid *AirGapOut;
+    G4VSolid *WLSOut;
+    G4VSolid *WOMTube;
+    G4VSolid *HoleBox;
+    G4VSolid *HoleSct;
+    G4VSolid *WLSIn;
+    G4VSolid *AirGapIn;
+    G4VSolid *InnerTube;
+    G4VSolid *PMMARingLower;
+    G4VSolid *PMMADisk;
+    G4VSolid *PMMAHat;
     G4VSolid *SteelAdd;
     G4VSolid *SctInside;
-    G4VSolid *WLS_ring;
-    G4VSolid *Air_ring_out;
-    G4VSolid *Air_ring_in;
-    G4VSolid *PMMA_ring_lower;
+    G4VSolid *WLSRing;
+    G4VSolid *AirRingOut;
+    G4VSolid *AirRingIn;
+    G4VSolid *PMMARing;
     G4VSolid *EmptySteelBoxWithHole;
     G4SubtractionSolid *ScintillatorBoxWithHole;
     G4SubtractionSolid *sipmWindow;
 
     // logical volumes
-    G4LogicalVolume* expHall_log;
-    G4LogicalVolume* WOM_cell_log;
-    G4LogicalVolume* sipmSens_log;
-    G4LogicalVolume* sipmSensTop_log;
-    G4LogicalVolume* sipmWindow_log;
-    G4LogicalVolume* sipmBaseBox_log;
-    G4LogicalVolume* sipmBox_log;
-    G4LogicalVolume* ScintillatorBox_log;
-    G4LogicalVolume* SteelBox_log;
-    G4LogicalVolume *Outer_tube_log;
-    G4LogicalVolume *WOM_tube_log;
-    G4LogicalVolume *Inner_tube_log;
-    G4LogicalVolume *PMMA_Ring_log;
-    G4LogicalVolume *PMMA_disk_log;
-    G4LogicalVolume *Air_gap_out_log;
-    G4LogicalVolume *Air_gap_in_log;
-    G4LogicalVolume *WLS_tube_out_log;
-    G4LogicalVolume *WLS_tube_in_log;
-    G4LogicalVolume *PMMA_Hat_log;
-    G4LogicalVolume *Air_ring_out_log;
-    G4LogicalVolume *Air_ring_in_log;
-    G4LogicalVolume *PMMA_ring_lower_log;
-    G4LogicalVolume *Steel_Add_log;
-    G4LogicalVolume *Sct_Inside_log;
+    G4LogicalVolume* ExpHallLV;
+    G4LogicalVolume* sipmSensLV;
+    G4LogicalVolume* sipmSensTopLV;
+    G4LogicalVolume* sipmWindowLV;
+    G4LogicalVolume* sipmBaseBoxLV;
+    G4LogicalVolume* sipmBoxLV;
+    G4LogicalVolume* ScintillatorBoxLV;
+    G4LogicalVolume* SteelBoxLV;
+    G4LogicalVolume *OuterTubeLV;
+    G4LogicalVolume *WOMTubeLV;
+    G4LogicalVolume *InnerTubeLV;
+    G4LogicalVolume *PMMARingLowerLV;
+    G4LogicalVolume *PMMADiskLV;
+    G4LogicalVolume *AirGapOutLV;
+    G4LogicalVolume *AirGapInLV;
+    G4LogicalVolume *WLSOutLV;
+    G4LogicalVolume *WLSInLV;
+    G4LogicalVolume *PMMAHatLV;
+    G4LogicalVolume *AirRingOutLV;
+    G4LogicalVolume *AirRingInLV;
+    G4LogicalVolume *PMMARingLV;
+    G4LogicalVolume *SteelAddLV;
+    G4LogicalVolume *SctInsideLV;
 
     // physical volumes
-    G4VPhysicalVolume* expHall_phys;
-    G4VPhysicalVolume* SteelBox_phys;
-    G4VPhysicalVolume* ScintillatorBox_phys;
-    G4VPhysicalVolume* sipmBase_phys;
-    G4VPhysicalVolume* sipmWindow_phys;
-    G4VPhysicalVolume* sipmSens_phys;
-    G4VPhysicalVolume* sipmSensTop_phys;
+    G4VPhysicalVolume* ExpHallPV;
+    G4VPhysicalVolume* SteelBoxPV;
+    G4VPhysicalVolume* ScintillatorBoxPV;
+    G4VPhysicalVolume* sipmBasePV;
+    G4VPhysicalVolume* sipmWindowPV;
+    G4VPhysicalVolume* sipmSensTopPV;
 
-    std::vector<G4VPhysicalVolume*> Outer_tube_phys_vect;
-    std::vector<G4VPhysicalVolume*> WOM_tube_phys_vect;
-    std::vector<G4VPhysicalVolume*> Inner_tube_phys_vect;
-    std::vector<G4VPhysicalVolume*> PMMA_Ring_phys_vect;
-    std::vector<G4VPhysicalVolume*> PMMA_Disk_phys_vect;
-    std::vector<G4VPhysicalVolume*> Air_gap_out_phys_vect;
-    std::vector<G4VPhysicalVolume*> Air_gap_in_phys_vect;
-    std::vector<G4VPhysicalVolume*> WLS_tube_out_phys_vect;
-    std::vector<G4VPhysicalVolume*> WLS_tube_in_phys_vect;
-    std::vector<G4VPhysicalVolume*> PMMA_Hat_phys_vect;
-    std::vector<G4VPhysicalVolume*> Air_ring_out_phys_vect;
-    std::vector<G4VPhysicalVolume*> Air_ring_in_phys_vect;
-    std::vector<G4VPhysicalVolume*> PMMA_ring_lower_phys_vect;
-    std::vector<G4VPhysicalVolume*> Steel_Add_phys_vect;
-    std::vector<G4VPhysicalVolume*> Sct_Inside_phys_vect;
-    std::vector<G4VPhysicalVolume*> sipm_phys_vect;
-    std::vector<G4VPhysicalVolume*> sipmBox_phys_vect;
+    std::vector<G4VPhysicalVolume*> OuterTubePV_vect;
+    std::vector<G4VPhysicalVolume*> WOMTubePV_vect;
+    std::vector<G4VPhysicalVolume*> InnerTubePV_vect;
+    std::vector<G4VPhysicalVolume*> PMMARingLowerPV_vect;
+    std::vector<G4VPhysicalVolume*> PMMADiskPV_vect;
+    std::vector<G4VPhysicalVolume*> AirGapOutPV_vect;
+    std::vector<G4VPhysicalVolume*> AirGapInPV_vect;
+    std::vector<G4VPhysicalVolume*> WLSOutPV_vect;
+    std::vector<G4VPhysicalVolume*> WLSInPV_vect;
+    std::vector<G4VPhysicalVolume*> PMMAHatPV_vect;
+    std::vector<G4VPhysicalVolume*> AirRingOutPV_vect;
+    std::vector<G4VPhysicalVolume*> AirRingInPV_vect;
+    std::vector<G4VPhysicalVolume*> PMMARingPV_vect;
+    std::vector<G4VPhysicalVolume*> SteelAddPV_vect;
+    std::vector<G4VPhysicalVolume*> SctInsidePV_vect;
+    std::vector<G4VPhysicalVolume*> sipmSensPV_vect;
+    std::vector<G4VPhysicalVolume*> sipmBoxPV_vect;
 
     // visualisation
     G4Color blue;
