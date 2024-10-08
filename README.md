@@ -7,11 +7,11 @@ A Geant4 simulation of liquid scintillator cells being developed for the Surroun
 
 <dl>
   <dt><code>master</code></dt>
-  <dd>Main development branch. Contains most up to date parameters of 1 SBT cell.</dd>
-  <dt><code>4cells</code></dt>
+  <dd>Main development branch. Contains most up to date parameters of 1 SBT cell (Aluminum with 5 cm wall thickness).</dd>
+  <dt><code>4cellsv11</code></dt>
   <dd>4 cell prototype geometry.</dd>
   <dt><code>other</code></dt>
-  <dd>Old.</dd>
+  <dd>Old, including compatibility with Geant v10.7.</dd>
 </dl>
 
 ## Build Instructions
@@ -71,4 +71,4 @@ Now you can for example simulate some events, run with a macro file:
 
 ## Dependencies
 
-This code is compatible with Geant4 releases 4.10.x. Not compatible with Geant4 version 4.11.
+This code is compatible with Geant4 releases 4.11.2. Not compatible with Geant4 version 4.10.x
