@@ -222,7 +222,7 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
       //---------------- 3. Absorbed in WLS END 
 
       //---------------- 1. Fallen on WOM
-      if((postphysvolname == "WOM_Tub_PV")) {
+      if((postphysvolname == "WOM_Tube_PV")) {
         PhotonInfo info = {parentid, process, pre_copynum, post_copynum, 1.24e-3 / track -> GetKineticEnergy(), stepnum};
         fEventAction->map_entersWOM[trackid] = info;
       }
