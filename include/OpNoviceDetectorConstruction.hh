@@ -97,6 +97,8 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     // geometrical parameters
     G4double SteelZ;
     G4double WallThick;
+    G4double Thickness_Reflect;
+    G4double ReflectZ;
     G4double SctZ;
     
     G4double Diam_In_In;
@@ -158,6 +160,7 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4VSolid *AirRingIn;
     G4VSolid *PMMARing;
     G4VSolid *EmptySteelBoxWithHole;
+    G4VSolid *EmptyReflectBoxWithHole;
     G4SubtractionSolid *ScintillatorBoxWithHole;
     G4SubtractionSolid *sipmWindow;
 
@@ -169,6 +172,7 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4LogicalVolume* sipmBaseBoxLV;
     G4LogicalVolume* sipmBoxLV;
     G4LogicalVolume* ScintillatorBoxLV;
+    G4LogicalVolume* ReflectBoxLV;
     G4LogicalVolume* SteelBoxLV;
     G4LogicalVolume *OuterTubeLV;
     G4LogicalVolume *WOMTubeLV;
@@ -189,6 +193,7 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     // physical volumes
     G4VPhysicalVolume* ExpHallPV;
     G4VPhysicalVolume* SteelBoxPV;
+    G4VPhysicalVolume* ReflectBoxPV;
     G4VPhysicalVolume* ScintillatorBoxPV;
     G4VPhysicalVolume* sipmBasePV;
     G4VPhysicalVolume* sipmWindowPV;
