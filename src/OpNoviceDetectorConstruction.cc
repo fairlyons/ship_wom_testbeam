@@ -97,7 +97,7 @@ OpNoviceDetectorConstruction::OpNoviceDetectorConstruction()
   double ytm = (ytl+ytr)/2;
   double ybm = (ybl+ybr)/2;
   double height = ytm+ybm;
-  double womy = height/6;
+  double womy = height/4;
   WOM_coord_vec = {{0*mm, womy*mm}, {0*mm, -womy*mm}};
 }
 

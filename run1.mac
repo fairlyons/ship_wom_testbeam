@@ -1,6 +1,6 @@
 /analysis/setFileName mutestfile.root
 /gps/particle mu-
-/gps/position -400 600 500 mm
+/gps/position 0 0 500 mm
 /gps/direction 0 0 -1
 /gps/ene/type Mono
 /gps/energy 1 GeV
