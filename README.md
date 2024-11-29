@@ -22,38 +22,46 @@ A Geant4 simulation of liquid scintillator cells being developed for the Surroun
     ```
 
 2. Make sure to setup ROOT and Geant4
+
+    Recommended: using `lxplus`
+
+    ```bash
+    source /cvmfs/sft.cern.ch/lcg/contrib/gcc/11.3.0/x86_64-el9-gcc11-opt/setup.sh
+    source /cvmfs/geant4.cern.ch/geant4/11.2/x86_64-el9-gcc11-optdeb/CMake-setup.sh
+    ```
+    Local
     ```bash
     source /usr/local/[...]/geant4make.sh
     ```
-3. Move to code directory
+4. Move to code directory
     ```bash
     cd ship_wom_testbeam
     ```
 
-4. Create build directory
+5. Create build directory
     ```bash
     mkdir build
     ```
     
-5. Move to build directory
+6. Move to build directory
     ```bash
     cd build
     ```
-6. Run cmake
+7. Run cmake
     ```bash
     cmake ..
     ```
-7. Run make
+8. Run make
     ```bash
     make
     ```
 
 ## Run Instructions
 
-Set up Geant4
+If running locally: set up Geant4
 
 ```bash
-    source /usr/local/[...]/geant4make.sh
+source /usr/local/[...]/geant4make.sh
 ```
 
 To run in interactive mode simply execute inside the build directory with no arguments
@@ -62,7 +70,7 @@ To run in interactive mode simply execute inside the build directory with no arg
 ./OpNovice
 ```    
 
-Now you can for example simulate some events, run with a macro file:
+Now you can simulate some events, run with a macro file
 
 ```bash
 ./OpNovice -m run1.mac
