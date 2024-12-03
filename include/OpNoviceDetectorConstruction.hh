@@ -132,7 +132,6 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
   //-------------------------------------------------------------------
     G4VSolid *sipmBase;
   //-------------------------------------------------------------------
-    G4UnionSolid* ScintillatorBox;
     G4Box* sipmBaseBox;
     G4Box* sipmSens;
     G4Box* sipmSensTop;
@@ -158,6 +157,7 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4VSolid *AirRingIn;
     G4VSolid *PMMARing;
     G4VSolid *EmptySteelBoxWithHole;
+    G4SubtractionSolid *SideAirBox;
     G4SubtractionSolid *ScintillatorBoxWithHole;
     G4SubtractionSolid *sipmWindow;
 
@@ -169,6 +169,7 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4LogicalVolume* sipmBaseBoxLV;
     G4LogicalVolume* sipmBoxLV;
     G4LogicalVolume* ScintillatorBoxLV;
+    G4LogicalVolume* AirBoxLV;
     G4LogicalVolume* SteelBoxLV;
     G4LogicalVolume *OuterTubeLV;
     G4LogicalVolume *WOMTubeLV;
@@ -189,6 +190,7 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     // physical volumes
     G4VPhysicalVolume* ExpHallPV;
     G4VPhysicalVolume* SteelBoxPV;
+    G4VPhysicalVolume* AirBoxPV;
     G4VPhysicalVolume* ScintillatorBoxPV;
     G4VPhysicalVolume* sipmBasePV;
     G4VPhysicalVolume* sipmWindowPV;

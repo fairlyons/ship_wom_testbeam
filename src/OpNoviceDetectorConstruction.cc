@@ -90,15 +90,15 @@ OpNoviceDetectorConstruction::OpNoviceDetectorConstruction()
   Length_In = 195*mm;
   Length_sipm_box = 15*cm;
 
-  ytl = 644.396;
-  ytr = 590.790;
-  ybl = 601.561;
-  ybr = 633.625;
+  ytl = 632;
+  ytr = 618;
+  ybl = 610;
+  ybr = 638;
   double ytm = (ytl+ytr)/2;
   double ybm = (ybl+ybr)/2;
   double height = ytm+ybm;
   double womy = height/4;
-  WOM_coord_vec = {{0*mm, womy*mm}, {0*mm, -womy*mm}};
+  WOM_coord_vec = {{0*mm, 312.5*mm}, {0*mm, -312.5*mm}};
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -417,12 +417,12 @@ void OpNoviceDetectorConstruction::DefineSolids()
   ExpHallBox = new G4Box("World_Box", fExpHall, fExpHall, fExpHall);
   //-------------------------------------------------------------------
   //-------------------------------------------------------------------
-  double x = 400*mm;
+  double x = 417.5*mm;
 
   // Steel box
   std::vector<G4TwoVector> det = {G4TwoVector(-x, -ybl), G4TwoVector(-x, ytl), G4TwoVector(x, ytr), G4TwoVector(x, -ybr), G4TwoVector(-x, -ybl), G4TwoVector(-x, ytl), G4TwoVector(x, ytr), G4TwoVector(x, -ybr)};
   G4GenericTrap* SteelBox = new G4GenericTrap("Steel_Box", SteelZ/2., det);
-
+/*
   // Scintillator box left top
   std::vector<G4TwoVector> scint = 
   {G4TwoVector(-x+WallThick, -ybl+WallThick),
@@ -431,6 +431,32 @@ void OpNoviceDetectorConstruction::DefineSolids()
    G4TwoVector(x-WallThick, -ybr+WallThick),
    G4TwoVector(-x+WallThick, -ybl+WallThick),
    G4TwoVector(-x+WallThick, ytl-WallThick),
+   G4TwoVector(x-WallThick, ytr-WallThick),
+   G4TwoVector(x-WallThick, -ybr+WallThick)};
+  G4GenericTrap* ScintillatorBox = new G4GenericTrap("Scintillator_Box", SctZ/2., scint);*/
+
+  // Air box
+  std::vector<G4TwoVector> air = 
+  {G4TwoVector(-x+WallThick, -ybl+WallThick),
+   G4TwoVector(-x+WallThick, ytl-WallThick),
+   G4TwoVector(x-WallThick, ytr-WallThick),
+   G4TwoVector(x-WallThick, -ybr+WallThick),
+   G4TwoVector(-x+WallThick, -ybl+WallThick),
+   G4TwoVector(-x+WallThick, ytl-WallThick),
+   G4TwoVector(x-WallThick, ytr-WallThick),
+   G4TwoVector(x-WallThick, -ybr+WallThick)};
+  G4GenericTrap* AirBox = new G4GenericTrap("Air_Box", SctZ/2., air);
+
+  double airgap = 2*cm;
+
+  // Scintillator box left top
+  std::vector<G4TwoVector> scint = 
+  {G4TwoVector(-x+WallThick+airgap, (ybr-ybl)/((x-WallThick)*2)*(x-WallThick-airgap)-((ybl-ybr)/2+ybr-WallThick)),
+   G4TwoVector(-x+WallThick+airgap, (ytl-ytr)/((x-WallThick)*2)*(x-WallThick-airgap)+((ytr-ytl)/2+ytl-WallThick)),
+   G4TwoVector(x-WallThick, ytr-WallThick),
+   G4TwoVector(x-WallThick, -ybr+WallThick),
+   G4TwoVector(-x+WallThick+airgap, (ybr-ybl)/((x-WallThick)*2)*(x-WallThick-airgap)-((ybl-ybr)/2+ybr-WallThick)),
+   G4TwoVector(-x+WallThick+airgap, (ytl-ytr)/((x-WallThick)*2)*(x-WallThick-airgap)+((ytr-ytl)/2+ytl-WallThick)),
    G4TwoVector(x-WallThick, ytr-WallThick),
    G4TwoVector(x-WallThick, -ybr+WallThick)};
   G4GenericTrap* ScintillatorBox = new G4GenericTrap("Scintillator_Box", SctZ/2., scint);
@@ -507,7 +533,9 @@ void OpNoviceDetectorConstruction::DefineSolids()
   Rout = Diam_In_In/2;
   SctInside = new G4Tubs("Sct_Inside", Rin, Rout, (Length_In + Thickness_Ring)/2, 0, 360*deg);
 
-  G4SubtractionSolid* EmptySteelBox = new G4SubtractionSolid("Empty_Steel_Box", SteelBox, ScintillatorBox, 0, G4ThreeVector(0, 0, 0));
+  //G4SubtractionSolid* EmptySteelBox = new G4SubtractionSolid("Empty_Steel_Box", SteelBox, ScintillatorBox, 0, G4ThreeVector(0, 0, 0));
+  G4SubtractionSolid* EmptySteelBox = new G4SubtractionSolid("Empty_Steel_Box", SteelBox, AirBox, 0, G4ThreeVector(0, 0, 0));
+  SideAirBox = new G4SubtractionSolid("Side_Air_Box", AirBox, ScintillatorBox, 0, G4ThreeVector(0, 0, 0));
   
   G4double delta_Z_ScintillatorBoxWithHole = SctZ/2 - (Length_WOM - Thickness_Steel_Add_Bot - Thickness_Hat - WallThick) + (Length_Out + Thickness_Ring)/2;
   G4double delta_Z_Steel_Add = SteelZ/2 + Thickness_Steel_Add_Bot/2 + (Thickness_Steel_Add_Top - Thickness_Steel_Add_Bot)/4 - overlap;
@@ -533,7 +561,8 @@ void OpNoviceDetectorConstruction::DefineSolids()
     }
   }
   EmptySteelBoxWithHole = EmptySteelBoxWithHole_tempvec.back();
-  ScintillatorBoxWithHole = ScintillatorBoxWithHole_tempvec.back();
+  //ScintillatorBoxWithHole = ScintillatorBoxWithHole_tempvec.back();
+  ScintillatorBoxWithHole = new G4SubtractionSolid("Scintillator_Box_With_Hole_2", ScintillatorBoxWithHole_tempvec.back(), EmptySteelBox, 0, G4ThreeVector(0, 0, 0));
  
   sipmBox = new G4Box("sipm_Box", Length_sipm_box/2, Length_sipm_box/2, Length_sipm_box/2);
  
@@ -555,6 +584,7 @@ void OpNoviceDetectorConstruction::DefineLogicalVolumes()
   ExpHallLV = new G4LogicalVolume(ExpHallBox, air, "World_LV", 0, 0, 0);
   ScintillatorBoxLV = new G4LogicalVolume(ScintillatorBoxWithHole, LAB_PPO, "Scintillator_Box_LV", 0, 0, 0);
   SteelBoxLV = new G4LogicalVolume(EmptySteelBoxWithHole, Al, "Steel_Box_LV", 0, 0, 0);
+  AirBoxLV = new G4LogicalVolume(SideAirBox, air, "Air_Box_LV", 0, 0, 0);
   OuterTubeLV = new G4LogicalVolume(OuterTube, PMMA_side, "Outer_Tube_LV");
   WOMTubeLV = new G4LogicalVolume(WOMTube, PMMA_bottom, "WOM_Tube_LV");
   InnerTubeLV = new G4LogicalVolume(InnerTube, PMMA_side, "Inner_Tube_LV");
@@ -589,6 +619,7 @@ void OpNoviceDetectorConstruction::ConstructVolumes()
 
   SteelBoxPV = new G4PVPlacement(0, G4ThreeVector(), SteelBoxLV, "Steel_Box_PV", ExpHallLV, false, 100, intersect_check);
   ScintillatorBoxPV = new G4PVPlacement(0, G4ThreeVector(), ScintillatorBoxLV, "Scintillator_Box_PV", ExpHallLV, false, 200, intersect_check);
+  AirBoxPV = new G4PVPlacement(0, G4ThreeVector(), AirBoxLV, "Air_Box_PV", ExpHallLV, false, 1000, intersect_check);
 
   // PMMA Staff
   // Outer tube
@@ -678,11 +709,11 @@ void OpNoviceDetectorConstruction::DefineVisAttributes()
 
   G4VisAttributes *sctBoxVisAtt = new G4VisAttributes;
   sctBoxVisAtt->SetColor(blue);
-  sctBoxVisAtt->SetVisibility(false);
+  sctBoxVisAtt->SetVisibility(true);
   ScintillatorBoxLV->SetVisAttributes(sctBoxVisAtt);
   G4VisAttributes *sctBoxVisAtt1 = new G4VisAttributes;
   sctBoxVisAtt1->SetColor(blue);
-  sctBoxVisAtt1->SetVisibility(false);
+  sctBoxVisAtt1->SetVisibility(true);
   SctInsideLV->SetVisAttributes(sctBoxVisAtt1);
 
   G4VisAttributes *PMMAVisAtt = new G4VisAttributes;
