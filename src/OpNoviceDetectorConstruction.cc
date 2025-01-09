@@ -215,7 +215,7 @@ void OpNoviceDetectorConstruction::DefineMPTs()
     rindex_LAB_PPO[i] = Ridndex_LAB_PPO(wl);
   }
   G4MaterialPropertiesTable *MPT_LAB_PPO = new G4MaterialPropertiesTable();
-  MPT_LAB_PPO->AddConstProperty("SCINTILLATIONYIELD",10800./MeV); // https://underground.physics.berkeley.edu/WbLS/slides/PennRnD-Grullon.pdf
+  MPT_LAB_PPO->AddConstProperty("SCINTILLATIONYIELD",10830./MeV); // https://arxiv.org/pdf/2011.12924
   MPT_LAB_PPO->AddProperty("RINDEX", photon_en_LAB_PPO, rindex_LAB_PPO, 100);//->SetSpline(true);
 
   // emission
