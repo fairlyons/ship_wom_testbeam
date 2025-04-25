@@ -92,10 +92,10 @@ OpNoviceDetectorConstruction::OpNoviceDetectorConstruction()
   Length_In = 195*mm;
   Length_sipm_box = 15*cm;
 
-  WOM_coord_vec = {{-397*mm, 976.80*mm}, {-397*mm, 344.88*mm},
-                   {397*mm, 928.20*mm}, {397*mm, 308.10*mm},
-                   {-397*mm, -217.12*mm}, {-397*mm, -739.54*mm},
-                   {397*mm, -243.88*mm}, {397*mm, -755.46*mm}};
+  WOM_coord_vec = {{-397*mm, 977*mm}, {-397*mm, 346*mm},
+                   {397*mm, 928*mm}, {397*mm, 311*mm},
+                   {-397*mm, -217*mm}, {-397*mm, -739*mm},
+                   {397*mm, -240*mm}, {397*mm, -755*mm}};
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
