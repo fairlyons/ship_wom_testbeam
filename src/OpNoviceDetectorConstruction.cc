@@ -244,7 +244,7 @@ void OpNoviceDetectorConstruction::DefineMPTs()
 
   for(unsigned int i = 0; i < sizeof(absLen_purified_April2024)/sizeof(absLen_purified_April2024[0]); i++) absLen_purified_April2024[i] = absLen_purified_April2024[i]*m;
 
-  MPT_LAB_PPO->AddProperty("ABSLENGTH", photon_April2024, absLen_purified_April2024, 398, true, true);
+  MPT_LAB_PPO->AddProperty("ABSLENGTH", photon_April2024, absLen_purified_April2024, 399, true, true);
   MPT_LAB_PPO->AddConstProperty("RESOLUTIONSCALE", 1.0); //??
   MPT_LAB_PPO->AddConstProperty("SCINTILLATIONTIMECONSTANT1", 4.3*ns); // https://pubs.rsc.org/en/content/articlepdf/2020/ma/d0ma00055h
   MPT_LAB_PPO->AddConstProperty("SCINTILLATIONTIMECONSTANT2", 13.4*ns); // https://pubs.rsc.org/en/content/articlepdf/2020/ma/d0ma00055h
@@ -374,11 +374,8 @@ void OpNoviceDetectorConstruction::DefineSurfaces()
 
   G4double photonEnergy9[2] = {1*eV, 5*eV};
 
-  G4double total_Al[2] = {0.60, 0.60};
-
   G4MaterialPropertiesTable *MPTsurf_Steel = new G4MaterialPropertiesTable();
-  //MPTsurf_Steel->AddProperty("REFLECTIVITY", photonEnergy7, specular_steel, 59);
-  MPTsurf_Steel->AddProperty("REFLECTIVITY", photonEnergy9, total_Al, 2);
+  MPTsurf_Steel->AddProperty("REFLECTIVITY", photonEnergy7, specular_steel, 59);
   SteelBoxSurface->SetMaterialPropertiesTable(MPTsurf_Steel);
 
   G4LogicalSkinSurface* Surface = new G4LogicalSkinSurface("SteelSurface", SteelBox_log, SteelBoxSurface); //surface between the coating layer (that need to be filled with lab_ppo and steel)
@@ -418,41 +415,35 @@ void OpNoviceDetectorConstruction::DefineSurfaces()
    0.973531353135314,0.977491749174918,0.978151815181518,0.98013201320132,0.980792079207921,0.970891089108911,
    0.960990099009901,0.953729372937294}; // reflectivity of the coating https://www.optopolymer.de/produktuebersicht/diffuse-reflecting-materials/bariumsulfate-baso4-coating-oprc/
 
-  G4double specular_Al[2] = {0.25, 0.25};
-
   G4MaterialPropertiesTable* MTP_BaSOLT = new G4MaterialPropertiesTable();
-  //MTP_BaSOLT->AddProperty("SPECULARLOBECONSTANT", photonEnergy8, specular_coating, 59); // In order to have diffuse reclectivity (Lambertian), it is necessary define all the other three.
+  MTP_BaSOLT->AddProperty("SPECULARLOBECONSTANT", photonEnergy8, specular_coating, 59); // In order to have diffuse reclectivity (Lambertian), it is necessary define all the other three.
   MTP_BaSOLT->AddProperty("SPECULARSPIKECONSTANT", photonEnergy9, other_coating, 2); //  The diffuse is 1-other three (in this case 1-specular).
   MTP_BaSOLT->AddProperty("BACKSCATTERCONSTANT", photonEnergy9, other_coating, 2);
-  MTP_BaSOLT->AddProperty("SPECULARLOBECONSTANT", photonEnergy9, specular_Al, 2);
   G4MaterialPropertiesTable* MTP_BaSORT = new G4MaterialPropertiesTable();
-  //MTP_BaSORT->AddProperty("SPECULARLOBECONSTANT", photonEnergy8, specular_coating, 59); // In order to have diffuse reclectivity (Lambertian), it is necessary define all the other three.
+  MTP_BaSORT->AddProperty("SPECULARLOBECONSTANT", photonEnergy8, specular_coating, 59); // In order to have diffuse reclectivity (Lambertian), it is necessary define all the other three.
   MTP_BaSORT->AddProperty("SPECULARSPIKECONSTANT", photonEnergy9, other_coating, 2); //  The diffuse is 1-other three (in this case 1-specular).
   MTP_BaSORT->AddProperty("BACKSCATTERCONSTANT", photonEnergy9, other_coating, 2);
-  MTP_BaSORT->AddProperty("SPECULARLOBECONSTANT", photonEnergy9, specular_Al, 2);
   G4MaterialPropertiesTable* MTP_BaSOLB = new G4MaterialPropertiesTable();
-  //MTP_BaSOLB->AddProperty("SPECULARLOBECONSTANT", photonEnergy8, specular_coating, 59); // In order to have diffuse reclectivity (Lambertian), it is necessary define all the other three.
+  MTP_BaSOLB->AddProperty("SPECULARLOBECONSTANT", photonEnergy8, specular_coating, 59); // In order to have diffuse reclectivity (Lambertian), it is necessary define all the other three.
   MTP_BaSOLB->AddProperty("SPECULARSPIKECONSTANT", photonEnergy9, other_coating, 2); //  The diffuse is 1-other three (in this case 1-specular).
   MTP_BaSOLB->AddProperty("BACKSCATTERCONSTANT", photonEnergy9, other_coating, 2);
-  MTP_BaSOLB->AddProperty("SPECULARLOBECONSTANT", photonEnergy9, specular_Al, 2);
   G4MaterialPropertiesTable* MTP_BaSORB = new G4MaterialPropertiesTable();
-  //MTP_BaSORB->AddProperty("SPECULARLOBECONSTANT", photonEnergy8, specular_coating, 59); // In order to have diffuse reclectivity (Lambertian), it is necessary define all the other three.
+  MTP_BaSORB->AddProperty("SPECULARLOBECONSTANT", photonEnergy8, specular_coating, 59); // In order to have diffuse reclectivity (Lambertian), it is necessary define all the other three.
   MTP_BaSORB->AddProperty("SPECULARSPIKECONSTANT", photonEnergy9, other_coating, 2); //  The diffuse is 1-other three (in this case 1-specular).
   MTP_BaSORB->AddProperty("BACKSCATTERCONSTANT", photonEnergy9, other_coating, 2);
-  MTP_BaSORB->AddProperty("SPECULARLOBECONSTANT", photonEnergy9, specular_Al, 2);
 
-  G4double reflLT[2], reflRT[2], reflLB[2], reflRB[2];
-  for(int i = 0; i < 2; ++i) {
-    reflLT[i] = 1.0*total_Al[i];
-    reflRT[i] = 1.0*total_Al[i];
-    reflLB[i] = 1.0*total_Al[i];
-    reflRB[i] = 1.0*total_Al[i];
+  G4double reflLT[19], reflRT[19], reflLB[19], reflRB[19];
+  for(int i = 0; i < 19; ++i) {
+    reflLT[i] = 1.0*refl_coating[i];
+    reflRT[i] = 1.0*refl_coating[i];
+    reflLB[i] = 1.0*refl_coating[i];
+    reflRB[i] = 1.0*refl_coating[i];
   }
  
-  MTP_BaSOLT->AddProperty("REFLECTIVITY", photonEnergy9, reflLT, 2);
-  MTP_BaSORT->AddProperty("REFLECTIVITY", photonEnergy9, reflRT, 2);
-  MTP_BaSOLB->AddProperty("REFLECTIVITY", photonEnergy9, reflLB, 2);
-  MTP_BaSORB->AddProperty("REFLECTIVITY", photonEnergy9, reflRB, 2);
+  MTP_BaSOLT->AddProperty("REFLECTIVITY", p_coating_refl, reflLT, 19);
+  MTP_BaSORT->AddProperty("REFLECTIVITY", p_coating_refl, reflRT, 19);
+  MTP_BaSOLB->AddProperty("REFLECTIVITY", p_coating_refl, reflLB, 19);
+  MTP_BaSORB->AddProperty("REFLECTIVITY", p_coating_refl, reflRB, 19);
 
   BaSO4_surfaceLT->SetMaterialPropertiesTable(MTP_BaSOLT);
   BaSO4_surfaceRT->SetMaterialPropertiesTable(MTP_BaSORT);
