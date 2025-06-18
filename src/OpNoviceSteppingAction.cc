@@ -166,45 +166,36 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
           //analysisManager->FillNtupleDColumn(0,4, 1.24e-3 / track->GetKineticEnergy());
           analysisManager->FillNtupleDColumn(0,2,track->GetGlobalTime());
           analysisManager->FillNtupleIColumn(0,3,eventNumber);
-          int sipm;
-          if(posttouchable->GetCopyNumber(0) >= 0 && posttouchable->GetCopyNumber(0) < 5)        sipm = 0;
-          else if(posttouchable->GetCopyNumber(0) >= 5 && posttouchable->GetCopyNumber(0) < 10)  sipm = 1;
-          else if(posttouchable->GetCopyNumber(0) >= 10 && posttouchable->GetCopyNumber(0) < 15) sipm = 2;
-          else if(posttouchable->GetCopyNumber(0) >= 15 && posttouchable->GetCopyNumber(0) < 20) sipm = 3;
-          else if(posttouchable->GetCopyNumber(0) >= 20 && posttouchable->GetCopyNumber(0) < 25) sipm = 4;
-          else if(posttouchable->GetCopyNumber(0) >= 25 && posttouchable->GetCopyNumber(0) < 30) sipm = 5;
-          else if(posttouchable->GetCopyNumber(0) >= 30 && posttouchable->GetCopyNumber(0) < 35) sipm = 6;
-          else if(posttouchable->GetCopyNumber(0) >= 35 && posttouchable->GetCopyNumber(0) < 40) sipm = 7;
-          analysisManager->FillNtupleIColumn(0,4,sipm); //sipm number
+          analysisManager->FillNtupleIColumn(0,4,posttouchable->GetCopyNumber(0)); //sipm number
           analysisManager->FillNtupleIColumn(0,5,posttouchable->GetCopyNumber(1)); //WOM number
           analysisManager->AddNtupleRow(0);
-          analysisManager->FillH3(0,eventNumber,sipm+8*(posttouchable->GetCopyNumber(1)-1),track->GetGlobalTime()); // quadrant 
+          analysisManager->FillH3(0,eventNumber,posttouchable->GetCopyNumber(0)+8*(posttouchable->GetCopyNumber(1)-1),track->GetGlobalTime()); // quadrant 
      
 
           ////CROSSTALK PHOTONS
           G4double rnd = double(rand())/RAND_MAX;
           if( rnd < eff_CT ){
-               analysisManager->FillNtupleIColumn(0,4,sipm); //sipm number
+               analysisManager->FillNtupleIColumn(0,4,posttouchable->GetCopyNumber(0)); //sipm number
                analysisManager->FillNtupleIColumn(0,5,posttouchable->GetCopyNumber(1)); //WOM number
                analysisManager->AddNtupleRow(0);
-               analysisManager->FillH3(0,eventNumber,sipm+8*(posttouchable->GetCopyNumber(1)-1),track->GetGlobalTime()); // quadrant  
+               analysisManager->FillH3(0,eventNumber,posttouchable->GetCopyNumber(0)+8*(posttouchable->GetCopyNumber(1)-1),track->GetGlobalTime()); // quadrant  
           }
           //DARK COUNTS
           G4double rnd_time = double(rand())/RAND_MAX;  //to have dark count in random position in the wfs
           G4double rnd_DC = double(rand())/RAND_MAX;
           if( rnd_DC < DC_prob ){
-	        analysisManager->FillNtupleIColumn(0,4,sipm); //sipm number
+	        analysisManager->FillNtupleIColumn(0,4,posttouchable->GetCopyNumber(0)); //sipm number
             analysisManager->FillNtupleIColumn(0,5,posttouchable->GetCopyNumber(1)); //WOM number
             analysisManager->AddNtupleRow(0);
-            analysisManager->FillH3(0,eventNumber,sipm+8*(posttouchable->GetCopyNumber(1)-1),rnd_time*320.); // quadrant 
+            analysisManager->FillH3(0,eventNumber,posttouchable->GetCopyNumber(0)+8*(posttouchable->GetCopyNumber(1)-1),rnd_time*320.); // quadrant 
 
             //CROSSTALK PHOTONS for dark count
             G4double rnd_CT = double(rand())/RAND_MAX;
             if( rnd_CT < eff_CT ){
-              analysisManager->FillNtupleIColumn(0,4,sipm); //sipm number
+              analysisManager->FillNtupleIColumn(0,4,posttouchable->GetCopyNumber(0)); //sipm number
               analysisManager->FillNtupleIColumn(0,5,posttouchable->GetCopyNumber(1)); //WOM number
               analysisManager->AddNtupleRow(0);
-              analysisManager->FillH3(0,eventNumber,sipm+8*(posttouchable->GetCopyNumber(1)-1),rnd_time*320.); // quadrant
+              analysisManager->FillH3(0,eventNumber,posttouchable->GetCopyNumber(0)+8*(posttouchable->GetCopyNumber(1)-1),rnd_time*320.); // quadrant
             }
           }
         }
