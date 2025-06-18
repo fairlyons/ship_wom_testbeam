@@ -103,6 +103,9 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4double Diam_Out_Out;
     G4double Diam_WOM_In;
     G4double Diam_WOM_Out;
+    G4double Thickness_WOM;
+    G4double Thickness_Air;
+    G4double Thickness_Vessel;
     G4double Diam_Steel_Add;
     G4double Diam_Hat;
     G4double Length_Out;
@@ -130,8 +133,8 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
   //-------------------------------------------------------------------
     G4VSolid *sipm_base;
   //-------------------------------------------------------------------
-    G4UnionSolid* ScintillatorBox;
-    G4UnionSolid* SteelBeamWithHoles;
+    G4VSolid* ScintillatorBox;
+    G4VSolid* SteelBeamWithHoles;
     G4Box* sipmBaseBox;
     G4Box* sipmSens;
     G4Box* sipmSensTop;
@@ -162,7 +165,7 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     G4SubtractionSolid *EmptyReflectBoxWithHoleLB;
     G4SubtractionSolid *EmptyReflectBoxWithHoleRB;
     G4SubtractionSolid *ScintillatorBoxWithHole;
-    G4SubtractionSolid *sipmWindow;
+    G4VSolid *sipmWindow;
 
     // logical volumes
     G4LogicalVolume* expHall_log;
