@@ -174,7 +174,7 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
         else if(posttouchable->GetCopyNumber(0) >= 25 && posttouchable->GetCopyNumber(0) < 30) sipm = 5;
         else if(posttouchable->GetCopyNumber(0) >= 30 && posttouchable->GetCopyNumber(0) < 35) sipm = 6;
         else if(posttouchable->GetCopyNumber(0) >= 35 && posttouchable->GetCopyNumber(0) < 40) sipm = 7;
-        analysisManager->FillNtupleIColumn(0,4,sipm); //sipm number
+        analysisManager->FillNtupleIColumn(0,4,posttouchable->GetCopyNumber(0)); //sipm number
         analysisManager->FillNtupleIColumn(0,5,posttouchable->GetCopyNumber(1)); //WOM number
         analysisManager->AddNtupleRow(0);
         analysisManager->FillH3(0,eventNumber,sipm+8*(posttouchable->GetCopyNumber(1)-1),track->GetGlobalTime()); // quadrant 

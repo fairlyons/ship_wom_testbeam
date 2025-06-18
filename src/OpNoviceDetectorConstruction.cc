@@ -65,10 +65,6 @@ OpNoviceDetectorConstruction::OpNoviceDetectorConstruction()
   ReflectZ = SteelZ - WallThick*2;
   SctZ = SteelZ - WallThick*2 - ReflectThick*2;
 
-  SteelZ = 21*cm;
-  WallThick = 5*mm;
-  SctZ = SteelZ - WallThick*2;
-
   Diam_WOM_Out = 60*mm;
   Thickness_WOM = 3*mm;
   Diam_WOM_In = Diam_WOM_Out - 2*Thickness_WOM;
@@ -944,8 +940,8 @@ void OpNoviceDetectorConstruction::ConstructVolumes()
     if(pos == 0) { for(int i = 0; i < n_sipm; i++) {
       G4RotationMatrix* RM2 = new G4RotationMatrix();
       RM2->rotateZ(-(i+0.5)*360./n_sipm*deg);
-      G4double Xrotation = radius_sipm*std::cos((i + 0.5)*2*pi/n_sipm);
-      G4double Yrotation = radius_sipm*std::sin((i + 0.5)*2*pi/n_sipm);
+      G4double Xrotation = radius_sipm*std::cos((i + 0.5)*2*pi/n_sipm + pi/2);
+      G4double Yrotation = radius_sipm*std::sin((i + 0.5)*2*pi/n_sipm + pi/2);
       sipm_phys_vect.push_back(new G4PVPlacement(RM2, G4ThreeVector(Xrotation, Yrotation, -Length_sipm_box/2+sipmWindowThickness+sipmSensThicknessTop+sipmSensThickness/2), sipmSens_log, "sipmSens", sipmBox_log, false, sipm_id++, intersect_check));
       sipmSensTop_phys = new G4PVPlacement(RM2, G4ThreeVector(Xrotation, Yrotation, -Length_sipm_box/2+sipmWindowThickness+sipmSensThicknessTop/2), sipmSensTop_log, "sipmSensTop", sipmBox_log, false, 801, intersect_check);
       sipmWindow_phys = new G4PVPlacement(RM2, G4ThreeVector(Xrotation, Yrotation, -Length_sipm_box/2+sipmWindowThickness), sipmWindow_log, "sipmWindow", sipmBox_log, false, 800, intersect_check);
