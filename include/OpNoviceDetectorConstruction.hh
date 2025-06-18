@@ -76,6 +76,7 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
     double ybl;
     double ybr;
     std::vector<std::pair<G4double,G4double>>  WOM_coord_vec;
+    int n_sipm;
 
   private:
     G4double fExpHall;
