@@ -87,7 +87,7 @@ OpNoviceDetectorConstruction::OpNoviceDetectorConstruction()
   Length_sipm_box = 15*cm;
 
   n_sipm = 40;
-  sipmSizeSens = Thickness_WOM;
+  sipmSizeSens = 3*mm;
   sipmSize = sipmSizeSens + 0.4*mm;
   sipmBaseThickness = 1.*mm;
   sipmWindowThickness =  0.15*mm;
