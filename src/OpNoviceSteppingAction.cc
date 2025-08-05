@@ -44,7 +44,7 @@
 #include <vector>
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
-
+#include "G4OpBoundaryProcess.hh"
 #include "OpNoviceEventAction.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -146,6 +146,25 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
         if(process == 1) fEventAction->scintillation_photons++;
         if(process == 2) fEventAction->cherenkov_photons++;
       }
+     if (aStep->GetPostStepPoint()->GetStepStatus() == fGeomBoundary) {
+       static G4ParticleDefinition* opticalphoton = G4OpticalPhoton::OpticalPhotonDefinition();
+       G4OpBoundaryProcessStatus theStatus = Undefined;
+       G4ProcessManager* OpManager = opticalphoton->GetProcessManager();
+       G4ProcessVector* postStepDoItVector = OpManager->GetPostStepProcessVector(typeDoIt);
+       G4int n_proc = postStepDoItVector->entries();
+       for (G4int i = 0; i < n_proc; ++i) {
+         G4VProcess* currentProcess = (*postStepDoItVector)[i];
+         auto opProc = dynamic_cast<G4OpBoundaryProcess*>(currentProcess);
+         if (opProc) {
+             theStatus = opProc->GetStatus();
+             if(theStatus == TotalInternalReflection) fEventAction->map_refl[trackid].internal += 1;
+             if(theStatus == LambertianReflection) fEventAction->map_refl[trackid].lambertian += 1;
+             if(theStatus == LobeReflection) fEventAction->map_refl[trackid].lobe += 1;
+             if(theStatus == SpikeReflection) fEventAction->map_refl[trackid].spike += 1;
+             if(theStatus == BackScattering) fEventAction->map_refl[trackid].back += 1;
+         }
+       }
+     }
 
       //---------------- 2. Born in WLS
       if(process == 3) {

@@ -119,12 +119,6 @@ void OpNoviceEventAction::EndOfEventAction(const G4Event*)
     }
   }
 
-  map_bornWLS.clear();
-  map_absorbedWLS.clear();
-  map_absorbedWLS_info.clear();
-  map_entersWOM.clear();
-  map_entersPMMAvessel.clear();
-
   analysisManager->FillNtupleIColumn(1,0, scintillation_photons);
   analysisManager->FillNtupleIColumn(1,1, cherenkov_photons);
   analysisManager->FillNtupleDColumn(1,2, fEnergyDeposit[0]);
@@ -132,8 +126,28 @@ void OpNoviceEventAction::EndOfEventAction(const G4Event*)
   analysisManager->FillNtupleDColumn(1,4, fEnergyDeposit[2]);
   analysisManager->FillNtupleIColumn(1,5, eventNumber);
   analysisManager->AddNtupleRow(1);
+*/
 
-  fEnergyDeposit.clear();*/
+  map<G4int, G4bool>::iterator it;
+  for(it=map_absorbedWLS.begin(); it!=map_absorbedWLS.end(); it++) {
+    if(it->second) {
+      ReflInfo info = map_refl[it->first];
+      analysisManager->FillNtupleIColumn(1,0, it->first);
+      analysisManager->FillNtupleIColumn(1,1, info.internal);
+      analysisManager->FillNtupleIColumn(1,2, info.lambertian);
+      analysisManager->FillNtupleIColumn(1,3, info.lobe);
+      analysisManager->FillNtupleIColumn(1,4, info.spike);
+      analysisManager->FillNtupleIColumn(1,5, info.back);
+      analysisManager->AddNtupleRow(1);
+    }
+  }
+  fEnergyDeposit.clear();
+  map_bornWLS.clear();
+  map_absorbedWLS.clear();
+  map_absorbedWLS_info.clear();
+  map_entersWOM.clear();
+  map_entersPMMAvessel.clear();
+  map_refl.clear();
 }
 
 OpNoviceEventAction::~OpNoviceEventAction()

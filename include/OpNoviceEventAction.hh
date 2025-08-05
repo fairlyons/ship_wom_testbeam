@@ -59,6 +59,16 @@ typedef struct
     G4int stepnum;
 } PhotonInfo;
 
+typedef struct
+{
+    G4int internal;
+    G4int lambertian;
+    G4int lobe;
+    G4int spike;
+    G4int back;
+} ReflInfo;
+
+
 class OpNoviceEventAction : public G4UserEventAction
 {
   public:
@@ -76,6 +86,7 @@ class OpNoviceEventAction : public G4UserEventAction
     map<G4int, PhotonInfo> map_entersWOM;
 
     map<G4int, PhotonInfo> map_entersPMMAvessel;
+    map<G4int, ReflInfo> map_refl;
 
     //long long int fallen_on_steel;
     G4int scintillation_photons;

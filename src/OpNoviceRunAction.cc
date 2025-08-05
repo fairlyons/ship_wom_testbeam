@@ -77,6 +77,14 @@ OpNoviceRunAction::OpNoviceRunAction()
 //--------------------------------------------------------------------
 
 //--------------------------------------------------------------------
+  analysisManager -> CreateNtuple("EventStat","AbsorbedWLS");
+  analysisManager -> CreateNtupleIColumn("first");
+  analysisManager -> CreateNtupleIColumn("internal");
+  analysisManager -> CreateNtupleIColumn("lambertian");
+  analysisManager -> CreateNtupleIColumn("lobe");
+  analysisManager -> CreateNtupleIColumn("spike");
+  analysisManager -> CreateNtupleIColumn("back");
+  analysisManager -> FinishNtuple(1);
 /*
   analysisManager -> CreateNtuple("EventStat","Results");
   analysisManager -> CreateNtupleIColumn("scintillation_photons");
