@@ -137,7 +137,7 @@ void OpNoviceDetectorConstruction::DefineMaterials()
   LAB->AddElement(H, natoms = 28);
   LAB->AddElement(C, natoms = 17);
   // Diphenyloxazole (PPO)
-  G4Material* PPO = new G4Material("PPO", density = 1.128*g/cm3, ncomponent = 4); // density: https://www.echemi.com/sds/24-diphenyloxazole-pid_Rock24446.html
+  G4Material* PPO = new G4Material("PPO", density = 1.06*g/cm3, ncomponent = 4); // https://www.chemsynthesis.com/base/chemical-structure-6313.html
   PPO->AddElement(H, natoms = 11);
   PPO->AddElement(C, natoms = 15);
   PPO->AddElement(N, natoms = 1);
