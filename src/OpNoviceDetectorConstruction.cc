@@ -357,7 +357,7 @@ void OpNoviceDetectorConstruction::DefineSurfaces()
   G4double photonEnergy9[2] = {1*eV, 5*eV};
 
   G4double other_coating[2] = {0, 0}; // it is not relevant in our case, it is for not smooth surfaces 
-  G4double specular_Al[2] = {0.0, 0.0};
+  G4double specular_Al[2] = {1.0, 1.0};
   G4double total_Al[2] = {0.75, 0.75};
 
   G4MaterialPropertiesTable *MPTsurf_Steel = new G4MaterialPropertiesTable();
