@@ -90,15 +90,15 @@ OpNoviceDetectorConstruction::OpNoviceDetectorConstruction()
   Length_In = 195*mm;
   Length_sipm_box = 15*cm;
 
-  ytl = 632;
-  ytr = 618;
-  ybl = 610;
-  ybr = 638;
+  ytl = 664;
+  ytr = 651;
+  ybl = 645;
+  ybr = 671;
   double ytm = (ytl+ytr)/2;
   double ybm = (ybl+ybr)/2;
   double height = ytm+ybm;
   double womy = height/4;
-  WOM_coord_vec = {{0*mm, 312.5*mm}, {0*mm, -312.5*mm}};
+  WOM_coord_vec = {{0*mm, 328*mm}, {0*mm, -328*mm}};  ytl = 632;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -357,7 +357,7 @@ void OpNoviceDetectorConstruction::DefineSurfaces()
   G4double photonEnergy9[2] = {1*eV, 5*eV};
 
   G4double other_coating[2] = {0, 0}; // it is not relevant in our case, it is for not smooth surfaces 
-  G4double specular_Al[2] = {1.0, 1.0};
+  G4double specular_Al[2] = {0.0, 0.0};
   G4double total_Al[2] = {0.75, 0.75};
 
   G4MaterialPropertiesTable *MPTsurf_Steel = new G4MaterialPropertiesTable();
@@ -401,7 +401,7 @@ void OpNoviceDetectorConstruction::DefineSolids()
   ExpHallBox = new G4Box("World_Box", fExpHall, fExpHall, fExpHall);
   //-------------------------------------------------------------------
   //-------------------------------------------------------------------
-  double x = 417.5*mm;
+  double x = 400*mm;
 
   // Steel box
   std::vector<G4TwoVector> det = {G4TwoVector(-x, -ybl), G4TwoVector(-x, ytl), G4TwoVector(x, ytr), G4TwoVector(x, -ybr), G4TwoVector(-x, -ybl), G4TwoVector(-x, ytl), G4TwoVector(x, ytr), G4TwoVector(x, -ybr)};
@@ -567,7 +567,7 @@ void OpNoviceDetectorConstruction::DefineLogicalVolumes()
 {
   ExpHallLV = new G4LogicalVolume(ExpHallBox, air, "World_LV", 0, 0, 0);
   ScintillatorBoxLV = new G4LogicalVolume(ScintillatorBoxWithHole, LAB_PPO, "Scintillator_Box_LV", 0, 0, 0);
-  SteelBoxLV = new G4LogicalVolume(EmptySteelBoxWithHole, Al, "Steel_Box_LV", 0, 0, 0);
+  SteelBoxLV = new G4LogicalVolume(EmptySteelBoxWithHole, steel, "Steel_Box_LV", 0, 0, 0);
   AirBoxLV = new G4LogicalVolume(SideAirBox, air, "Air_Box_LV", 0, 0, 0);
   OuterTubeLV = new G4LogicalVolume(OuterTube, PMMA_side, "Outer_Tube_LV");
   WOMTubeLV = new G4LogicalVolume(WOMTube, PMMA_bottom, "WOM_Tube_LV");
