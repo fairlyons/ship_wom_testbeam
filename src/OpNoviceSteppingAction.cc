@@ -152,7 +152,6 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
     }
     //---------------- 2. Born in WLS END
 
-<<<<<<< HEAD
     //---------------- 4. photons that reached SiPM's
     if(postphysvolname == "sipmSens") {
       if(sipm_detection(1.24e-3 / track->GetKineticEnergy())) {
