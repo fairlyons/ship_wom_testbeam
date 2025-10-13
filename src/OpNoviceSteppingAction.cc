@@ -152,6 +152,7 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
     }
     //---------------- 2. Born in WLS END
 
+<<<<<<< HEAD
     //---------------- 4. photons that reached SiPM's
     if(postphysvolname == "sipmSens") {
       if(sipm_detection(1.24e-3 / track->GetKineticEnergy())) {
@@ -177,36 +178,50 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* aStep)
         analysisManager->FillNtupleIColumn(0,4,sipm); //sipm number
         analysisManager->FillNtupleIColumn(0,5,posttouchable->GetCopyNumber(1)); //WOM number
         analysisManager->AddNtupleRow(0);
-        analysisManager->FillH3(0,eventNumber,sipm+8*(posttouchable->GetCopyNumber(1)-1),track->GetGlobalTime()); // quadrant 
+
+          //Adding noise to simulate waveform, abandoned for now
+/*
+          analysisManager->FillH3(0,eventNumber,posttouchable->GetCopyNumber(0)+8*(posttouchable->GetCopyNumber(1)-1),track->GetGlobalTime()); // quadrant 
      
+          ////CROSSTALK PHOTONS
+          G4double rnd = double(rand())/RAND_MAX;
+          if( rnd < eff_CT ){
+              analysisManager->FillNtupleDColumn(0,0,aStep->GetPostStepPoint()->GetPosition().getX());
+              analysisManager->FillNtupleDColumn(0,1,aStep->GetPostStepPoint()->GetPosition().getY());
+              analysisManager->FillNtupleDColumn(0,2,track->GetGlobalTime());
+              analysisManager->FillNtupleIColumn(0,3,eventNumber);
+              analysisManager->FillNtupleIColumn(0,4,sipm); //sipm number
+              analysisManager->FillNtupleIColumn(0,5,posttouchable->GetCopyNumber(1)); //WOM number
+              analysisManager->AddNtupleRow(0);
+              analysisManager->FillH3(0,eventNumber,posttouchable->GetCopyNumber(0)+8*(posttouchable->GetCopyNumber(1)-1),track->GetGlobalTime()); // quadrant  
+          }
+          //DARK COUNTS
+          G4double rnd_time = double(rand())/RAND_MAX;  //to have dark count in random position in the wfs
+          G4double rnd_DC = double(rand())/RAND_MAX;
+          if( rnd_DC < DC_prob ){
+              analysisManager->FillNtupleDColumn(0,0,aStep->GetPostStepPoint()->GetPosition().getX());
+              analysisManager->FillNtupleDColumn(0,1,aStep->GetPostStepPoint()->GetPosition().getY());
+              analysisManager->FillNtupleDColumn(0,2, rnd_time*320.0);
+              analysisManager->FillNtupleIColumn(0,3,eventNumber);
+	          analysisManager->FillNtupleIColumn(0,4,sipm); //sipm number
+              analysisManager->FillNtupleIColumn(0,5,posttouchable->GetCopyNumber(1)); //WOM number
+              analysisManager->AddNtupleRow(0);
+              analysisManager->FillH3(0,eventNumber,posttouchable->GetCopyNumber(0)+8*(posttouchable->GetCopyNumber(1)-1),rnd_time*320.); // quadrant 
 
-        ////CROSSTALK PHOTONS
-        G4double rnd = double(rand())/RAND_MAX;
-        if( rnd < eff_CT ){
-             analysisManager->FillNtupleIColumn(0,4,sipm); //sipm number
-             analysisManager->FillNtupleIColumn(0,5,posttouchable->GetCopyNumber(1)); //WOM number
-             analysisManager->AddNtupleRow(0);
-             analysisManager->FillH3(0,eventNumber,sipm+8*(posttouchable->GetCopyNumber(1)-1),track->GetGlobalTime()); // quadrant  
-        }
-        //DARK COUNTS
-        G4double rnd_time = double(rand())/RAND_MAX;  //to have dark count in random position in the wfs
-        G4double rnd_DC = double(rand())/RAND_MAX;
-        if( rnd_DC < DC_prob ){
-	         analysisManager->FillNtupleIColumn(0,4,sipm); //sipm number
-             analysisManager->FillNtupleIColumn(0,5,posttouchable->GetCopyNumber(1)); //WOM number
-             analysisManager->AddNtupleRow(0);
-             analysisManager->FillH3(0,eventNumber,sipm+8*(posttouchable->GetCopyNumber(1)-1),rnd_time*320.); // quadrant 
-
-             //CROSSTALK PHOTONS for dark count
-             G4double rnd_CT = double(rand())/RAND_MAX;
-             if( rnd_CT < eff_CT ){
-                  analysisManager->FillNtupleIColumn(0,4,sipm); //sipm number
-                  analysisManager->FillNtupleIColumn(0,5,posttouchable->GetCopyNumber(1)); //WOM number
-                  analysisManager->AddNtupleRow(0);
-                  analysisManager->FillH3(0,eventNumber,sipm+8*(posttouchable->GetCopyNumber(1)-1),rnd_time*320.); // quadrant
-             }
-        }
-    }
+            //CROSSTALK PHOTONS for dark count
+            G4double rnd_CT = double(rand())/RAND_MAX;
+            if( rnd_CT < eff_CT ){
+              analysisManager->FillNtupleDColumn(0,0,aStep->GetPostStepPoint()->GetPosition().getX());
+              analysisManager->FillNtupleDColumn(0,1,aStep->GetPostStepPoint()->GetPosition().getY());
+              analysisManager->FillNtupleDColumn(0,2,track->GetGlobalTime());
+              analysisManager->FillNtupleIColumn(0,3,eventNumber);
+              analysisManager->FillNtupleIColumn(0,4,sipm); //sipm number
+              analysisManager->FillNtupleIColumn(0,5,posttouchable->GetCopyNumber(1)); //WOM number
+              analysisManager->AddNtupleRow(0);
+              analysisManager->FillH3(0,eventNumber,posttouchable->GetCopyNumber(0)+8*(posttouchable->GetCopyNumber(1)-1),rnd_time*320.); // quadrant
+            }
+          }
+*/
     track->SetTrackStatus(fStopAndKill);
     }
     //---------------- 4. photons that reached SiPM's END
