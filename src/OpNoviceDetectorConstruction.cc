@@ -378,7 +378,7 @@ void OpNoviceDetectorConstruction::DefineSurfaces()
   G4double photon_ReflAl[2] = {1*eV, 5*eV};
   G4double other_coating[2] = {0, 0}; // it is not relevant in our case, it is for not smooth surfaces 
   G4double reflection_specularAl[2] = {1.0, 1.0};
-  G4double relfection_TotalAl[2] = {0.10, 0.10};
+  G4double relfection_TotalAl[2] = {0.80, 0.80};
 
   G4MaterialPropertiesTable *MPTsurf_Steel = new G4MaterialPropertiesTable();
   MPTsurf_Steel->AddProperty("SPECULARSPIKECONSTANT", photon_ReflAl, other_coating, 2); //  The diffuse is 1-other three (in this case 1-specular).
